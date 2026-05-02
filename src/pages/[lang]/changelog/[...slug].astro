@@ -39,12 +39,6 @@ const t = useTranslations(lang);
     <PageHeader 
         title={`Release <span class="text-primary">v${entry.data.version}</span>`}
         description={entry.data.description}
-        breadcrumb={{
-            items: [
-                { label: 'Changelog', href: `/${lang}/changelog` },
-                { label: `v${entry.data.version}`, href: '#' }
-            ]
-        }}
     />
 
     <Section class="pt-12 pb-24">
