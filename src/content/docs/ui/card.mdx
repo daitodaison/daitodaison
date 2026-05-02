@@ -25,20 +25,20 @@ By passing an `href` prop, the card becomes a clickable link with hover effects.
 
 <div class="p-6 border border-foreground/10 rounded-xl mb-6">
     <Card href="#" class="group max-w-sm">
-        <h4 class="font-bold flex items-center gap-2">
+        <h3 class="font-bold flex items-center gap-2">
             Clickable Card 
             <ArrowRight size={16} class="group-hover:translate-x-1 transition-transform"/>
-        </h4>
+        </h3>
         <p class="text-sm text-muted-foreground mt-2">Hover me to see the effect.</p>
     </Card>
 </div>
 
 ```astro
 <Card href="/somewhere" class="group">
-    <h4 class="flex items-center gap-2">
+    <h3 class="flex items-center gap-2">
         Clickable Card 
         <ArrowRight class="group-hover:translate-x-1 transition-transform"/>
-    </h4>
+    </h3>
 </Card>
 ```
 

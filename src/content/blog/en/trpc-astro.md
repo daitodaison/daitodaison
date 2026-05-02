@@ -8,7 +8,7 @@ tags: ["typescript", "api"]
 
 TRPC enables you to build type-safe APIs without schemas or code generation. It connects your backend and frontend with full TypeScript inference.
 
-### Benefits in Astro
+## Benefits in Astro
 
 1.  **Type Safety**: Changes in your backend types are immediately reflected in your client code.
 2.  **Developer Experience**: Autocomplete for your API endpoints.

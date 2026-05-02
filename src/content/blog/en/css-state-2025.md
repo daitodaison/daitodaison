@@ -8,7 +8,7 @@ tags: ["css", "design"]
 
 CSS has evolved rapidly. Features that once required preprocessors or complex JavaScript are now native.
 
-### New Features
+## New Features
 
 1.  **Nesting**: Native nesting support reduces the need for Sass.
 2.  **Container Queries**: Style elements based on their container size, not the viewport.

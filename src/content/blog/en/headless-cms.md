@@ -8,7 +8,7 @@ tags: ["cms", "content-strategy"]
 
 Choosing a Content Management System (CMS) is a critical decisions. While options like Contentful or Sanity offer great APIs, we believe closely coupled content offers superior benefits for developers.
 
-### The Git-based Advantage
+## The Git-based Advantage
 
 1.  **Version Control**: Content is code. You can diff, branch, and rollback changes just like your application logic.
 2.  **Performance**: No API calls at build time. Content is read directly from the filesystem.

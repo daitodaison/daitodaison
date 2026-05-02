@@ -8,7 +8,7 @@ tags: ["performance", "web-vitals"]
 
 Core Web Vitals are the essential metrics for a healthy site. Google uses them to measure user experience, and they affect your search ranking.
 
-### The Big Three
+## The Big Three
 
 *   **LCP (Largest Contentful Paint)**: Loading performance.
 *   **FID (First Input Delay)**: Interactivity.

@@ -8,7 +8,7 @@ tags: ["serverless", "edge"]
 
 Serverless functions allow you to run backend code without managing servers. Cloudflare Workers take this a step further by running your code in data centers close to your users.
 
-### Use Cases
+## Use Cases
 
 *   **Form Handling**: Process contact forms without a dedicated backend server.
 *   **Authentication**: Validate user sessions at the edge.

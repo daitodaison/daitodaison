@@ -8,7 +8,7 @@ tags: ["react", "server-components", "astro"]
 
 React Server Components (RSC) are changing the way we think about building React applications. By moving the logic to the server, we can reduce the bundle size and improve performance.
 
-### Why RSC Matters
+## Why RSC Matters
 
 1. **Zero Bundle Size**: Server components are not sent to the client.
 2. **Direct Database Access**: Query your database directly from your components.

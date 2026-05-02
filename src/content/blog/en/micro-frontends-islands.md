@@ -8,7 +8,7 @@ tags: ["architecture", "micro-frontends"]
 
 Micro-frontends allow large teams to work independently on different parts of a web application. Astro's Island Architecture is the perfect foundation for this approach.
 
-### The Island Model
+## The Island Model
 
 Imagine your page as a static ocean with interactive islands floating in it. Each island can be:
 

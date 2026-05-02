@@ -21,7 +21,7 @@ const t = useTranslations(lang);
         </div>
 
         <div class="mt-4 w-full">
-          <h3 id="newsletter-title" class="text-sm font-semibold text-foreground mb-2">{t['footer.newsletter.title']}</h3>
+          <div id="newsletter-title" class="text-sm font-semibold text-foreground mb-2">{t['footer.newsletter.title']}</div>
           <form class="flex gap-2 max-w-sm w-full">
             <label for="newsletter-email" class="sr-only">Email address</label>
             <input 
@@ -42,7 +42,7 @@ const t = useTranslations(lang);
       
       {Object.entries(FOOTER_LINKS).map(([key, section]) => (
         <div>
-          <h3 class="font-semibold mb-4 text-foreground">{t[`footer.${key}` as keyof typeof t] || section.title}</h3>
+          <div class="font-semibold mb-4 text-foreground">{t[`footer.${key}` as keyof typeof t] || section.title}</div>
           <ul class="space-y-2 text-sm text-foreground/90">
             {section.links.map((link: any) => {
               

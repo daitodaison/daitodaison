@@ -8,7 +8,7 @@ tags: ["security", "devops"]
 
 Security is not an afterthought. Configuring the right HTTP headers is the first line of defense against XSS, clickjacking, and other attacks.
 
-### Must-Have Headers
+## Must-Have Headers
 
 *   **Content-Security-Policy (CSP)**: Whitelists trusted content sources.
 *   **Strict-Transport-Security (HSTS)**: Enforces HTTPS.

@@ -200,7 +200,7 @@ export default function AudioPlayer({ src, title = "AUDIO_LOG_01" }: AudioPlayer
                     {/* Info & Visualization */}
                     <div className="flex-1 overflow-hidden">
                         <div className="flex justify-between items-baseline mb-1">
-                            <h4 className="text-white truncate max-w-[150px] md:max-w-xs">{title}</h4>
+                            <div className="text-white font-bold truncate max-w-[150px] md:max-w-xs">{title}</div>
                             <span className="text-amber-500 tabular-nums">
                                 {formatTime(progress)}<span className="text-zinc-600 px-1">/</span>{formatTime(duration)}
                             </span>

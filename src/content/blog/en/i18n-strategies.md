@@ -8,7 +8,7 @@ tags: ["i18n", "global"]
 
 Reaching a global audience requires more than just translation. It requires a thoughtful strategy for routing, content management, and layout.
 
-### Astro's Native i18n
+## Astro's Native i18n
 
 Astro now includes built-in i18n routing support. You can configure:
 *   **Default Locale**: The fallback language.

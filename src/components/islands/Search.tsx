@@ -150,9 +150,9 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
                           onClick={() => setOpen(false)}
                           className="block p-4 rounded-xl border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 transition-colors group"
                         >
-                          <h4 className="font-bold text-lg text-foreground group-hover:text-primary mb-1">
+                          <div className="font-bold text-lg text-foreground group-hover:text-primary mb-1">
                             {item.title}
-                          </h4>
+                          </div>
                           {item.description && (
                             <p className="text-sm text-foreground/70 mb-2 line-clamp-2">
                               {item.description}
@@ -171,9 +171,9 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
                   )
                 ) : (
                   <>
-                    <h4 className="text-[10px] font-bold uppercase tracking-widest text-foreground/50 mb-4">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-foreground/50 mb-4">
                       Popular Links
-                    </h4>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {localizedLinks.map((link) => (
                         <a 
