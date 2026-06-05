@@ -31,7 +31,7 @@ Tailwind v4 allows for more dynamic value usage without defining them in a confi
 
 ## Integration with Astro
 
-In Gladtek, we've set up Tailwind v4 to work seamlessly with Astro's styling model, ensuring that only the CSS you use is included in the final build.
+In ASTRO攻略LABO, we've set up Tailwind v4 to work seamlessly with Astro's styling model, ensuring that only the CSS you use is included in the final build.
 
 
 

@@ -21,7 +21,7 @@ Search usually requires complex infrastructure: ElasticSearch, Algolia, or a ded
 - **Privacy First**: Search queries never leave the user's browser.
 - **Fuzzy Precision**: Users find what they need even with incomplete queries.
 
-Gladtek wraps this powerful engine in a beautiful, accessible Command Palette (`Cmd+K`) interface.
+ASTRO攻略LABO wraps this powerful engine in a beautiful, accessible Command Palette (`Cmd+K`) interface.
 
 
 

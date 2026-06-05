@@ -15,7 +15,7 @@ Security is not an afterthought. Configuring the right HTTP headers is the first
 *   **X-Frame-Options**: Prevents clickjacking.
 *   **X-Content-Type-Options**: Prevents MIME sniffing.
 
-In Gladtek, we recommend configuring these headers at the edge (Cloudflare or Vercel) to ensure every response is secured before it reaches the browser.
+In ASTRO攻略LABO, we recommend configuring these headers at the edge (Cloudflare or Vercel) to ensure every response is secured before it reaches the browser.
 
 
 

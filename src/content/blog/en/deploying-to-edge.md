@@ -1,12 +1,12 @@
 ---
 title: 'Deploying to the Edge'
-description: 'Getting your Gladtek site live on Cloudflare or Vercel.'
+description: 'Getting your ASTRO攻略LABO site live on Cloudflare or Vercel.'
 pubDate: '2025-01-15'
 heroImage: '~/assets/blog/globe.webp'
 tags: ["devops", "deployment"]
 ---
 
-Static sites are the easiest to deploy. Because Gladtek produces standard HTML/CSS/JS, you can host it anywhere. But "Edge" networks offer the best performance.
+Static sites are the easiest to deploy. Because ASTRO攻略LABO produces standard HTML/CSS/JS, you can host it anywhere. But "Edge" networks offer the best performance.
 
 ## Cloudflare Pages
 
@@ -20,7 +20,7 @@ Cloudflare's edge network ensures your assets are cached in hundreds of data cen
 
 Similar ease of use, with the added benefit of excellent analytics and "Deploy Previews" that allow you to review changes before they merge to main.
 
-Gladtek is optimized for both, with a `wrangler.toml` ready for Cloudflare users who need advanced features like Workers or KV bindings.
+ASTRO攻略LABO is optimized for both, with a `wrangler.toml` ready for Cloudflare users who need advanced features like Workers or KV bindings.
 
 
 

@@ -16,7 +16,7 @@ Rendering is moving closer to the user. Instead of building once-per-deploy, we 
 
 Frameworks like Qwik are pioneering "Resumability"—instant interactivity without hydration. While Astro uses "Islands" to mitigate hydration costs, the goal is the same: **Zero TBT (Total Blocking Time)**.
 
-## Why Gladtek?
+## Why ASTRO攻略LABO?
 
 We stay ahead of these curves. By using Astro, we are positioned to adopt these optimizations as they mature, keeping your site future-proof.
 

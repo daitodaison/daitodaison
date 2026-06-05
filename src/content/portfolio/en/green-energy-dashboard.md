@@ -4,7 +4,7 @@ description: 'A comprehensive analytics platform for monitoring renewable energy
 pubDate: '2024-03-15'
 heroImage: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&q=80'
 tags: ["Dashboard", "React", "Data Viz"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## Overview

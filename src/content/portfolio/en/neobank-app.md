@@ -4,7 +4,7 @@ description: 'A next-generation banking application focused on financial wellnes
 pubDate: '2024-02-10'
 heroImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=80'
 tags: ["Mobile App", "Fintech", "React Native"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## Overview

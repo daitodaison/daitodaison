@@ -26,7 +26,7 @@ Switching to Astro often results in:
 - **Use Next.js** if you are building a complex, authenticated web application (like a SaaS dashboard).
 - **Use Astro** if you are building a marketing site, blog, documentation, or portfolio.
 
-Gladtek chooses Astro because speed is the ultimate feature.
+ASTRO攻略LABO chooses Astro because speed is the ultimate feature.
 
 
 

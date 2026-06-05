@@ -4,7 +4,7 @@ description: 'A comprehensive analytics dashboard for enterprise data visualizat
 pubDate: '2024-01-22'
 heroImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'
 tags: ["SaaS", "Dashboard", "Vue.js"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## Background

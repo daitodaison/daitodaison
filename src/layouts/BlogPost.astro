@@ -54,7 +54,7 @@ const schema = {
   ...(heroImage && { "image": new URL(heroImage.src, Astro.site).toString() }),
   "author": {
       "@type": "Person",
-      "name": authorEntry ? authorEntry.data.name : "Cooper Team",
+      "name": authorEntry ? authorEntry.data.name : "ASTRO攻略LABOチーム",
       "url": Astro.site?.toString() || ""
   }
 };

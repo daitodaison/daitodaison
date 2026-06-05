@@ -22,26 +22,43 @@ const plans = [
   {
     name: t['pricing.starter.name'],
     price: 0,
-    displayPrice: '$0',
+    displayPrice: '¥0 / 永年無料',
     description: t['pricing.starter.desc'],
-    features: [t['pricing.feat.projects.limited'], t['pricing.feat.support.community'], t['pricing.feat.analytics.basic'], t['pricing.feat.response.48h']],
+    features: [
+      t['pricing.feat.usdjpy'],
+      t['pricing.feat.backtest.today'],
+      t['pricing.feat.delay.lag'],
+      t['pricing.feat.indicator.partial'],
+    ],
     cta: t['pricing.cta.start'],
   },
   {
     name: t['pricing.pro.name'],
-    price: 29,
-    displayPrice: '$29',
+    price: 0,
+    displayPrice: '¥0 / 実質無料',
     description: t['pricing.pro.desc'],
-    features: [t['pricing.feat.projects.unlimited'], t['pricing.feat.support.priority'], t['pricing.feat.analytics.advanced'], t['pricing.feat.response.24h'], t['pricing.feat.domain.custom']],
+    features: [
+      t['pricing.feat.all_pairs'],
+      t['pricing.feat.backtest.unlimited'],
+      t['pricing.feat.realtime'],
+      t['pricing.feat.indicator.full'],
+      t['pricing.feat.support.email'],
+    ],
     cta: t['pricing.cta.start'],
     popular: true,
   },
   {
     name: t['pricing.enterprise.name'],
-    price: 99,
-    displayPrice: '$99',
+    price: 0,
+    displayPrice: '¥0 / 特別枠',
     description: t['pricing.enterprise.desc'],
-    features: [t['pricing.feat.projects.unlimited'], t['pricing.feat.support.dedicated'], t['pricing.feat.integrations.custom'], t['pricing.feat.sla'], t['pricing.feat.sso']],
+    features: [
+      t['pricing.feat.all_pairs'],
+      t['pricing.feat.backtest.unlimited'],
+      t['pricing.feat.realtime'],
+      t['pricing.feat.indicator.full'],
+      t['pricing.feat.support.chat'],
+    ],
     cta: t['pricing.cta.contact'],
   },
 ];
@@ -55,29 +72,21 @@ const faqs = [
 
 ---
 
-<Layout title="Pricing - Astro Boilerplate" description="Simple, transparent pricing for everyone.">
+<Layout title="ASTROツール比較 - ASTRO攻略LABO" description="体験版と完全版のASTROツール仕様を比較します。">
   
   <Schema item={{
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "Cooper",
-    "applicationCategory": "DeveloperApplication",
+    "name": "ASTRO攻略LABO",
+    "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "offers": plans.map(plan => ({
       "@type": "Offer",
       "name": plan.name,
       "price": String(plan.price),
-      "priceCurrency": "USD",
+      "priceCurrency": "JPY",
       "description": plan.description,
       "url": `${Astro.site}${lang}/pricing`,
-      ...(plan.price > 0 && {
-        "priceSpecification": {
-          "@type": "UnitPriceSpecification",
-          "price": String(plan.price),
-          "priceCurrency": "USD",
-          "billingDuration": "P1M"
-        }
-      })
     }))
   }} />
 
@@ -113,20 +122,11 @@ const faqs = [
           }))}
           features={[
             { category: t['compare.cat.core'], items: [
-                { name: t['compare.row.projects'], starter: t['compare.val.3'], pro: t['compare.val.unlimited'], enterprise: t['compare.val.unlimited'] },
-                { name: t['compare.row.users'], starter: t['compare.val.1'], pro: t['compare.val.5'], enterprise: t['compare.val.unlimited'] },
-                { name: t['compare.row.storage'], starter: t['compare.val.1gb'], pro: t['compare.val.10gb'], enterprise: t['compare.val.unlimited'] },
-            ]},
-            { category: t['compare.cat.analytics'], items: [
-                { name: t['compare.row.basic_analytics'], starter: true, pro: true, enterprise: true },
-                { name: t['compare.row.advanced_reports'], starter: false, pro: true, enterprise: true },
-                { name: t['compare.row.custom_dashboards'], starter: false, pro: true, enterprise: true },
-                { name: t['compare.row.audit_logs'], starter: false, pro: false, enterprise: true },
-            ]},
-            { category: t['compare.cat.support'], items: [
-                { name: t['compare.row.email_support'], starter: t['compare.val.standard'], pro: t['compare.val.priority'], enterprise: t['compare.val.dedicated'] },
-                { name: t['compare.row.sso'], starter: false, pro: false, enterprise: true },
-                { name: t['compare.row.sla'], starter: false, pro: false, enterprise: t['compare.val.99_99'] },
+                { name: t['compare.row.pairs'], starter: t['compare.val.usdjpy'], pro: t['compare.val.all'], enterprise: t['compare.val.all'] },
+                { name: t['compare.row.backtest'], starter: t['compare.val.today'], pro: t['compare.val.unlimited'], enterprise: t['compare.val.unlimited'] },
+                { name: t['compare.row.latency'], starter: t['compare.val.delayed'], pro: t['compare.val.realtime'], enterprise: t['compare.val.realtime'] },
+                { name: t['compare.row.indicators'], starter: t['compare.val.partial'], pro: t['compare.val.full'], enterprise: t['compare.val.full'] },
+                { name: t['compare.row.support'], starter: t['compare.val.none'], pro: t['compare.val.email'], enterprise: t['compare.val.chat'] },
             ]}
           ]}
         />

@@ -4,7 +4,7 @@ description: 'Rebranding a sustainable energy startup to reflect their mission o
 pubDate: '2023-11-05'
 heroImage: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?w=800&q=80'
 tags: ["Branding", "Identity", "Design"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## The Brief

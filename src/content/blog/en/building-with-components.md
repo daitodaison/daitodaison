@@ -1,18 +1,18 @@
 ---
 title: 'Building with Components: The Bento Grid'
-description: 'How to use Gladtek pre-built components to assemble pages in minutes.'
+description: 'How to use ASTRO攻略LABO pre-built components to assemble pages in minutes.'
 pubDate: '2025-01-15'
 heroImage: '~/assets/blog/blocks.webp'
 tags: ["components", "ui"]
 ---
 
-Modern web design favors modularity. Gladtek comes packed with a suite of components, but the crown jewel is the **Bento Grid**.
+Modern web design favors modularity. ASTRO攻略LABO comes packed with a suite of components, but the crown jewel is the **Bento Grid**.
 
 ## What is a Bento Grid?
 
 Popularized by Apple, a Bento Grid allows you to display varying types of content—stats, features, images, and text—in a cohesive, masonry-like layout that adapts to screen size.
 
-## Using It in Gladtek
+## Using It in ASTRO攻略LABO
 
 We've made it trivial to use.
 

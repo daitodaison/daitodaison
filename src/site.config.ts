@@ -1,12 +1,12 @@
 
 
 export const siteConfig = {
-  name: 'Cooper',
-  description: 'Premium Astro Boilerplate for explorers.',
+  name: 'ASTRO攻略LABO',
+  description: 'ASTRO攻略LABOは、ASTROバイナリーオプション専用ツールと攻略情報を提供する日本語メディアです。',
   logo: {
     src: '/logo.svg',
     srcDark: '/logo.svg',       // Used when strategy is 'switch'
-    alt: 'Cooper Logo',
+    alt: 'ASTRO攻略LABO ロゴ',
     strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
   },
   ogImage: '/og-image.webp',
@@ -25,16 +25,16 @@ export const siteConfig = {
   },
   contact: {
     email: {
-      support: 'support@interstellar.com',
-      sales: 'sales@interstellar.com',
+      support: 'support@astro-labo.jp',
+      sales: 'sales@astro-labo.jp',
     },
     phone: {
-      main: '+1 (555) 123-4567',
-      label: 'Mon-Fri 9am-6pm PST'
+      main: '+81 3-1234-5678',
+      label: '月〜金 9:00〜18:00 JST'
     },
     address: {
-      city: 'Endurance',
-      full: 'Interstellar Space Station'
+      city: 'Tokyo',
+      full: 'Japan'
     }
   },
   analytics: {
@@ -103,11 +103,11 @@ export const NAV_LINKS = [
 export const ACTION_LINKS = {
   primary: { label: 'Get Started', href: '/docs/getting-started' },
   social: { 
-    twitter: 'https://twitter.com/gladtek',
-    linkedin: 'https://linkedin.com/company/gladtek',
-    github: 'https://github.com/gladtek',
-    youtube: 'https://youtube.com/@gladtek',
-    facebook: 'https://facebook.com/gladtek'
+    twitter: 'https://twitter.com/astro-lab',
+    linkedin: 'https://linkedin.com/company/astro-lab',
+    github: 'https://github.com/astro-lab',
+    youtube: 'https://youtube.com/@astro-lab',
+    facebook: 'https://facebook.com/astro-lab'
     
   }
 };

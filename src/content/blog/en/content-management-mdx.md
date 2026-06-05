@@ -12,7 +12,7 @@ Markdown is great. But sometimes you need more than just text and images. You ne
 
 ## Interactive Docs
 
-Documentation often requires examples. With MDX in Gladtek, you can import a component right into your markdown file:
+Documentation often requires examples. With MDX in ASTRO攻略LABO, you can import a component right into your markdown file:
 
 ```mdx
 import { Counter } from '../../components/Counter';

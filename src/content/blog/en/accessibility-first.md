@@ -1,12 +1,12 @@
 ---
 title: 'Accessibility First: A Core Value'
-description: 'How we ensure Gladtek components are useable by everyone.'
+description: 'How we ensure ASTRO攻略LABO components are useable by everyone.'
 pubDate: '2025-01-15'
 heroImage: '~/assets/blog/colors.webp'
 tags: ["a11y", "design"]
 ---
 
-Accessibility (a11y) is often an afterthought. At Gladtek, it's a constraint we design around from day one.
+Accessibility (a11y) is often an afterthought. At ASTRO攻略LABO, it's a constraint we design around from day one.
 
 ## Color Contrast
 

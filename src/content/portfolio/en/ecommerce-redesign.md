@@ -4,7 +4,7 @@ description: 'A complete overhaul of a fashion retailers online store, focusing 
 pubDate: '2024-03-15'
 heroImage: 'https://images.unsplash.com/photo-1661956602116-aa6865609028?w=800&q=80'
 tags: ["UX Design", "Development", "Shopify"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## The Challenge

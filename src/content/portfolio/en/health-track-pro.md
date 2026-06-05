@@ -4,7 +4,7 @@ description: 'A compliant telemedicine app connecting patients with specialists 
 pubDate: '2024-01-20'
 heroImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80'
 tags: ["Mobile", "HealthTech", "Telemedicine"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## Overview

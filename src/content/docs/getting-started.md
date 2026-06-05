@@ -4,15 +4,15 @@ description: 'Learn how to set up and customize your new Astro project.'
 order: 0
 ---
 
-Welcome to the **Cooper** documentation! This guide will help you get your project up and running in minutes.
+Welcome to the **ASTRO攻略LABO** documentation! This guide will help you get your project up and running in minutes.
 
 ## Installation
 
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/Gladtek/Cooper.git
-cd Cooper
+git clone https://github.com/astro-lab/astro-cooper-blog.git
+cd astro-cooper-blog
 ```
 
 Next, install the dependencies:
@@ -63,7 +63,7 @@ You can easily customize the primary brand color and other site settings in `src
 ```typescript
 // src/site.config.ts
 export const siteConfig = {
-  name: 'Cooper',
+  name: 'ASTRO攻略LABO',
   description: 'Premium Astro Boilerplate',
   primaryColor: '#00008B', // Update this to your brand color
   logo: {

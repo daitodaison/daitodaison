@@ -4,7 +4,7 @@ description: 'An AI-powered collaborative writing assistant designed for enterpr
 pubDate: '2024-04-02'
 heroImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80'
 tags: ["SaaS", "AI", "Next.js"]
-link: "https://gladtek.com"
+link: "https://astrolab.com"
 ---
 
 ## Overview

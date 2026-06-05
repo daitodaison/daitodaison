@@ -1,12 +1,12 @@
 ---
-title: 'Granular SEO Control with Gladtek'
+title: 'Granular SEO Control with ASTRO攻略LABO'
 description: ' mastering indexation and visibility for your static site.'
 pubDate: '2025-01-15'
 heroImage: '~/assets/blog/graph.webp'
 tags: ["seo", "guide"]
 ---
 
-SEO isn't just about keywords; it's about controlling what search engines see. Gladtek gives you granular control over indexation.
+SEO isn't just about keywords; it's about controlling what search engines see. ASTRO攻略LABO gives you granular control over indexation.
 
 ## The `noindex` Prop
 
