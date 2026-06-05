@@ -3,6 +3,7 @@ export const prerender = true;
 import Layout from '~/layouts/Layout.astro';
 import PageHeader from '~/components/layout/PageHeader.astro';
 import Container from '~/components/ui/Container.astro';
+import Card from '~/components/ui/Card.astro';
 import { client } from '~/library/microcms';
 
 export async function getStaticPaths() {
@@ -23,14 +24,31 @@ const { lang } = Astro.params;
   <Container as="section" class="pb-24">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       {posts.map((post: any) => (
-        <a href={`/${lang}/blog/microcms/${post.id}`} class="block rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden hover:shadow-lg transition-shadow">
-          {post.eyecatch && (
-            <img src={post.eyecatch.url} alt={post.title} class="w-full h-48 object-cover" />
-          )}
-          <div class="p-4">
-            <h2 class="text-lg font-bold">{post.title}</h2>
+        <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
+          <div class="relative aspect-video w-full overflow-hidden bg-muted">
+            {post.eyecatch ? (
+              <img
+                src={post.eyecatch.url}
+                alt={post.title}
+                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
+                <span class="text-4xl">📝</span>
+              </div>
+            )}
+            <div class="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
           </div>
-        </a>
+          <div class="p-6">
+            <h2 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
+              {post.title}
+            </h2>
+            <div class="mt-4 flex items-center gap-2 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2">
+              <span>続きを読む</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </div>
+          </div>
+        </Card>
       ))}
     </div>
   </Container>
