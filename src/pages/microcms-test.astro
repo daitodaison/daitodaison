@@ -1,0 +1,34 @@
+---
+// src/pages/microcms-test.astro
+import { client } from '../library/microcms';
+
+// 🔍 【デバッグ】合言葉が正しく読み込めているかターミナル（黒い画面）に表示します
+console.log("-----------------------------------------");
+console.log("【デバッグ】サービスドメイン:", import.meta.env.MICROCMS_SERVICE_DOMAIN);
+console.log("【デバッグ】APIキー:", import.meta.env.MICROCMS_API_KEY ? "設定されています (OK)" : "設定されていません (NG)");
+console.log("-----------------------------------------");
+
+// microCMSからブログ記事を取得します
+const response = await client.get({ endpoint: "blogs" }); // 末尾に s をつけます
+const posts = response.contents;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>microCMS 接続テスト</title>
+  </head>
+  <body style="padding: 2rem; font-family: sans-serif; background-color: #0f172a; color: #f8fafc;">
+    <h1>microCMS 接続テスト</h1>
+    <p>管理画面から取得した記事一覧：</p>
+    
+    <ul style="margin-top: 1rem; list-style: none; padding-left: 0;">
+      {posts.map((post: any) => (
+        <li style="margin-bottom: 2rem; border-bottom: 1px solid #334155; padding-bottom: 1.5rem;">
+          <h2 style="color: #60a5fa;">{post.title}</h2>
+          <div style="margin-top: 0.5rem;" set:html={post.content} />
+        </li>
+      ))}
+    </ul>
+  </body>
+</html>
