@@ -10,7 +10,7 @@ export const siteConfig = {
     strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
   },
   ogImage: '/og-image.webp',
-  primaryColor: '#00008B', // Default primary color
+  primaryColor: '#2563EB', // Default primary color
   search: {
     enabled: true,
   },
