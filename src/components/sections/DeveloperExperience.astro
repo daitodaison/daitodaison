@@ -19,14 +19,14 @@ const commandPayload = JSON.stringify({
   args: terminal.command.args
 }, null, 2);
 ---
-<div class="mt-24 p-12 rounded-[40px] bg-linear-to-br from-primary/10 via-background to-background border border-primary/20">
+<div class="mt-24 p-12 rounded-[40px] bg-gradient-to-br from-slate-100 via-white to-white dark:from-zinc-950 dark:via-zinc-950 dark:to-zinc-950 border border-gray-200 dark:border-white/10">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
             <h2 class="text-3xl font-bold mb-6">{title}</h2>
             <ul class="space-y-4">
                 {features.map(item => (
-                    <li class="flex items-center gap-3 text-foreground/70">
-                        <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+                    <li class="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                        <div class="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-white"></div>
                         {item}
                     </li>
                 ))}
@@ -45,7 +45,7 @@ const commandPayload = JSON.stringify({
             {terminal.successSteps.map(step => (
                  <div class="text-emerald-400">✓ {step}</div>
             ))}
-            <div class="mt-4 text-primary animate-pulse">{terminal.readyMessage} _</div>
+            <div class="mt-4 text-slate-900 dark:text-white animate-pulse">{terminal.readyMessage} _</div>
         </div>
     </div>
 </div>

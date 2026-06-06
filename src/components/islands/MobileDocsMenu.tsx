@@ -39,7 +39,7 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="flex lg:hidden items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-foreground/5 rounded-full hover:text-foreground transition-colors"
+        className="flex lg:hidden items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-white/5 rounded-full hover:bg-gray-200 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-colors"
         aria-label="Open Documentation Navigation"
       >
         <ListTree className="w-4 h-4" />
@@ -55,7 +55,7 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-background/60 backdrop-blur-sm z-80"
+              className="fixed inset-0 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-sm z-80"
               aria-hidden="true"
             />
 
@@ -65,16 +65,16 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-[85%] max-w-sm bg-background border-r border-foreground/10 z-90 shadow-2xl flex flex-col"
+              className="fixed inset-y-0 left-0 w-[85%] max-w-sm bg-white dark:bg-zinc-950 border-r border-gray-200 dark:border-white/10 z-90 shadow-2xl flex flex-col"
             >
-              <div className="flex items-center justify-between p-6 border-b border-foreground/5">
-                <div className="flex items-center gap-2 font-bold text-lg">
-                  <ListTree className="w-5 h-5 text-primary" />
+              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-white/10">
+                <div className="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white">
+                  <ListTree className="w-5 h-5 text-gray-900 dark:text-white" />
                   Documentation
                 </div>
                 <button 
                   onClick={() => setIsOpen(false)}
-                  className="p-2 -mr-2 text-foreground/50 hover:text-foreground transition-colors"
+                  className="p-2 -mr-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -98,11 +98,11 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
                                   onClick={() => setIsOpen(false)}
                                   className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
                                     isExact 
-                                    ? "bg-primary/10 text-primary shadow-sm" 
-                                    : "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
+                                    ? "bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white shadow-sm" 
+                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white"
                                   }`}
                                 >
-                                  <div className={`w-1.5 h-1.5 rounded-full ${isExact ? "bg-primary" : "bg-foreground/20"}`} />
+                                  <div className={`w-1.5 h-1.5 rounded-full ${isExact ? "bg-slate-900 dark:bg-white" : "bg-gray-200 dark:bg-white/20"}`} />
                                   {doc.data.title}
                                 </a>
                               </li>
@@ -116,25 +116,25 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
                     
                     return (
                       <div key={section} className="space-y-1">
-                        <div className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-foreground/40">
+                        <div className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400">
                           {rawTitle}
                         </div>
-                        <ul className="pl-4 border-l border-foreground/10 space-y-1 list-none m-0">
+                        <ul className="pl-4 border-l border-gray-200 dark:border-white/10 space-y-1 list-none m-0">
                           {sectionDocs.map(doc => {
                             const docPath = `/docs/${getSlug(doc.id)}`;
                             const isExact = normalizedCurrentPath === docPath;
                             return (
                               <li key={doc.id} className="relative">
                                 {/* Visual branch connector */}
-                                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-3 h-px bg-foreground/10" />
+                                <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-3 h-px bg-gray-200 dark:bg-white/10" />
                                 
                                 <a
                                   href={docPath}
                                   onClick={() => setIsOpen(false)}
                                   className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all ${
                                     isExact 
-                                    ? "bg-primary/5 text-primary font-semibold" 
-                                    : "text-foreground/60 hover:text-foreground hover:bg-foreground/5"
+                                    ? "bg-slate-100 dark:bg-white/10 text-slate-900 dark:text-white font-semibold" 
+                                    : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10"
                                   }`}
                                 >
                                   {doc.data.title}
@@ -149,10 +149,10 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
                 </div>
               </nav>
 
-              <div className="p-6 border-t border-foreground/5 bg-foreground/2">
+              <div className="p-6 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5">
                 <a 
                   href="/docs/getting-started" 
-                  className="flex items-center justify-center w-full px-4 py-3 bg-primary text-primary-foreground rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all text-sm"
+                  className="flex items-center justify-center w-full px-4 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold shadow-lg shadow-slate-900/20 dark:shadow-white/20 hover:bg-slate-800 dark:hover:bg-zinc-200 transition-all text-sm"
                 >
                   Quick Start Guide
                 </a>

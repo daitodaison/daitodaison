@@ -44,11 +44,11 @@ export default function Newsletter({
   return (
     <div className="relative group">
       {/* Background Glow */}
-      <div className="absolute -inset-0.5 bg-linear-to-r from-primary/50 to-blue-500/50 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-slate-900/20 via-sky-400/20 to-blue-500/20 dark:from-white/10 rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
       
-      <div className="relative bg-background border border-foreground/10 rounded-2xl p-8 md:p-12 overflow-hidden shadow-2xl">
+      <div className="relative bg-white dark:bg-zinc-950 border border-gray-200 dark:border-white/10 rounded-2xl p-8 md:p-12 overflow-hidden shadow-2xl">
         {/* Decorative elements */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-slate-900/5 dark:bg-white/5 rounded-full blur-3xl"></div>
         
         <AnimatePresence mode="wait">
           {status === "success" ? (
@@ -62,12 +62,12 @@ export default function Newsletter({
                 <CheckCircle2 size={32} />
               </div>
               <h3 className="text-2xl font-display font-bold">Welcome Aboard!</h3>
-              <p className="text-muted-foreground max-w-sm">
+              <p className="text-gray-600 dark:text-gray-300 max-w-sm">
                 You've successfully subscribed to our newsletter. Prepare for departure!
               </p>
               <button 
                 onClick={() => setStatus("idle")}
-                className="text-sm font-medium text-primary hover:underline"
+                className="text-sm font-medium text-slate-900 dark:text-white hover:underline"
               >
                 Subscribe another email
               </button>
@@ -77,7 +77,7 @@ export default function Newsletter({
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
                   <h2 id="newsletter-island-title" className="text-3xl font-display font-bold mb-4">{title}</h2>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                     {description}
                   </p>
                 </div>
@@ -105,7 +105,7 @@ export default function Newsletter({
                         placeholder={placeholder}
                         aria-label={placeholder}
                         aria-labelledby="newsletter-island-title"
-                        className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                        className="w-full bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:ring-2 focus:ring-sky-500/40 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400"
                       />
                       <Send className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                     </div>
@@ -113,7 +113,7 @@ export default function Newsletter({
                     <button
                       disabled={status === "loading"}
                       type="submit"
-                      className="w-full group/btn relative overflow-hidden bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-[0.98] disabled:opacity-70"
+                      className="w-full group/btn relative overflow-hidden bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold py-4 rounded-xl shadow-lg shadow-slate-900/20 dark:shadow-white/20 hover:shadow-slate-900/40 dark:hover:shadow-white/40 transition-all active:scale-[0.98] disabled:opacity-70"
                     >
                       <div className="relative z-10 flex items-center justify-center gap-2">
                         {status === "loading" ? (

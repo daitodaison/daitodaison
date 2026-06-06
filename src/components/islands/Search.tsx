@@ -91,12 +91,12 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
       <button
         onClick={() => setOpen(true)}
         aria-label={`${placeholder} (⌘K)`}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 rounded-full transition-all hover:scale-105"
+        className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-700 dark:text-gray-200 hover:text-slate-900 dark:hover:text-white bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 rounded-full transition-all hover:scale-105"
       >
         <SearchIcon size={14} />
         <span className="hidden lg:inline">{placeholder}</span>
-        <div className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 bg-background border border-foreground/10 rounded-full text-[10px] font-mono shadow-sm">
-          <span className="text-[10px] text-foreground/90">⌘K</span>
+        <div className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 bg-white dark:bg-zinc-950 border border-gray-200 dark:border-white/10 rounded-full text-[10px] font-mono shadow-sm">
+          <span className="text-[10px] text-gray-700 dark:text-gray-200">⌘K</span>
         </div>
       </button>
 
@@ -116,11 +116,11 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-background border border-foreground/20 rounded-2xl shadow-2xl ring-1 ring-foreground/20 flex flex-col" 
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white dark:bg-zinc-950 border border-gray-200 dark:border-white/20 rounded-2xl shadow-2xl ring-1 ring-gray-200 dark:ring-white/20 flex flex-col" 
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="relative border-b border-foreground/10 shrink-0">
-                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/50" />
+              <div className="relative border-b border-gray-200 dark:border-white/10 shrink-0">
+                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
                 <input 
                   ref={inputRef}
                   type="text"
@@ -129,11 +129,11 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
                   placeholder={placeholder}
                   aria-label={placeholder}
                   title={placeholder}
-                  className="w-full bg-transparent py-4 pl-12 pr-12 text-foreground outline-none placeholder:text-foreground/50 text-lg"
+                  className="w-full bg-transparent py-4 pl-12 pr-12 text-gray-900 dark:text-white outline-none placeholder:text-gray-500 dark:placeholder:text-gray-400 text-lg"
                 />
                 <button 
                   onClick={() => setOpen(false)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full text-foreground/50 hover:bg-foreground/10 hover:text-foreground transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white transition-colors"
                 >
                   <X size={18} />
                 </button>
@@ -148,30 +148,30 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
                           key={item.url} 
                           href={item.url}
                           onClick={() => setOpen(false)}
-                          className="block p-4 rounded-xl border border-foreground/10 bg-foreground/5 hover:bg-foreground/10 transition-colors group"
+                          className="block p-4 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors group"
                         >
-                          <div className="font-bold text-lg text-foreground group-hover:text-primary mb-1">
+                          <div className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-slate-900 dark:group-hover:text-white mb-1">
                             {item.title}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-foreground/70 mb-2 line-clamp-2">
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">
                               {item.description}
                             </p>
                           )}
-                          <div className="text-xs text-foreground/50 font-mono">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">
                             {item.url}
                           </div>
                         </a>
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-12 text-foreground/50">
+                    <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                       No results found for "{query}"
                     </div>
                   )
                 ) : (
                   <>
-                    <div className="text-[10px] font-bold uppercase tracking-widest text-foreground/50 mb-4">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-4">
                       Popular Links
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -180,12 +180,12 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
                           key={link.href}
                           href={link.href}
                           onClick={() => setOpen(false)}
-                          className="flex items-center gap-3 p-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 transition-colors border border-foreground/5 group"
+                          className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors border border-gray-200 dark:border-white/10 group"
                         >
-                          <div className="w-8 h-8 rounded-lg bg-background border border-foreground/10 flex items-center justify-center text-gray-600 dark:text-gray-300 group-hover:text-primary transition-colors">
+                          <div className="w-8 h-8 rounded-lg bg-white dark:bg-zinc-950 border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                             <link.icon size={16} />
                           </div>
-                          <span className="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover:text-primary">{link.label}</span>
+                          <span className="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover:text-slate-900 dark:group-hover:text-white">{link.label}</span>
                         </a>
                       ))}
                     </div>
