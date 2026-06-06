@@ -91,7 +91,7 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
       <button
         onClick={() => setOpen(true)}
         aria-label={`${placeholder} (⌘K)`}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm text-foreground/60 hover:text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 rounded-full transition-all hover:scale-105"
+        className="flex items-center gap-2 px-3 py-1.5 text-sm text-purple-500 md:text-foreground/60 md:hover:text-foreground bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 rounded-full transition-all hover:scale-105"
       >
         <SearchIcon size={14} />
         <span className="hidden lg:inline">{placeholder}</span>
