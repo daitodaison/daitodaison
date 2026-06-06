@@ -86,7 +86,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
       <span class="inline text-sm md:text-xl">{t['brand.name'] || siteConfig.name}</span>
     </a>
     <div class="flex-1 flex justify-center mx-4 lg:mx-8">
-      <DesktopNav client:only="react" links={links} currentPath={Astro.url.pathname} />
+      <DesktopNav client:only="react" links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} currentPath={Astro.url.pathname} />
     </div>
 
     {/* Mobile/Flyout Menu */}
@@ -121,7 +121,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
       <div class="md:hidden">
         <MobileMenu 
           client:only="react" 
-          links={links} 
+          links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} 
           currentPath={Astro.url.pathname} 
           lang={lang}
           availableLangs={availableLangs}

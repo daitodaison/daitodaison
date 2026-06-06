@@ -82,7 +82,7 @@ export default function MobileMenu({
       <button 
         type="button"
         onClick={() => setIsOpen(true)}
-        className="p-2 text-foreground hover:bg-foreground/5 rounded-md transition-colors z-50 relative"
+        className="p-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-white/5 rounded-md transition-colors z-50 relative"
         aria-label="Open Mobile Menu"
         aria-expanded={isOpen}
         aria-controls={isOpen ? "mobile-menu-panel" : undefined}
@@ -99,7 +99,7 @@ export default function MobileMenu({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-background/60 backdrop-blur-sm z-60"
+              className="fixed inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-sm z-60"
               aria-hidden="true"
             />
 
@@ -113,14 +113,14 @@ export default function MobileMenu({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed inset-0 md:inset-auto md:top-0 md:right-0 md:w-96 bg-background md:border-l md:border-foreground/10 md:shadow-2xl z-70 p-6 flex flex-col h-dvh md:h-full"
+              className="fixed inset-0 md:inset-auto md:top-0 md:right-0 md:w-96 bg-white dark:bg-zinc-950 md:border-l md:border-gray-200 dark:border-white/10 md:shadow-2xl z-70 p-6 flex flex-col h-dvh md:h-full"
             >
               <div className="flex justify-between items-center mb-6">
                 <span className="text-2xl font-bold text-primary md:text-lg">{labels.menu}</span>
                 <button 
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="p-2 text-foreground/70 hover:text-foreground rounded-full hover:bg-foreground/5 transition-colors"
+                  className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:text-white rounded-full hover:bg-gray-100 dark:bg-white/5 transition-colors"
                   aria-label="Close Mobile Menu"
                 >
                   <X className="w-8 h-8 md:w-6 md:h-6" aria-hidden="true" />
@@ -141,11 +141,11 @@ export default function MobileMenu({
                       {link.children ? (
                           <div className="flex flex-col">
                                <div className={`flex items-center justify-between py-2 text-xl md:text-lg font-bold ${
-                                   isLinkActive ? 'text-primary dark:text-blue-300' : 'text-foreground/80 dark:text-white'
+                                   isLinkActive ? 'text-primary dark:text-blue-300' : 'text-gray-700 dark:text-gray-200 dark:text-white'
                                }`}>
                                   {link.label}
                                </div>
-                               <ul className="pl-4 flex flex-col gap-3 md:gap-2 border-l-2 border-foreground/10 ml-2 m-0 list-none">
+                               <ul className="pl-4 flex flex-col gap-3 md:gap-2 border-l-2 border-gray-200 dark:border-white/10 ml-2 m-0 list-none">
                                   {link.children.map(child => {
                                       const Icon = child.icon ? (Icons as any)[child.icon] : null;
                                       return (
@@ -156,7 +156,7 @@ export default function MobileMenu({
                                             className={`py-2 text-lg md:text-base transition-colors flex items-center gap-3 ${
                                                 isActive(child.href) 
                                                 ? 'text-primary dark:text-blue-300 font-medium' 
-                                                : 'text-foreground hover:text-primary dark:text-white dark:hover:text-blue-300'
+                                                : 'text-gray-900 dark:text-white hover:text-primary dark:text-white dark:hover:text-blue-300'
                                             }`}
                                         >
                                             {Icon && <Icon className="w-5 h-5 md:w-4 md:h-4" aria-hidden="true" />}
@@ -173,7 +173,7 @@ export default function MobileMenu({
                               className={`flex items-center justify-between py-2 text-xl md:text-lg font-bold transition-colors ${
                                   isActive(link.href || '') 
                                   ? 'text-primary dark:text-blue-300' 
-                                  : 'text-foreground hover:text-primary dark:text-white dark:hover:text-blue-300'
+                                  : 'text-gray-900 dark:text-white hover:text-primary dark:text-white dark:hover:text-blue-300'
                               }`}
                           >
                               {link.label}
@@ -192,18 +192,18 @@ export default function MobileMenu({
                 </ul>
               </nav>
 
-              <div className="pt-6 md:pt-8 border-t border-foreground/10 flex flex-col gap-4 mt-auto">
+              <div className="pt-6 md:pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col gap-4 mt-auto">
                  <div className="space-y-3">
                     <Search placeholder={searchPlaceholder} lang={lang} />
                     {availableLangs.length > 0 && (
                       <div>
-                        <div className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-foreground/70">Language</div>
+                        <div className="mb-2 text-sm font-semibold uppercase tracking-[0.24em] text-gray-500 dark:text-gray-400">Language</div>
                         <div className="grid grid-cols-2 gap-2">
                           {availableLangs.map((locale) => (
                             <a
                               key={locale}
                               href={getLocaleHref(locale)}
-                              className="block w-full py-2 text-center text-sm font-medium rounded-lg border border-foreground/10 bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors"
+                              className="block w-full py-2 text-center text-sm font-medium rounded-lg border border-gray-200 dark:border-white/10 bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                             >
                               {locale.toUpperCase()}
                             </a>
@@ -220,7 +220,7 @@ export default function MobileMenu({
                   </a>
                   
                   <div className="flex justify-center gap-6 mt-4">
-                     <a href={ACTION_LINKS.social.github} target="_blank" rel="noopener noreferrer" className="text-foreground/70 hover:text-primary transition-colors" aria-label="GitHub">
+                     <a href={ACTION_LINKS.social.github} target="_blank" rel="noopener noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-primary transition-colors" aria-label="GitHub">
                         <BrandIcon icon="github" className="w-6 h-6" aria-hidden="true" />
                      </a>
                   </div>

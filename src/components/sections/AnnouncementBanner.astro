@@ -54,7 +54,7 @@ const { message, link, linkText } = Astro.props;
   .marquee-track {
     display: inline-flex;
     align-items: center;
-    animation: marquee 18s linear infinite;
+    animation: announcement-marquee 18s linear infinite !important;
     will-change: transform;
   }
 
@@ -63,14 +63,14 @@ const { message, link, linkText } = Astro.props;
     white-space: nowrap;
   }
 
-  @keyframes marquee {
+  @keyframes announcement-marquee {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
 
   @media (min-width: 768px) {
     .marquee-track {
-      animation: none;
+      animation: none !important;
     }
   }
 </style>
