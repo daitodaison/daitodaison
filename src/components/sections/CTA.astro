@@ -48,7 +48,7 @@ const isBoxed = variant === 'boxed';
           <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
         )}
 
-        <h2 class={isBoxed ? "text-3xl font-bold mb-4 relative z-10 !text-primary-foreground" : "text-5xl md:text-7xl font-display font-bold mb-8"} set:html={title} />
+        <h2 class={isBoxed ? "text-3xl font-bold mb-4 relative z-10 !text-primary-foreground" : "text-3xl md:text-5xl font-display font-bold mb-8 break-words"} set:html={title} />
         
         <p class={isBoxed ? "!text-primary-foreground/80 mb-8 max-w-md mx-auto relative z-10" : "text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"}>
             {description}
