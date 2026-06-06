@@ -23,3 +23,12 @@ img {
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
+
+/* iOS Safari 強制修正 */
+button, a[class*="btn"], [class*="Button"] {
+  -webkit-text-fill-color: inherit !important;
+}
+img {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
