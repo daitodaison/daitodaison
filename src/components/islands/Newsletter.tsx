@@ -105,9 +105,9 @@ export default function Newsletter({
                         placeholder={placeholder}
                         aria-label={placeholder}
                         aria-labelledby="newsletter-island-title"
-                        className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-purple-500 md:placeholder:text-foreground/30"
+                        className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-4 pr-12 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-gray-500 dark:placeholder:text-gray-400"
                       />
-                      <Send className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-500 md:text-foreground/20" />
+                      <Send className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
                     </div>
 
                     <button

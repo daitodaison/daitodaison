@@ -39,7 +39,7 @@ export default function MobileDocsMenu({ sections, groupedDocs, currentPath }: M
     <>
       <button 
         onClick={() => setIsOpen(true)}
-        className="flex lg:hidden items-center gap-2 px-3 py-1.5 text-sm font-medium text-purple-500 md:text-foreground/70 bg-foreground/5 rounded-full hover:text-foreground transition-colors"
+        className="flex lg:hidden items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-foreground/5 rounded-full hover:text-foreground transition-colors"
         aria-label="Open Documentation Navigation"
       >
         <ListTree className="w-4 h-4" />
