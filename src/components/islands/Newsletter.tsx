@@ -61,7 +61,7 @@ export default function Newsletter({
               <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center text-green-500">
                 <CheckCircle2 size={32} />
               </div>
-              <h3 className="text-2xl font-display font-bold">Welcome Aboard!</h3>
+              <h3 className="text-xl md:text-2xl font-display font-bold">Welcome Aboard!</h3>
               <p className="text-gray-600 dark:text-gray-300 max-w-sm">
                 You've successfully subscribed to our newsletter. Prepare for departure!
               </p>
@@ -76,7 +76,7 @@ export default function Newsletter({
             <motion.div key="form" exit={{ opacity: 0, scale: 0.9 }}>
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div>
-                  <h2 id="newsletter-island-title" className="text-3xl font-display font-bold mb-4">{title}</h2>
+                  <h2 id="newsletter-island-title" className="text-2xl md:text-3xl font-display font-bold mb-4">{title}</h2>
                   <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                     {description}
                   </p>

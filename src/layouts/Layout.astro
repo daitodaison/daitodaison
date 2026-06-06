@@ -116,8 +116,8 @@ const dir = isRtl(lang) ? 'rtl' : 'ltr';
         <Analytics />
         <slot name="head" />
 		</head>
-		<body class="min-h-screen flex flex-col antialiased bg-background text-foreground selection:bg-primary selection:text-white">
-        <div class="fixed inset-0 z-[-1] bg-background"></div>
+		<body class="min-h-screen flex flex-col antialiased bg-white text-slate-900 dark:bg-zinc-950 dark:text-white selection:bg-primary selection:text-white">
+        <div class="fixed inset-0 z-[-1] bg-white dark:bg-zinc-950"></div>
 
         <div class="fixed top-0 w-full z-50 flex flex-col items-stretch">
             {siteConfig.announcement?.enabled && (

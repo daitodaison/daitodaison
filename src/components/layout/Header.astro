@@ -45,7 +45,7 @@ const primaryHref = ACTION_LINKS.primary.href.startsWith('/docs')
   : `/${lang}${ACTION_LINKS.primary.href.startsWith('/') ? '' : '/'}${ACTION_LINKS.primary.href}`.replace(/\/$/, '');
 ---
 
-<header id="main-header" class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4 text-foreground">
+<header id="main-header" class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4 text-gray-900 dark:text-white">
   <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
     <a href={`/${lang}`} class="flex items-center gap-3 text-xl font-bold tracking-tight text-primary dark:text-white group">
       {siteConfig.logo && (
@@ -97,7 +97,7 @@ const primaryHref = ACTION_LINKS.primary.href.startsWith('/docs')
         href={ACTION_LINKS.social.github}
         target="_blank" 
         rel="noopener noreferrer"
-        class="text-foreground hover:text-foreground/70 dark:text-white dark:hover:text-blue-300 transition-colors hidden md:block"
+        class="text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-blue-300 transition-colors hidden md:block"
         aria-label="GitHub"
       >
         <BrandIcon icon="github" className="w-5 h-5" />
@@ -132,10 +132,10 @@ const primaryHref = ACTION_LINKS.primary.href.startsWith('/docs')
     const handleScroll = () => {
       if (window.scrollY > 20) {
         header.classList.remove('bg-transparent', 'border-transparent', 'py-4');
-        header.classList.add('bg-background/80', 'backdrop-blur-md', 'border-foreground/10', 'py-2', 'shadow-sm');
+        header.classList.add('bg-white/80', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
       } else {
         header.classList.add('bg-transparent', 'border-transparent', 'py-4');
-        header.classList.remove('bg-background/80', 'backdrop-blur-md', 'border-foreground/10', 'py-2', 'shadow-sm');
+        header.classList.remove('bg-white/80', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
       }
     };
 
