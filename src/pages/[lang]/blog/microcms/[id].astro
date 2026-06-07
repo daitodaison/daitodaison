@@ -192,14 +192,16 @@ const otherPosts = allPosts.filter((p: any) => p.id !== post.id).slice(0, 3);
         {headings.length > 0 && (
           <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 mb-4">
             <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">目次</p>
-            <ul class="space-y-1">
-              {headings.map((h) => (
+            <ul class="space-y-0.5" id="toc-list">
+              {headings.map((h, i) => (
                 <li>
                   
                     href={`#${h.id}`}
-                    class={`block text-xs leading-snug py-1 transition-colors hover:text-primary text-gray-600 dark:text-gray-400 ${h.level === 3 ? 'pl-3' : ''}`}
+                    data-toc-id={h.id}
+                    class={`toc-link flex items-start gap-2 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 hover:text-primary hover:bg-primary/5 text-gray-500 dark:text-gray-400 ${h.level === 3 ? 'pl-5' : ''}`}
                   >
-                    {h.text}
+                    <span class="toc-bar mt-1 shrink-0 w-0.5 h-3 rounded-full bg-transparent transition-all duration-200"></span>
+                    <span>{h.text}</span>
                   </a>
                 </li>
               ))}
@@ -221,21 +223,36 @@ const otherPosts = allPosts.filter((p: any) => p.id !== post.id).slice(0, 3);
   </div>
 
   <script>
-    // 目次のアクティブリンク
-    const headingEls = document.querySelectorAll('h2[id], h3[id]');
-    const tocLinks = document.querySelectorAll('aside a[href^="#"]');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          tocLinks.forEach((link) => {
-            link.classList.remove('text-primary', 'font-semibold');
-            if (link.getAttribute('href') === `#${entry.target.id}`) {
-              link.classList.add('text-primary', 'font-semibold');
-            }
-          });
+    const headingEls = Array.from(document.querySelectorAll('h2[id], h3[id]'));
+    const tocLinks = Array.from(document.querySelectorAll('a[data-toc-id]'));
+
+    function setActive(id) {
+      tocLinks.forEach((link) => {
+        const bar = link.querySelector('.toc-bar');
+        if (link.dataset.tocId === id) {
+          link.classList.add('text-primary', 'font-semibold', 'bg-primary/5');
+          link.classList.remove('text-gray-500', 'dark:text-gray-400');
+          if (bar) { bar.classList.add('bg-primary'); bar.classList.remove('bg-transparent'); }
+        } else {
+          link.classList.remove('text-primary', 'font-semibold', 'bg-primary/5');
+          link.classList.add('text-gray-500', 'dark:text-gray-400');
+          if (bar) { bar.classList.remove('bg-primary'); bar.classList.add('bg-transparent'); }
         }
       });
-    }, { rootMargin: '-20% 0% -70% 0%' });
-    headingEls.forEach((el) => observer.observe(el));
+    }
+
+    // スクロール位置から最も近い見出しを特定
+    function onScroll() {
+      const scrollY = window.scrollY + 120;
+      let current = headingEls[0]?.id || '';
+      for (const el of headingEls) {
+        if (el.offsetTop <= scrollY) current = el.id;
+        else break;
+      }
+      if (current) setActive(current);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   </script>
 </Layout>
