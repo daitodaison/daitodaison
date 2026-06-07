@@ -18,7 +18,7 @@ const { lang } = Astro.params;
 const t = useTranslations(lang);
 ---
 
-<Layout title="ASTRO攻略LABO | ID申請・お問い合わせ" description="ASTRO攻略LABOへのお問い合わせや取引ID申請はこちらから。">
+<Layout title={t['meta.contact.title']} description={t['meta.contact.desc']}>
   <PageHeader 
       title={t['contact.title']}
       description={t['contact.desc']}

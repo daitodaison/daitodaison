@@ -22,7 +22,7 @@ const plans = [
   {
     name: t['pricing.starter.name'],
     price: 0,
-    displayPrice: '¥0 / 永年無料',
+    displayPrice: t['pricing.plan1.price'],
     description: t['pricing.starter.desc'],
     features: [
       t['pricing.feat.usdjpy'],
@@ -35,7 +35,7 @@ const plans = [
   {
     name: t['pricing.pro.name'],
     price: 0,
-    displayPrice: '¥0 / 実質無料',
+    displayPrice: t['pricing.plan2.price'],
     description: t['pricing.pro.desc'],
     features: [
       t['pricing.feat.all_pairs'],
@@ -50,7 +50,7 @@ const plans = [
   {
     name: t['pricing.enterprise.name'],
     price: 0,
-    displayPrice: '¥0 / 特別枠',
+    displayPrice: t['pricing.plan3.price'],
     description: t['pricing.enterprise.desc'],
     features: [
       t['pricing.feat.all_pairs'],
@@ -72,7 +72,7 @@ const faqs = [
 
 ---
 
-<Layout title="ASTROツール比較 - ASTRO攻略LABO" description="体験版と完全版のASTROツール仕様を比較します。">
+<Layout title={t['meta.pricing.title']} description={t['meta.pricing.desc']}>
   
   <Schema item={{
     "@context": "https://schema.org",
