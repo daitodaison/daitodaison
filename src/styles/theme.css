@@ -7,6 +7,7 @@
   --primary-foreground: #ffffff;
   --color-primary: #2563EB;
 }
+
 /* Dark Theme */
 .dark {
   --background: #09090b;
@@ -16,42 +17,10 @@
   --primary-foreground: #ffffff;
   --color-primary: #3b82f6;
 }
+
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
   transition: background-color 0.3s, color 0.3s;
-}
-
-/* Navy Theme (ASTRO風) */
-.navy {
-  --background: #050A1E;
-  --foreground: #ffffff;
-  --muted: #0D1535;
-  --muted-foreground: #8B9CB8;
-  --primary-foreground: #050A1E;
-  --color-primary: #00D4FF;
-  --navy-accent: #7B4FFF;
-  --navy-border: rgba(0, 212, 255, 0.15);
-  --navy-card: #0F1A3E;
-}
-
-/* body への navy テーマ適用 */
-.navy body,
-body:where(.navy *) {
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-.navy .fixed.inset-0 {
-  background-color: #050A1E !important;
-}
-
-.navy #bg-overlay {
-  background-color: #050A1E !important;
-}
-
-.navy body {
-  background-color: #050A1E !important;
-  color: #ffffff !important;
 }

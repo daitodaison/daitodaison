@@ -107,9 +107,11 @@ const dir = 'ltr';
                 return 'light';
             };
             const theme = getTheme();
-            document.documentElement.classList.remove('dark', 'navy');
-            if (theme === 'dark') document.documentElement.classList.add('dark');
-            if (theme === 'navy') document.documentElement.classList.add('navy');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         </script>
         <Analytics />
         <slot name="head" />
