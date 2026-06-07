@@ -108,16 +108,14 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             })}
           </ul>
         </div>
-        <div class="bg-gradient-to-br from-primary to-blue-600 rounded-xl p-4 text-white">
-          <p class="text-xs font-bold mb-1">🎁 限定特典</p>
-          <p class="text-sm font-semibold mb-3">ツール完全版を無料解放中</p>
-          <a href="https://astro.space/ja/" class="block text-center bg-white text-primary text-xs font-bold py-2 px-3 rounded-lg hover:bg-white/90 transition-colors">
-            今すぐ口座開設
-          </a>
-        </div>
-      </aside>
-
-      <!-- 本文 -->
+        <a href="/ja/blog/microcms/3l44u_69rza4" class="block rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden hover:border-primary/40 transition-all group">
+          <div class="bg-gradient-to-br from-green-500/10 to-blue-500/5 p-4">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-green-600 dark:text-green-400 mb-1">📖 おすすめ記事</p>
+            <p class="text-xs font-bold text-zinc-900 dark:text-white leading-snug mb-2 group-hover:text-primary transition-colors">自己資金ゼロで始める完全ガイド</p>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">ポイ活で1〜2万円の軍資金を無料で作る方法</p>
+            <p class="text-[11px] text-primary font-medium mt-2">続きを読む →</p>
+          </div>
+        </a>
       <main class="min-w-0 flex-1">
         {post.eyecatch && (
           <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
@@ -177,15 +175,16 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
               ))}
             </ul>
           </div>
-        )}
-        <div class="bg-gradient-to-br from-primary to-blue-600 rounded-xl p-4 text-white">
-          <p class="text-xs font-bold mb-1">🎁 限定特典</p>
-          <p class="text-sm font-semibold mb-3">ツール完全版を無料解放中</p>
-          <a href="https://astro.space/ja/" class="block text-center bg-white text-primary text-xs font-bold py-2 px-3 rounded-lg hover:bg-white/90 transition-colors">
-            今すぐ口座開設
-          </a>
+        <div class="relative rounded-xl p-[1px] bg-gradient-to-br from-purple-500 via-blue-500 to-purple-500/30">
+          <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
+            <p class="text-[10px] font-bold tracking-widest uppercase text-purple-500 mb-1">🔧 近日公開</p>
+            <p class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1">限定サインツール</p>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">22種類の指標搭載・バックテスト対応。口座開設で完全版を無料解放</p>
+            <a href="https://astro.space/ja/" class="block text-center bg-gradient-to-r from-purple-600 to-blue-600 text-white text-xs font-bold py-2 px-3 rounded-lg hover:opacity-90 transition-opacity">
+              ASTROで口座開設 →
+            </a>
+          </div>
         </div>
-      </aside>
 
     </div>
   </div>
