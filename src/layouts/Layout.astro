@@ -107,17 +107,15 @@ const dir = 'ltr';
                 return 'light';
             };
             const theme = getTheme();
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            document.documentElement.classList.remove('dark', 'navy');
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+            if (theme === 'navy') document.documentElement.classList.add('navy');
         </script>
         <Analytics />
         <slot name="head" />
 		</head>
 		<body class="min-h-screen flex flex-col antialiased bg-white text-slate-900 dark:bg-zinc-950 dark:text-white selection:bg-primary selection:text-white">
-        <div class="fixed inset-0 z-[-1] bg-white dark:bg-zinc-950"></div>
+        <div class="fixed inset-0 z-[-1] bg-white dark:bg-zinc-950" id="bg-overlay"></div>
 
         <div class="fixed top-0 w-full z-50 flex flex-col items-stretch">
             {siteConfig.announcement?.enabled && (
