@@ -266,3 +266,8 @@ img {
 .toc-h3:hover {
   opacity: 1;
 }
+
+/* サイドバーのヘッダー重複修正 */
+aside.sticky {
+  top: 7rem !important;
+}
