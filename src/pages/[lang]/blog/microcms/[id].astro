@@ -47,7 +47,7 @@ if (lang === "en") {
 
 function extractHeadings(html: string) {
   const result: { id: string; text: string; level: number }[] = [];
-  const re = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
+  const re = /<h(2)[^>]*>(.*?)</h2>/gi;
   let m; let n = 0;
   while ((m = re.exec(html)) !== null) {
     result.push({ id: "toc-" + (n++), text: m[2].replace(/<[^>]+>/g, ""), level: +m[1] });
