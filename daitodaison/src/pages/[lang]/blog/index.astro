@@ -8,9 +8,10 @@ import { client } from '~/library/microcms';
 import { useTranslations } from '~/i18n/utils';
 
 export async function getStaticPaths() {
+  console.log('[blog/index] getStaticPaths開始');
   const response = await client.get({ endpoint: 'blogs' });
+  console.log('[blog/index] 取得件数:', response.contents.length);
   const posts = response.contents;
-
   return [
     { params: { lang: 'ja' }, props: { posts } },
     { params: { lang: 'en' }, props: { posts } },
@@ -21,26 +22,14 @@ const { posts } = Astro.props;
 const { lang } = Astro.params;
 const t = useTranslations(lang);
 ---
-
 <Layout title="Blog" description={t['blog.microcms.desc']}>
   <PageHeader title="Blog" description={t['blog.microcms.desc']} />
   <Container as="section" class="pb-24">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       {posts.map((post: any) => (
-        <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
-          <div class="relative aspect-video w-full overflow-hidden bg-muted">
-            {post.eyecatch ? (
-              <img src={post.eyecatch.url} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            ) : (
-              <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
-                <span class="text-4xl">📝</span>
-              </div>
-            )}
-          </div>
+        <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden block h-full group">
           <div class="p-6">
-            <h2 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
-              {post.title}
-            </h2>
+            <h2 class="text-xl font-bold">{post.title}</h2>
           </div>
         </Card>
       ))}
