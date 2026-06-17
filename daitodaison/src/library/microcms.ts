@@ -1,15 +1,12 @@
 import { createClient } from "microcms-js-sdk";
 
-const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN;
+const serviceDomain = import.meta.env.MICROCMS_SERVICE_DOMAIN || "daitodaison";
 const apiKey = import.meta.env.MICROCMS_API_KEY;
 
-console.log('[microcms] serviceDomain:', serviceDomain);
-console.log('[microcms] apiKey:', apiKey ? '設定あり' : '未設定');
-
-export const client = (serviceDomain && apiKey)
+export const client = (apiKey)
   ? createClient({ serviceDomain, apiKey })
   : ({
-      get: async () => { console.log('[microcms] フォールバック使用'); return { contents: [] }; },
+      get: async () => ({ contents: [] }),
       getList: async () => ({ contents: [] }),
       getObject: async () => ({}),
     } as any);
