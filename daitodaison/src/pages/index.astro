@@ -1,0 +1,5 @@
+---
+const lang = Astro.request.headers.get('accept-language') || '';
+const isJapanese = lang.startsWith('ja');
+return Astro.redirect(isJapanese ? '/ja/' : '/en/');
+---

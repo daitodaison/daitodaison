@@ -1,0 +1,119 @@
+---
+import { clsx } from 'clsx';
+import { 
+  Atom, 
+  Wind, 
+  Zap, 
+  Layers, 
+  Cpu, 
+  Globe, 
+  Code2,
+  Rocket
+} from 'lucide-react';
+
+interface Props {
+  t: any;
+}
+
+const { t } = Astro.props;
+
+interface TechItem {
+  id: string;
+  name: string;
+  icon: any;
+  category: 'core' | 'frontend' | 'design' | 'devtool' | 'devops';
+  color: string;
+}
+
+const TECH_STACK: TechItem[] = [
+  {
+    id: 'astro',
+    name: 'Astro',
+    icon: Rocket,
+    category: 'core',
+    color: 'text-orange-500',
+  },
+  {
+    id: 'react',
+    name: 'React',
+    icon: Atom,
+    category: 'frontend',
+    color: 'text-blue-400',
+  },
+  {
+    id: 'tailwind',
+    name: 'Tailwind CSS',
+    icon: Wind,
+    category: 'design',
+    color: 'text-cyan-400',
+  },
+  {
+    id: 'typescript',
+    name: 'TypeScript',
+    icon: Code2,
+    category: 'core',
+    color: 'text-blue-600',
+  },
+  {
+    id: 'vite',
+    name: 'Vite',
+    icon: Zap,
+    category: 'devtool',
+    color: 'text-yellow-500',
+  },
+  {
+    id: 'cloudflare',
+    name: 'Cloudflare',
+    icon: Globe,
+    category: 'devops',
+    color: 'text-orange-600',
+  },
+  {
+    id: 'motion',
+    name: 'Motion',
+    icon: Layers,
+    category: 'frontend',
+    color: 'text-pink-500',
+  },
+  {
+    id: 'lucide',
+    name: 'Lucide',
+    icon: Cpu,
+    category: 'design',
+    color: 'text-indigo-400',
+  }
+];
+
+const CATEGORY_COLORS = {
+  core: "bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 border-slate-200 dark:border-slate-700",
+  frontend: "bg-blue-100 dark:bg-blue-900/50 text-blue-900 dark:text-blue-200 border-blue-200 dark:border-blue-800",
+  design: "bg-violet-100 dark:bg-violet-900/50 text-violet-900 dark:text-violet-200 border-violet-200 dark:border-violet-800",
+  devtool: "bg-orange-100 dark:bg-orange-900/50 text-orange-900 dark:text-orange-200 border-orange-200 dark:border-orange-800",
+  devops: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800",
+};
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  {TECH_STACK.map((tech) => (
+    <div class="group relative p-6 rounded-2xl border border-gray-200 dark:border-white/15 bg-white dark:bg-zinc-900 shadow-sm hover:border-slate-300 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/20 hover:-translate-y-1">
+      <div class="flex items-start justify-between mb-4">
+        <div class={clsx("p-3 rounded-xl bg-slate-100 dark:bg-zinc-800 transition-colors group-hover:bg-slate-200 dark:group-hover:bg-zinc-700", tech.color)}>
+          <tech.icon className="w-6 h-6" />
+        </div>
+        <span class={clsx("text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border transition-colors", CATEGORY_COLORS[tech.category])}>
+          {t[`techstack.category.${tech.category}`]}
+        </span>
+      </div>
+      
+      <h3 class="text-lg font-bold mb-1 group-hover:text-slate-900 transition-colors italic text-gray-900 dark:text-white">
+        {tech.name}
+      </h3>
+      <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed font-medium">
+        {t[`techstack.item.${tech.id}.desc`]}
+      </p>
+
+      {/* Background Glow */}
+      <div class="absolute inset-0 rounded-2xl bg-slate-50/0 dark:bg-zinc-950/0 group-hover:bg-slate-100/50 dark:group-hover:bg-zinc-900/30 transition-colors -z-1" />
+    </div>
+  ))}
+</div>
