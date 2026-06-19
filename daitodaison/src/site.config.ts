@@ -66,18 +66,10 @@ export const siteConfig = {
 
 export const NAV_LINKS = [
   { 
-    href: '/features', 
-    label: 'Work',
+    href: '/blog/microcms', 
+    label: 'Blog',
     children: [
-        { href: '/features', label: 'Features', description: 'What makes us different', icon: 'Zap' },
-        { href: '/pricing', label: 'Pricing', description: 'Plans for every team', icon: 'CreditCard' },
-    ]
-  },
-  { 
-    href: '/blog', 
-    label: 'Resources',
-    children: [
-        { href: '/blog', label: 'Blog', description: 'Latest updates & guides', icon: 'Newspaper' },
+        { href: '/blog/microcms', label: 'Blog', description: 'プロップ攻略ブログ', icon: 'Newspaper' },
     ]
   },
 ];
