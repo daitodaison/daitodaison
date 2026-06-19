@@ -71,7 +71,7 @@ displayContent = addIds(displayContent, headings);
 const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slice(0, 3);
 ---
 
-<Layout title={displayTitle} description={displayTitle} image={post.eyecatch?.url} imageAlt={displayTitle} article={true}>
+<Layout title={displayTitle} description={displayTitle} image={post.eyecatch} imageAlt={displayTitle} article={true}>
   <ScrollProgress />
   <div class="max-w-7xl mx-auto px-4 pt-32 pb-20">
 
@@ -118,7 +118,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       <main class="min-w-0 flex-1">
         {post.eyecatch && (
           <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
-            <img src={post.eyecatch.url} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
+            <img src={post.eyecatch} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
           </div>
         )}
         <h1 class="text-xl md:text-2xl font-bold mb-8 leading-snug text-zinc-900 dark:text-white">
@@ -143,7 +143,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
                 <a href={"/" + lang + "/blog/microcms/" + p.id} class="group block rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all">
                   {p.eyecatch && (
                     <div class="overflow-hidden aspect-video">
-                      <img src={p.eyecatch.url} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={p.eyecatch} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   )}
                   <div class="p-4">

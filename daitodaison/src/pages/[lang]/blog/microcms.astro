@@ -19,7 +19,7 @@ const posts = response.contents;
 const { lang } = Astro.params;
 const t = useTranslations(lang);
 
-function extractFirstImage(html) {
+function // extractFirstImage(html) {
   const match = html?.match(/<img[^>]+src=["']([^"']+)["']/i);
   return match ? match[1] : null;
 }
@@ -35,7 +35,7 @@ function extractFirstImage(html) {
         <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
           <div class="relative aspect-video w-full overflow-hidden bg-muted">
             {(() => {
-              const imgUrl = post.eyecatch?.url || extractFirstImage(post.content);
+              const imgUrl = post.eyecatch || null;
               return imgUrl ? (
                 <img
                   src={imgUrl}
