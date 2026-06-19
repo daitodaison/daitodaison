@@ -88,19 +88,19 @@ export const ACTION_LINKS = {
 
 export const FOOTER_LINKS = {
   product: {
-    title: 'Product',
+    title: 'コンテンツ',
     links: [
-      { href: '/features', label: 'Features' },
-      { href: '/about', label: 'About' },
-      { href: '/pricing', label: 'Pricing' },
-      { href: '/changelog', label: 'Changelog' },
+      { href: '/blog/microcms', label: '攻略ブログ' },
+      { href: 'https://www.fintokei.com/jp/?affiliate=64', label: 'Fintokei登録', localize: false },
+      { href: 'https://my.funded7.com/ja/sign-up?affiliateId=111', label: 'FUNDED7登録', localize: false },
+      { href: 'https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD', label: 'FTMO登録', localize: false },
     ],
   },
   legal: {
-    title: 'Legal',
+    title: '法的情報',
     links: [
-      { href: '/privacy', label: 'Privacy', localize: false },
-      { href: '/terms', label: 'Terms', localize: false }
+      { href: '/privacy', label: 'プライバシーポリシー', localize: false },
+      { href: '/terms', label: '免責事項', localize: false }
     ],
   },
 };
