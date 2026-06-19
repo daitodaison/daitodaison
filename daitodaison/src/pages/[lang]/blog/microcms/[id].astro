@@ -36,7 +36,9 @@ async function translateHtml(html: string, to: string) {
 }
 
 let displayTitle = post.title;
-let displayContent = post.content;
+let displayContent = (post.content || '')
+  .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+  .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 
 if (lang === "en") {
   try {
