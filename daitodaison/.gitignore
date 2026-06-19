@@ -40,4 +40,4 @@ pnpm-debug.log*
 test-results/
 playwright-report/
 blob-report/
-playwright/.cache/
+playwright/.cache/4889c65139d6eabff211a253ea7572fe.csv
