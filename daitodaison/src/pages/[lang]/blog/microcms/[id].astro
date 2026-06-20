@@ -10,8 +10,14 @@ import translate from "translate";
 translate.engine = "google";
 
 export async function getStaticPaths() {
-  const response = await client.get({ endpoint: "blogs", queries: { limit: 1000 } });
-  const posts = response.contents;
+  let posts: any[] = [];
+  let offset = 0;
+  while (true) {
+    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch" } });
+    posts = posts.concat(response.contents);
+    if (posts.length >= response.totalCount) break;
+    offset += 100;
+  }
   return posts.flatMap((post: any) =>
     Object.keys(languages).map((lang) => ({
       params: { lang, id: post.id },
