@@ -1,10 +1,8 @@
 ---
 export const prerender = true;
 import Layout from "~/layouts/Layout.astro";
-import PageHeader from "~/components/layout/PageHeader.astro";
-import Container from "~/components/ui/Container.astro";
 import { client } from "~/library/microcms";
-import { useTranslations } from "~/i18n/utils";
+import { languages } from "~/i18n/ui";
 
 export async function getStaticPaths() {
   let allRawPosts: any[] = [];
@@ -12,66 +10,137 @@ export async function getStaticPaths() {
   while (true) {
     const response = await client.get({
       endpoint: "blogs",
-      queries: { limit: 100, offset, fields: "id,title,content", orders: "-updatedAt" },
+      queries: { limit: 100, offset, fields: "id,title,category,updatedAt", orders: "-updatedAt" },
     });
     allRawPosts = allRawPosts.concat(response.contents);
     if (allRawPosts.length >= response.totalCount) break;
     offset += 100;
   }
-  const allPosts = allRawPosts.filter(
-    (p: any) => p.title && (p.content || "").trim()
-  );
-
-  return [
-    { params: { lang: "ja" }, props: { posts: allPosts } },
-    { params: { lang: "en" }, props: { posts: allPosts } },
-  ];
+  const allPosts = allRawPosts.filter((p: any) => p.title);
+  return Object.keys(languages).map((lang) => ({
+    params: { lang },
+    props: { posts: allPosts },
+  }));
 }
 
 const { posts } = Astro.props;
 const { lang } = Astro.params;
-const t = useTranslations(lang);
 
 const staticPages = [
-  { label: "トップページ", href: `/${lang}/` },
-  { label: "会社概要", href: `/${lang}/about/` },
-  { label: "お問い合わせ", href: `/${lang}/contact/` },
-  { label: "デザイン", href: `/${lang}/design/` },
-  { label: "機能", href: `/${lang}/features/` },
-  { label: "料金", href: `/${lang}/pricing/` },
-  { label: "ポートフォリオ", href: `/${lang}/portfolio/` },
-  { label: "ショーケース", href: `/${lang}/showcase/` },
-  { label: "ブログ一覧", href: `/${lang}/blog/` },
+  { label: "トップページ", href: `/${lang}/`, desc: "プロップ攻略・Substack案内" },
+  { label: "ブログ一覧", href: `/${lang}/blog/`, desc: "全記事一覧" },
+  { label: "会社概要", href: `/${lang}/about/`, desc: "サイト運営者情報" },
+  { label: "お問い合わせ", href: `/${lang}/contact/`, desc: "お問い合わせフォーム" },
 ];
+
+// カテゴリー別に整理
+const categoryMap: Record<string, any[]> = {};
+for (const post of posts) {
+  const cat = post.category?.name || "未分類";
+  if (!categoryMap[cat]) categoryMap[cat] = [];
+  categoryMap[cat].push(post);
+}
+const categories = Object.entries(categoryMap).sort((a, b) => b[1].length - a[1].length);
+
+const now = new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
 ---
-<Layout title="サイトマップ" description="サイト内の全ページ一覧です。">
-  <PageHeader title="サイトマップ" description="サイト内の全ページ一覧です。" />
-  <Container as="section" class="pb-24">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-      <div>
-        <h2 class="text-xl font-display font-bold mb-4">固定ページ</h2>
-        <ul class="space-y-2">
-          {staticPages.map((page) => (
-            <li>
-              <a href={page.href} class="text-foreground hover:text-primary transition-colors underline-offset-4 hover:underline">
-                {page.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h2 class="text-xl font-display font-bold mb-4">ブログ記事一覧（{posts.length}件）</h2>
-        <ul class="space-y-2 max-h-[600px] overflow-y-auto pr-2">
-          {posts.map((post: any) => (
-            <li>
-              <a href={`/${lang}/blog/microcms/${post.id}`} class="text-foreground hover:text-primary transition-colors underline-offset-4 hover:underline text-sm">
-                {post.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+
+<Layout title="サイトマップ | daito FXプロップ攻略ブログ" description="サイト内の全ページ・全記事一覧です。カテゴリー別に整理しています。">
+
+  <!-- ヘッダー -->
+  <div class="bg-gradient-to-br from-zinc-950 to-blue-950 text-white pt-32 pb-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-3xl font-black mb-2">サイトマップ</h1>
+      <p class="text-zinc-400 text-sm">サイト内の全ページ・全記事一覧 / 最終更新：{now}</p>
+      <p class="text-zinc-500 text-xs mt-2">景品表示法に基づく表示：当サイトのリンクには広告を含む場合があります</p>
     </div>
-  </Container>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-4 py-16 space-y-16">
+
+    <!-- 固定ページ -->
+    <section>
+      <h2 class="text-lg font-black mb-6 pb-2 border-b-2 border-blue-500 inline-flex items-center gap-2">
+        📄 固定ページ
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        {staticPages.map((page) => (
+          <a href={page.href}
+             class="block bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 hover:border-blue-400 hover:shadow-md transition-all group">
+            <p class="font-bold text-zinc-900 dark:text-white group-hover:text-blue-600 transition-colors">{page.label}</p>
+            <p class="text-xs text-zinc-500 mt-1">{page.desc}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- 記事統計 -->
+    <section class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-500/30 rounded-2xl p-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div>
+          <p class="text-3xl font-black text-blue-600">{posts.length}</p>
+          <p class="text-xs text-zinc-500 mt-1">総記事数</p>
+        </div>
+        <div>
+          <p class="text-3xl font-black text-blue-600">{categories.length}</p>
+          <p class="text-xs text-zinc-500 mt-1">カテゴリー数</p>
+        </div>
+        <div>
+          <p class="text-3xl font-black text-blue-600">2.3%</p>
+          <p class="text-xs text-zinc-500 mt-1">Fintokei上位</p>
+        </div>
+        <div>
+          <p class="text-3xl font-black text-blue-600">6年</p>
+          <p class="text-xs text-zinc-500 mt-1">FX経験</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- カテゴリー別記事一覧 -->
+    <section>
+      <h2 class="text-lg font-black mb-8 pb-2 border-b-2 border-blue-500 inline-flex items-center gap-2">
+        📂 カテゴリー別記事一覧
+      </h2>
+      <div class="space-y-10">
+        {categories.map(([catName, catPosts]) => (
+          <div>
+            <h3 class="flex items-center gap-2 text-base font-bold mb-4 text-zinc-900 dark:text-white">
+              <span class="bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs px-3 py-1 rounded-full">
+                {catName}
+              </span>
+              <span class="text-xs text-zinc-400">{catPosts.length}件</span>
+            </h3>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1.5">
+              {catPosts.map((post: any) => (
+                <li class="flex items-start gap-2">
+                  <span class="text-blue-400 mt-0.5 shrink-0">▸</span>
+                  <a href={`/${lang}/blog/microcms/${post.id}`}
+                     class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors leading-snug">
+                    {post.title}
+                    {post.updatedAt && (
+                      <span class="text-[10px] text-zinc-400 ml-1">
+                        {new Date(post.updatedAt).toLocaleDateString("ja-JP", {month:"numeric", day:"numeric"})}
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Substack CTA -->
+    <section class="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 text-white p-8 text-center">
+      <p class="text-sm font-bold uppercase tracking-widest text-blue-200 mb-2">📬 無料ニュースレター</p>
+      <h2 class="text-xl font-black mb-3">プロップ攻略の知見を無料で受け取る</h2>
+      <p class="text-blue-100 text-sm mb-6">Fintokei上位2.3%の攻略戦略をSubstackで毎週公開中</p>
+      <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3 rounded-xl hover:-translate-y-0.5 transition-all">
+        Substackを無料購読する →
+      </a>
+    </section>
+
+  </div>
 </Layout>
