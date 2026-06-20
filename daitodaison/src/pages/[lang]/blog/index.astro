@@ -78,8 +78,8 @@ if (cur < totalPages) {
       {posts.map((post: any) => (
         <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
           <div class="relative aspect-video w-full overflow-hidden bg-muted">
-            {post.eyecatch ? (
-              <img src={post.eyecatch} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {(() => { const raw = post.eyecatch || ""; return raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content"); })() ? (
+              <img src={(() => { const raw = post.eyecatch || ""; return raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content"); })()} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
             ) : (
               <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
                 <span class="text-4xl">📝</span>
