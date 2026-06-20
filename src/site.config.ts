@@ -65,32 +65,41 @@ export const siteConfig = {
 };
 
 export const NAV_LINKS = [
-  { 
-    href: '/features', 
-    label: 'Work',
+  {
+    href: '/blog/',
+    label: 'Blog',
     children: [
-        { href: '/features', label: 'Features', description: 'What makes us different', icon: 'Zap' },
-        { href: '/pricing', label: 'Pricing', description: 'Plans for every team', icon: 'CreditCard' },
+      { href: '/blog/', label: 'Blog', description: '全記事の攻略一覧', icon: 'Newspaper' },
+      { href: '/sitemap-page/', label: 'Sitemap', description: 'カテゴリー別記事マップ', icon: 'Map' },
     ]
   },
-  { 
-    href: '/blog', 
-    label: 'Resources',
+  {
+    href: 'https://www.fintokei.com/jp/?affiliate=64',
+    label: 'PropFarm',
+    localize: false,
     children: [
-        { href: '/blog', label: 'Blog', description: 'Latest updates & guides', icon: 'Newspaper' },
+      { href: 'https://www.fintokei.com/jp/?affiliate=64', label: 'Fintokei', description: '🏆 著者イチオシ・日本初プロップ', icon: 'Trophy', localize: false },
+      { href: 'https://my.funded7.com/ja/sign-up?affiliateId=111', label: 'FUNDED7', description: '💰 1フェーズ・最大6000万円', icon: 'Wallet', localize: false },
+      { href: 'https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD', label: 'FTMO', description: '🌍 世界最大手・300万人以上', icon: 'Globe', localize: false },
+    ]
+  },
+  {
+    href: 'https://daitodaison.substack.com/',
+    label: 'Substack',
+    localize: false,
+    children: [
+      { href: 'https://daitodaison.substack.com/', label: 'Substack', description: '📬 無料ニュースレター購読', icon: 'Mail', localize: false },
     ]
   },
 ];
-
 export const ACTION_LINKS = {
-  primary: { label: 'Get Started', href: '/docs/getting-started' },
-  social: { 
-    twitter: 'https://twitter.com/astro-lab',
-    linkedin: 'https://linkedin.com/company/astro-lab',
-    github: 'https://github.com/astro-lab',
-    youtube: 'https://youtube.com/@astro-lab',
-    facebook: 'https://facebook.com/astro-lab'
-    
+  primary: { label: 'プロップ攻略手法を学ぶ', href: 'https://daitodaison.substack.com/' },
+  social: {
+    twitter: 'https://twitter.com/daitodaison',
+    github: 'https://github.com/daitodaison',
+    youtube: 'https://youtube.com/@creator_gaku',
+    linkedin: '',
+    facebook: ''
   }
 };
 
