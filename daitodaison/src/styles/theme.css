@@ -10,12 +10,12 @@
 
 /* Dark Theme */
 .dark {
-  --background: #09090b;
-  --foreground: #ffffff;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
+  --background: #141820;
+  --foreground: #e8eaf0;
+  --muted: #1e2433;
+  --muted-foreground: #9ba8bf;
   --primary-foreground: #ffffff;
-  --color-primary: #3b82f6;
+  --color-primary: #4f8ef7;
 }
 
 body {
