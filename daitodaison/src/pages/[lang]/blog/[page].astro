@@ -12,19 +12,25 @@ export async function getStaticPaths() {
   const response = await client.get({ endpoint: "blogs", queries: { limit: 100 } });
   const allPosts = response.contents;
   const totalPages = Math.max(1, Math.ceil(allPosts.length / PER_PAGE));
-  const start = 0;
-  const posts = allPosts.slice(0, PER_PAGE);
-  return [
-    { params: { lang: "ja" }, props: { posts, currentPage: 1, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE } },
-    { params: { lang: "en" }, props: { posts, currentPage: 1, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE } },
-  ];
+  const paths = [];
+  for (const lang of ["ja", "en"]) {
+    for (let page = 2; page <= totalPages; page++) {
+      const start = (page - 1) * PER_PAGE;
+      const posts = allPosts.slice(start, start + PER_PAGE);
+      paths.push({
+        params: { lang, page: String(page) },
+        props: { posts, currentPage: page, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE },
+      });
+    }
+  }
+  return paths;
 }
 
 const { posts, currentPage, totalPages, totalPosts, perPage } = Astro.props;
 const { lang } = Astro.params;
 const t = useTranslations(lang);
 ---
-<Layout title="Blog" description={t["blog.microcms.desc"]}>
+<Layout title={`Blog - ${currentPage}ページ目`} description={t["blog.microcms.desc"]}>
   <PageHeader title="Blog" description={t["blog.microcms.desc"]} />
   <Container as="section" class="pb-24">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
@@ -48,21 +54,24 @@ const t = useTranslations(lang);
       ))}
     </div>
 
-    {totalPages > 1 && (
-      <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <a href={page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${page}/`} class={page === currentPage ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"} aria-current={page === currentPage ? "page" : undefined}>
-            {page}
-          </a>
-        ))}
-        <a href={`/${lang}/blog/2/`} class="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium">
+    <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
+      <a href={currentPage === 2 ? `/${lang}/blog/` : `/${lang}/blog/${currentPage - 1}/`} class="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium">
+        ← 前へ
+      </a>
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <a href={page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${page}/`} class={page === currentPage ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"} aria-current={page === currentPage ? "page" : undefined}>
+          {page}
+        </a>
+      ))}
+      {currentPage < totalPages && (
+        <a href={`/${lang}/blog/${currentPage + 1}/`} class="px-4 py-2 rounded-lg border border-border hover:bg-muted transition-colors text-sm font-medium">
           次へ →
         </a>
-      </nav>
-    )}
+      )}
+    </nav>
 
     <p class="text-center text-sm text-muted-foreground mt-4">
-      {totalPosts}件中 1〜{Math.min(perPage, totalPosts)}件を表示
+      {totalPosts}件中 {(currentPage - 1) * perPage + 1}〜{Math.min(currentPage * perPage, totalPosts)}件を表示
     </p>
   </Container>
 </Layout>
