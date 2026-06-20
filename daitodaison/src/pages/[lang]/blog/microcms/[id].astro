@@ -110,7 +110,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
 
 <Layout title={displayTitle} description={displayTitle} image={post.eyecatch} imageAlt={displayTitle} article={true}>
   <ScrollProgress />
-  <div class="max-w-7xl mx-auto px-4 pt-32 pb-20">
+  <div class="max-w-7xl mx-auto px-4 pt-32 pb-20 bg-background">
 
     <div class="mb-6">
       <a href={"/" + lang + "/blog/microcms"} class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
@@ -264,8 +264,15 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
           ))}
         </div>
         <!-- Substack 購読 -->
-        <div class="mt-8 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden flex justify-center bg-white dark:bg-zinc-900">
-          <iframe src="https://daitodaison.substack.com/embed" width="480" height="320" style="border:none;background:white;display:block;max-width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
+        <div class="mt-8 rounded-2xl border border-blue-200 dark:border-blue-500/30 bg-gradient-to-br from-blue-600 to-blue-800 p-8 text-center text-white">
+          <p class="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2">📬 無料ニュースレター</p>
+          <h3 class="text-lg font-black mb-2">プロップ攻略の知見を無料で受け取る</h3>
+          <p class="text-blue-100 text-sm mb-5">Fintokei上位2.3%の攻略戦略をSubstackで毎週公開中</p>
+          <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3 rounded-xl hover:-translate-y-0.5 transition-all shadow-lg">
+            Substackを無料購読する →
+          </a>
+          <p class="text-blue-200 text-xs mt-3">無料・いつでも解除可能</p>
         </div>
 
         {otherPosts.length > 0 && (
@@ -325,7 +332,15 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
               </div>
             </a>
             <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-              <iframe src="https://daitodaison.substack.com/embed" width="208" height="280" style="border:none;background:white;display:block;width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
+              <div class="rounded-xl border border-blue-200 dark:border-blue-500/30 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-zinc-800/50 p-4">
+                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-1">📬 無料購読</p>
+                <p class="text-xs font-bold text-zinc-900 dark:text-white mb-1">Substack</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">プロップ攻略戦略を毎週無料配信中</p>
+                <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+                   class="block text-center bg-gradient-to-r from-blue-600 to-blue-500 text-white text-xs font-bold py-2 px-3 rounded-lg hover:opacity-90 transition-all">
+                  無料購読する →
+                </a>
+              </div>
             </div>
           </div>
         </div>
