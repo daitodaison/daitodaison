@@ -90,8 +90,8 @@ export const FOOTER_LINKS = {
   product: {
     title: 'コンテンツ',
     links: [
-      { href: '/blog/', label: '攻略ブログ' },
-      { href: '/sitemap-page/', label: 'サイトマップ' },
+      { href: '/blog/', label: '攻略ブログ', key: 'blog' },
+      { href: '/sitemap-page/', label: 'サイトマップ', key: 'sitemap' },
       { href: 'https://www.fintokei.com/jp/?affiliate=64', label: 'Fintokei登録', localize: false },
       { href: 'https://my.funded7.com/ja/sign-up?affiliateId=111', label: 'FUNDED7登録', localize: false },
       { href: 'https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD', label: 'FTMO登録', localize: false },

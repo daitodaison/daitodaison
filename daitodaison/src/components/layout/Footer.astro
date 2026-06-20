@@ -48,9 +48,9 @@ const t = useTranslations(lang);
                   <a 
                     href={href} 
                     class="inline-flex items-center px-2 py-2 rounded-md hover:text-slate-900 dark:hover:text-white transition-colors"
-                    aria-label={t[`footer.${link.label.toLowerCase()}` as keyof typeof t] || link.label}
+                    aria-label={(link.key && t[`footer.${link.key}` as keyof typeof t]) || link.label}
                   >
-                    {t[`footer.${link.label.toLowerCase()}` as keyof typeof t] || link.label}
+                    {(link.key && t[`footer.${link.key}` as keyof typeof t]) || link.label}
                   </a>
                 </li>
               );
