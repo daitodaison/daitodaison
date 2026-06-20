@@ -38,6 +38,44 @@ export async function getStaticPaths() {
 const { posts, currentPage, totalPages, totalPosts, perPage } = Astro.props;
 const { lang } = Astro.params;
 const t = useTranslations(lang);
+
+// ページネーションのロジック計算（フロントマター側で安全に処理）
+const cur = Number(currentPage);
+const paginationItems = [];
+
+if (cur > 1) {
+  paginationItems.push({ type: 'page', page: cur - 1, label: '＜', active: false });
+}
+
+paginationItems.push({ type: 'page', page: 1, label: '1', active: cur === 1 });
+
+if (cur > 3) {
+  paginationItems.push({ type: 'ellipsis' });
+} else if (totalPages > 2 && cur === 3) {
+  paginationItems.push({ type: 'page', page: 2, label: '2', active: false });
+}
+
+const startPage = Math.max(2, cur - 1);
+const endPage = Math.min(totalPages - 1, cur + 1);
+for (let i = startPage; i <= endPage; i++) {
+  if (i !== 1 && i !== totalPages) {
+    paginationItems.push({ type: 'page', page: i, label: String(i), active: cur === i });
+  }
+}
+
+if (cur < totalPages - 2) {
+  paginationItems.push({ type: 'ellipsis' });
+} else if (totalPages > 2 && cur === totalPages - 2) {
+  paginationItems.push({ type: 'page', page: totalPages - 1, label: String(totalPages - 1), active: false });
+}
+
+if (totalPages > 1) {
+  paginationItems.push({ type: 'page', page: totalPages, label: String(totalPages), active: cur === totalPages });
+}
+
+if (cur < totalPages) {
+  paginationItems.push({ type: 'page', page: cur + 1, label: '＞', active: false });
+}
 ---
 <Layout title={`Blog - ${currentPage}ページ目`} description={t["blog.microcms.desc"]}>
   <PageHeader title="Blog" description={t["blog.microcms.desc"]} />
@@ -77,18 +115,23 @@ const t = useTranslations(lang);
       ))}
     </div>
 
-    <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
-      {Array.from({ length: totalPages }, (_, i) => i + 1)
-        .filter((i) => i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2))
-        .map((page, idx, arr) => (
-          <>
-            {idx > 0 && arr[idx - 1] !== page - 1 && <span class="px-2 py-2 text-sm text-muted-foreground">...</span>}
-            <a href={page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${page}/`} class={page === currentPage ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"} aria-current={page === currentPage ? "page" : undefined}>
-              {page}
+        {totalPages > 1 && (
+      <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
+        {paginationItems.map((item) => (
+          item.type === 'ellipsis' ? (
+            <span class="px-2 py-2 text-sm text-muted-foreground">...</span>
+          ) : (
+            <a
+              href={item.page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${item.page}/`}
+              class={item.active ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"}
+              aria-current={item.active ? "page" : undefined}
+            >
+              {item.label}
             </a>
-          </>
+          )
         ))}
-    </nav>
+      </nav>
+    )}
 
     <p class="text-center text-sm text-muted-foreground mt-4">
       {totalPosts}件中 {(currentPage - 1) * perPage + 1}〜{Math.min(currentPage * perPage, totalPosts)}件を表示
