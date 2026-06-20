@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   let posts: any[] = [];
   let offset = 0;
   while (true) {
-    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch" } });
+    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch,content" } });
     posts = posts.concat(response.contents);
     if (posts.length >= response.totalCount) break;
     offset += 100;
