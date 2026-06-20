@@ -46,9 +46,23 @@ const t = useTranslations(lang);
             )}
           </div>
           <div class="p-6">
+            {post.category && (
+              <span class="inline-block text-xs font-bold px-2 py-1 rounded-full bg-primary/10 text-primary mb-2">
+                {post.category.name}
+              </span>
+            )}
             <h2 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
               {post.title}
             </h2>
+            {post.tags && (
+              <div class="flex flex-wrap gap-1 mt-2">
+                {post.tags.split(',').map((tag: string) => (
+                  <span class="text-xs px-2 py-0.5 rounded-full border border-border text-muted-foreground">
+                    {tag.trim()}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </Card>
       ))}
