@@ -12,8 +12,14 @@ export async function getStaticPaths() {
     { params: { lang: 'en' } },
   ];
 }
-const response = await client.get({ endpoint: 'blogs' });
-const posts = response.contents;
+let posts: any[] = [];
+let off = 0;
+while (true) {
+  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt', orders: '-updatedAt' } });
+  posts = posts.concat(res.contents);
+  if (posts.length >= res.totalCount) break;
+  off += 100;
+}
 const { lang } = Astro.params;
 const t = useTranslations(lang);
 ---
@@ -24,14 +30,12 @@ const t = useTranslations(lang);
       {posts.map((post: any) => (
         <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
           <div class="relative aspect-video w-full overflow-hidden bg-muted">
-            {post.eyecatch ? (
-              <img
-                src={post.eyecatch}
+            {(() => { const u = (post.eyecatch||'').split('|')[0].replace('https://daitodaison.pages.dev/wp-content','https://dysonblog.org/wp-content'); return u ? (
+              <img src={u}
                 alt={post.title}
                 loading="lazy"
                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
+              />) : (
               <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
                 <span class="text-4xl">📝</span>
               </div>

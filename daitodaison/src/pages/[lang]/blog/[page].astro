@@ -14,7 +14,7 @@ export async function getStaticPaths() {
   while (true) {
     const response = await client.get({
       endpoint: "blogs",
-      queries: { limit: 100, offset, orders: "-updatedAt" },
+      queries: { limit: 100, offset, orders: "-updatedAt", fields: "id,title,eyecatch,category,tags,updatedAt" },
     });
     allPosts = allPosts.concat(response.contents);
     if (allPosts.length >= response.totalCount) break;

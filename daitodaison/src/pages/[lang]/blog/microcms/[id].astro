@@ -18,10 +18,19 @@ export async function getStaticPaths() {
     if (posts.length >= response.totalCount) break;
     offset += 100;
   }
+  // allPostsはサイドバー用に軽量版を別取得
+  let lightPosts: any[] = [];
+  let offset2 = 0;
+  while (true) {
+    const res2 = await client.get({ endpoint: "blogs", queries: { limit: 100, offset: offset2, fields: "id,title,eyecatch,category,updatedAt" } });
+    lightPosts = lightPosts.concat(res2.contents);
+    if (lightPosts.length >= res2.totalCount) break;
+    offset2 += 100;
+  }
   return posts.flatMap((post: any) =>
     Object.keys(languages).map((lang) => ({
       params: { lang, id: post.id },
-      props: { post, allPosts: posts },
+      props: { post, allPosts: lightPosts },
     }))
   );
 }
@@ -63,7 +72,7 @@ if (styleMatches.length > 0) {
 }
 displayContent = styleTag + bodyContent;
 
-if (lang === "en") {
+if (false && lang === "en") {
   try {
     displayTitle = await translate(post.title, { from: "ja", to: "en" });
     const cleanedForTranslate = (post.content || '')
@@ -177,11 +186,15 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
 
       <!-- 本文 -->
       <main class="min-w-0 flex-1">
-        {post.eyecatch && (
-          <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
-            <img src={post.eyecatch} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
-          </div>
-        )}
+{(() => {
+          const rawEye = post.eyecatch || "";
+          const eyeUrl = rawEye.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content").replace("http://","https://");
+          return eyeUrl ? (
+            <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
+              <img src={eyeUrl} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
+            </div>
+          ) : null;
+        })()}
         <h1 class="text-xl md:text-2xl font-bold mb-4 leading-snug text-zinc-900 dark:text-white">
           {displayTitle}
         </h1>
