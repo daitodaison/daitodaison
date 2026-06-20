@@ -116,7 +116,6 @@ if (cur < totalPages) {
     </div>
 
         {totalPages > 1 && (
-          {totalPages > 1 && (
       <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
         {Number(currentPage) > 1 && (
           <a href={Number(currentPage) === 2 ? `/${lang}/blog/` : `/${lang}/blog/${Number(currentPage) - 1}/`} class="px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted">＜</a>
@@ -135,7 +134,6 @@ if (cur < totalPages) {
           <a href={`/${lang}/blog/${Number(currentPage) + 1}/`} class="px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted">＞</a>
         )}
       </nav>
-    )}
     )}
 
     <p class="text-center text-sm text-muted-foreground mt-4">
