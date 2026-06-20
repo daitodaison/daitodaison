@@ -66,10 +66,10 @@ export const siteConfig = {
 
 export const NAV_LINKS = [
   { 
-    href: '/blog/microcms', 
+    href: '/blog/', 
     label: 'Blog',
     children: [
-        { href: '/blog/microcms', label: 'Blog', description: 'プロップ攻略ブログ', icon: 'Newspaper' },
+        { href: '/blog/', label: 'Blog', description: 'プロップ攻略ブログ', icon: 'Newspaper' },
     ]
   },
 ];
@@ -90,7 +90,7 @@ export const FOOTER_LINKS = {
   product: {
     title: 'コンテンツ',
     links: [
-      { href: '/blog/microcms', label: '攻略ブログ' },
+      { href: '/blog/', label: '攻略ブログ' },
       { href: 'https://www.fintokei.com/jp/?affiliate=64', label: 'Fintokei登録', localize: false },
       { href: 'https://my.funded7.com/ja/sign-up?affiliateId=111', label: 'FUNDED7登録', localize: false },
       { href: 'https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD', label: 'FTMO登録', localize: false },
