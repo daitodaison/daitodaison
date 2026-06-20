@@ -117,16 +117,23 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
         <!-- 最新記事 -->
         <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
           <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">🆕 最新記事</p>
-          <ul class="space-y-1">
-            {(allPosts as any[]).slice(0, 8).map((p: any) => {
+          <ul class="space-y-3">
+            {(allPosts as any[]).slice(0, 6).map((p: any) => {
               const isActive = p.id === post.id;
+              const rawImg = p.eyecatch || "";
+              const imgUrl = rawImg.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content");
               return (
                 <li>
                   <a href={"/" + lang + "/blog/microcms/" + p.id}
-                     class={isActive
-                       ? "block text-xs leading-snug py-1.5 px-2 rounded-lg bg-primary/10 text-primary font-semibold"
-                       : "block text-xs leading-snug py-1.5 px-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"}>
-                    {p.title}
+                     class={"flex gap-2 group " + (isActive ? "opacity-60 pointer-events-none" : "")}>
+                    <div class="w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-zinc-200 dark:bg-zinc-700">
+                      {imgUrl && <img src={imgUrl} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />}
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-[11px] leading-snug text-zinc-700 dark:text-zinc-300 group-hover:text-primary transition-colors line-clamp-2">{p.title}</p>
+                      {p.updatedAt && <p class="text-[10px] text-zinc-400 mt-0.5">{new Date(p.updatedAt).toLocaleDateString("ja-JP",{month:"numeric",day:"numeric"})}</p>}
+                      {p.category?.name && <p class="text-[10px] text-blue-500 truncate">{p.category.name}</p>}
+                    </div>
                   </a>
                 </li>
               );
@@ -134,18 +141,27 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
           </ul>
         </div>
         <!-- 関連記事（同カテゴリー） -->
-        {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 5).length > 0 && (
+        {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 4).length > 0 && (
           <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
             <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">🔗 関連記事</p>
-            <ul class="space-y-1">
-              {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 5).map((p: any) => (
-                <li>
-                  <a href={"/" + lang + "/blog/microcms/" + p.id}
-                     class="block text-xs leading-snug py-1.5 px-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
-                    {p.title}
-                  </a>
-                </li>
-              ))}
+            <ul class="space-y-3">
+              {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 4).map((p: any) => {
+                const rawImg = p.eyecatch || "";
+                const imgUrl = rawImg.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content");
+                return (
+                  <li>
+                    <a href={"/" + lang + "/blog/microcms/" + p.id} class="flex gap-2 group">
+                      <div class="w-16 h-12 rounded-lg overflow-hidden shrink-0 bg-zinc-200 dark:bg-zinc-700">
+                        {imgUrl && <img src={imgUrl} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />}
+                      </div>
+                      <div class="min-w-0">
+                        <p class="text-[11px] leading-snug text-zinc-700 dark:text-zinc-300 group-hover:text-primary transition-colors line-clamp-2">{p.title}</p>
+                        {p.category?.name && <p class="text-[10px] text-blue-500 truncate">{p.category.name}</p>}
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
