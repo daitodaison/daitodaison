@@ -1,0 +1,77 @@
+---
+export const prerender = true;
+import Layout from "~/layouts/Layout.astro";
+import PageHeader from "~/components/layout/PageHeader.astro";
+import Container from "~/components/ui/Container.astro";
+import { client } from "~/library/microcms";
+import { useTranslations } from "~/i18n/utils";
+
+export async function getStaticPaths() {
+  let allRawPosts: any[] = [];
+  let offset = 0;
+  while (true) {
+    const response = await client.get({
+      endpoint: "blogs",
+      queries: { limit: 100, offset, fields: "id,title,content" },
+    });
+    allRawPosts = allRawPosts.concat(response.contents);
+    if (allRawPosts.length >= response.totalCount) break;
+    offset += 100;
+  }
+  const allPosts = allRawPosts.filter(
+    (p: any) => p.title && (p.content || "").trim()
+  );
+
+  return [
+    { params: { lang: "ja" }, props: { posts: allPosts } },
+    { params: { lang: "en" }, props: { posts: allPosts } },
+  ];
+}
+
+const { posts } = Astro.props;
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+
+const staticPages = [
+  { label: "トップページ", href: `/${lang}/` },
+  { label: "会社概要", href: `/${lang}/about/` },
+  { label: "お問い合わせ", href: `/${lang}/contact/` },
+  { label: "デザイン", href: `/${lang}/design/` },
+  { label: "機能", href: `/${lang}/features/` },
+  { label: "料金", href: `/${lang}/pricing/` },
+  { label: "ポートフォリオ", href: `/${lang}/portfolio/` },
+  { label: "ショーケース", href: `/${lang}/showcase/` },
+  { label: "ブログ一覧", href: `/${lang}/blog/` },
+];
+---
+<Layout title="サイトマップ" description="サイト内の全ページ一覧です。">
+  <PageHeader title="サイトマップ" description="サイト内の全ページ一覧です。" />
+  <Container as="section" class="pb-24">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <h2 class="text-xl font-display font-bold mb-4">固定ページ</h2>
+        <ul class="space-y-2">
+          {staticPages.map((page) => (
+            <li>
+              <a href={page.href} class="text-foreground hover:text-primary transition-colors underline-offset-4 hover:underline">
+                {page.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-display font-bold mb-4">ブログ記事一覧（{posts.length}件）</h2>
+        <ul class="space-y-2 max-h-[600px] overflow-y-auto pr-2">
+          {posts.map((post: any) => (
+            <li>
+              <a href={`/${lang}/blog/microcms/${post.id}`} class="text-foreground hover:text-primary transition-colors underline-offset-4 hover:underline text-sm">
+                {post.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </Container>
+</Layout>
