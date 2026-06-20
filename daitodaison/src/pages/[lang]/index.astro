@@ -2,271 +2,212 @@
 export const prerender = true;
 import { languages, defaultLang } from '~/i18n/ui';
 import { useTranslations } from '~/i18n/utils';
-import { Image } from 'astro:assets';
-import bentoCode from '~/assets/bento-code.webp';
-import logoVite from '~/assets/logos/Vite.js.webp';
-import logoCloudflare from '~/assets/logos/Cloudflare.webp';
-import logoAstro from '~/assets/logos/Astro.webp';
-import logoReact from '~/assets/logos/React.webp';
-import logoTailwind from '~/assets/logos/Tailwind.webp';
-import logoFramer from '~/assets/logos/Motion.webp';
 import Layout from '~/layouts/Layout.astro';
-import Schema from '~/components/layout/Schema.astro';
-import Hero from '~/components/sections/Hero.astro';
-import Section from '~/components/layout/Section.astro';
-import LatestPosts from '~/components/sections/LatestPosts.astro';
-import BentoGrid from '~/components/sections/BentoGrid.astro';
-import BentoItem from '~/components/ui/BentoItem.astro';
-import { Cpu, Globe, Zap, BarChart, ShieldCheck, Settings, FileCode, Search, Moon, Eye } from 'lucide-react';
-import FeaturesList from '~/components/sections/FeaturesList.astro';
-import FeatureItem from '~/components/ui/FeatureItem.astro';
-
-import Testimonials from '~/components/sections/Testimonials.astro';
-import Testimonial from '~/components/ui/Testimonial.astro';
-import Stats from '~/components/sections/Stats.astro';
-import StatItem from '~/components/ui/StatItem.astro';
-import CTA from '~/components/sections/CTA.astro';
-import FAQ from '~/components/sections/FAQ.astro';
-import LogoCloud from '~/components/sections/LogoCloud.astro';
-import TechStack from '~/components/sections/TechStack.astro';
-import ThreeSteps from '~/components/sections/ThreeSteps.astro';
-import NewsletterSection from '~/components/sections/NewsletterSection.astro';
+import { client } from '~/library/microcms';
 
 export async function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
 
 const { lang = defaultLang } = Astro.params;
-const t = useTranslations(lang);
 
-const logos = [
-  { name: 'Vite', src: logoVite, description: t['logo.vite.desc'] },
-  { name: 'Cloudflare', src: logoCloudflare, description: t['logo.cloudflare.desc'] },
-  { name: 'Astro', src: logoAstro, description: t['logo.astro.desc'] },
-  { name: 'React', src: logoReact, description: t['logo.react.desc'] },
-  { name: 'Tailwind CSS', src: logoTailwind, description: t['logo.tailwind.desc'] },
-  { name: 'Framer Motion', src: logoFramer, description: t['logo.framer.desc'] },
-];
-
-const benefits = [
-  { title: t['benefits.1.title'], description: t['benefits.1.desc'], icon: Settings },
-  { title: t['benefits.2.title'], description: t['benefits.2.desc'], icon: FileCode },
-  { title: t['benefits.3.title'], description: t['benefits.3.desc'], icon: Search },
-  { title: t['benefits.4.title'], description: t['benefits.4.desc'], icon: Moon },
-  { title: t['benefits.5.title'], description: t['benefits.5.desc'], icon: Eye },
-  { title: t['benefits.6.title'], description: t['benefits.6.desc'], icon: Globe },
-];
-
-const stats = [
-  { value: "10k+", label: t['stats.downloads'] },
-  { value: "99.9%", label: t['stats.uptime'] },
-  { value: "50M+", label: t['stats.requests'] },
-  { value: "24/7", label: t['stats.support'] },
-];
-
-const testimonials = [
-  { text: t['testimonials.1.text'], author: t['testimonials.1.author'], role: t['testimonials.1.role'] },
-  { text: t['testimonials.2.text'], author: t['testimonials.2.author'], role: t['testimonials.2.role'] },
-  { text: t['testimonials.3.text'], author: t['testimonials.3.author'], role: t['testimonials.3.role'] },
-  { text: t['testimonials.4.text'], author: t['testimonials.4.author'], role: t['testimonials.4.role'] },
-  { text: t['testimonials.5.text'], author: t['testimonials.5.author'], role: t['testimonials.5.role'] },
-];
-
-const homeFaqs = [
-  { question: t['faq.home.1.q'], answer: t['faq.home.1.a'] },
-  { question: t['faq.home.2.q'], answer: t['faq.home.2.a'] },
-  { question: t['faq.home.3.q'], answer: t['faq.home.3.a'] },
-  { question: t['faq.home.4.q'], answer: t['faq.home.4.a'] },
-  { question: t['faq.home.5.q'], answer: t['faq.home.5.a'] },
-];
-
+// 最新記事3件取得
+let latestPosts: any[] = [];
+try {
+  const res = await client.get({ endpoint: "blogs", queries: { limit: 3, fields: "id,title,eyecatch,category" } });
+  latestPosts = res.contents;
+} catch(e) {}
 ---
 
-<Layout title={t['meta.index.title']} description={t['meta.index.desc']}>
-    <Schema item={{
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "ASTRO攻略LABO",
-            "url": Astro.site,
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": `${Astro.site}/search?q={search_term_string}`
-                },
-                "query-input": "required name=search_term_string"
-            }
-        }} />
-    <Schema item={{
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "ASTRO攻略LABO",
-            "operatingSystem": "Web",
-            "applicationCategory": "BusinessApplication",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "JPY"
-            },
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "ratingCount": "120"
-            }
-        }} />
-	
-    <Hero 
-        title={t['hero.title']}
-        highlight={t['hero.highlight']}
-        description={t['hero.subtitle']}
-        primaryCta={{ text: t['hero.getStarted'], href: `https://astro.space/ja/` }}
-        secondaryCta={{ text: t['hero.learnMore'], href: `https://astro.space/ja/` }}
-    />
-    
-    <LogoCloud title={t['logo.title']} logos={logos} />
-    
-    <Section class="py-0 overflow-visible">
-    <BentoGrid 
-        title={t['bento.title']}
-        description={t['bento.description']}
-    >
-        <!-- Large Item -->
-        <BentoItem class="md:col-span-2 group">
-            <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-linear-to-br from-slate-900/20 to-blue-500/20 rounded-full blur-[80px] -mr-20 -mt-20"></div>
-            
-            <div class="relative z-10 h-full flex flex-col justify-between">
-                <div>
-                    <div class="w-12 h-12 rounded-xl bg-slate-900/10 dark:bg-white/10 flex items-center justify-center mb-6">
-                        <Globe className="w-6 h-6 text-slate-900 dark:text-white" />
-                    </div>
-                    <h3 class="text-xl md:text-2xl font-bold mb-2">{t['bento.item1.title']}</h3>
-                    <p class="text-gray-600 dark:text-gray-300 break-words">{t['bento.item1.desc']}</p>
-                </div>
-                
-                <div class="w-full h-32 bg-black/20 rounded-xl border border-white/5 backdrop-blur-sm overflow-hidden relative">
-                        <div class="absolute inset-0 flex items-center justify-center text-xs font-mono text-slate-900/90 dark:text-white/70 font-bold">
-                        running regional_edge_check... <br/>
-                        lat: 12ms | status: active
-                        </div>
-                </div>
-            </div>
-        </BentoItem>
+<Layout title="daito | 勝率40%・上位2.3%のFXトレーダーが教えるプロップ攻略" description="Fintokei上位2.3%入賞（2587人中61位）のFXトレーダーが、プロップファーム攻略・FX戦略をSubstackで無料公開中。">
 
-        <!-- Tall Item -->
-        <BentoItem class="md:row-span-2 group">
-                <div class="absolute bottom-0 left-0 w-full h-1/2 bg-linear-to-t from-black/50 to-transparent z-10"></div>
-                <Image 
-                    src={bentoCode} 
-                    alt="Code" 
-                    width={800}
-                    height={1000}
-                    quality={70}
-                    class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:scale-105 transition-transform duration-700" 
-                />
-                
-                <div class="relative z-20 h-full flex flex-col justify-end min-w-0">
-                <div class="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center mb-4">
-                    <Cpu className="w-6 h-6 text-white" />
-                </div>
-                <h3 class="text-xl md:text-2xl font-bold mb-2">{t['bento.item2.title']}</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm break-words">{t['bento.item2.desc']}</p>
-                </div>
-        </BentoItem>
-
-        <!-- Small Item 1 -->
-        <BentoItem class="flex flex-col justify-center text-center hover:bg-white/10 transition-colors">
-            <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center mx-auto mb-4">
-                <Zap className="w-6 h-6" />
-            </div>
-            <h3 class="text-lg font-bold">{t['bento.item3.title']}</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">{t['bento.item3.desc']}</p>
-        </BentoItem>
-
-        <!-- Small Item 2 -->
-            <BentoItem class="flex flex-col justify-center text-center hover:bg-white/10 transition-colors">
-            <div class="w-12 h-12 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center mx-auto mb-4">
-                <ShieldCheck className="w-6 h-6" />
-            </div>
-            <h3 class="text-lg font-bold">{t['bento.item4.title']}</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mt-2">{t['bento.item4.desc']}</p>
-        </BentoItem>
-        
-        <!-- Wide Item -->
-        <BentoItem class="md:col-span-2 flex items-center justify-between gap-8 group">
-            <div class="relative z-10 min-w-0">
-                    <h3 class="text-xl md:text-2xl font-bold mb-2">{t['bento.item5.title']}</h3>
-                    <p class="text-gray-600 dark:text-gray-300 max-w-sm break-words">{t['bento.item5.desc']}</p>
-            </div>
-            <div class="relative z-10 w-32 h-32 shrink-0 bg-linear-to-tr from-slate-900 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg transform rotate-6 group-hover:rotate-12 transition-transform">
-                <BarChart className="w-16 h-16 text-white" />
-            </div>
-        </BentoItem>
-    </BentoGrid>
-    </Section>
-
-    <ThreeSteps />
-
-    <Section class="py-24">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xl md:text-3xl font-bold mb-4">{t['benefits.title']}</h2>
-            <p class="text-gray-600 dark:text-gray-300 break-words">{t['benefits.subtitle']}</p>
+  <!-- HERO -->
+  <section class="relative bg-gradient-to-br from-zinc-950 via-blue-950 to-zinc-900 text-white pt-32 pb-20 px-4 overflow-hidden">
+    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_30%_50%,#2563eb,transparent_60%)]"></div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <div class="inline-flex items-center gap-2 bg-blue-500/20 border border-blue-500/30 rounded-full px-4 py-1.5 text-sm text-blue-300 mb-6">
+        🏆 Fintokei大会 上位2.3%入賞（2587人中61位）
+      </div>
+      <h1 class="text-3xl md:text-5xl font-black leading-tight mb-6">
+        自己資金ゼロで<br class="md:hidden"/>
+        <span class="text-blue-400">プロの資金</span>を動かす<br/>
+        FXプロップ攻略法
+      </h1>
+      <p class="text-lg text-zinc-300 max-w-2xl mx-auto mb-8 leading-relaxed">
+        勝率40%でも上位2.3%に入れる理由とは？<br/>
+        Fintokei・FTMO・Funded7の攻略戦略をSubstackで無料公開中。
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+           class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-500/20">
+          📬 Substackを無料購読する
+        </a>
+        <a href={`/${lang}/blog/`}
+           class="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5">
+          📖 攻略ブログを読む
+        </a>
+      </div>
+      <!-- 実績数字 -->
+      <div class="grid grid-cols-3 gap-4 mt-16 max-w-lg mx-auto">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+          <p class="text-2xl font-black text-blue-400">2.3%</p>
+          <p class="text-xs text-zinc-400 mt-1">Fintokei上位</p>
         </div>
-        <FeaturesList>
-            {benefits.map((benefit) => (
-                <FeatureItem title={benefit.title} description={benefit.description}>
-                    <benefit.icon slot="icon" className="w-6 h-6" />
-                </FeatureItem>
-            ))}
-        </FeaturesList>
-    </Section>
-
-    <Section id="tech-stack" class="py-24 bg-gray-50 dark:bg-zinc-950">
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-xl md:text-3xl font-bold mb-4 italic text-gray-900 dark:text-white">{t['techstack.title']}</h2>
-            <p class="text-gray-600 dark:text-gray-300 break-words">{t['techstack.subtitle']}</p>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+          <p class="text-2xl font-black text-blue-400">40%</p>
+          <p class="text-xs text-zinc-400 mt-1">勝率</p>
         </div>
-        <div class="max-w-6xl mx-auto px-6">
-            <TechStack t={t} />
+        <div class="bg-white/5 border border-white/10 rounded-xl p-4">
+          <p class="text-2xl font-black text-blue-400">756+</p>
+          <p class="text-xs text-zinc-400 mt-1">攻略記事</p>
         </div>
-    </Section>
+      </div>
+    </div>
+  </section>
 
-    <LatestPosts count={6}/>
+  <!-- プロップファーム比較 -->
+  <section class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900">
+    <div class="max-w-5xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-black text-center mb-4 text-zinc-900 dark:text-white">
+        おすすめプロップファーム3選
+      </h2>
+      <p class="text-center text-zinc-500 dark:text-zinc-400 mb-12">自己資金不要・合格すれば会社資金でトレードできる</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-    <NewsletterSection 
-        title={t['newsletter.title']}
-        description={t['newsletter.description']}
-    />
+        <!-- Fintokei -->
+        <div class="relative bg-white dark:bg-zinc-800 rounded-2xl border-2 border-purple-400 p-6 shadow-lg">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-purple-600 text-white text-xs font-bold px-4 py-1 rounded-full">🏆 著者イチオシ</div>
+          <div class="text-center mb-4">
+            <p class="text-3xl mb-2">🇯🇵</p>
+            <h3 class="text-xl font-black text-zinc-900 dark:text-white">Fintokei</h3>
+            <p class="text-sm text-zinc-500 mt-1">日本初・無料デモ大会あり</p>
+          </div>
+          <ul class="space-y-2 mb-6 text-sm text-zinc-600 dark:text-zinc-300">
+            <li>✅ 利益配分100%（速攻プロ）</li>
+            <li>✅ 最大3,500万円の資金</li>
+            <li>✅ 参加費全額返金キャンペーン中</li>
+            <li>✅ 国内銀行振込対応</li>
+          </ul>
+          <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
+             class="block text-center bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition-all">
+            無料で始める →
+          </a>
+        </div>
 
-    <Section class="py-0 overflow-visible">
-    <Stats>
-        {stats.map((stat) => (
-            <StatItem value={stat.value} label={stat.label} />
+        <!-- FUNDED7 -->
+        <div class="bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
+          <div class="text-center mb-4">
+            <p class="text-3xl mb-2">7️⃣</p>
+            <h3 class="text-xl font-black text-zinc-900 dark:text-white">FUNDED7</h3>
+            <p class="text-sm text-zinc-500 mt-1">1フェーズ・速攻プランあり</p>
+          </div>
+          <ul class="space-y-2 mb-6 text-sm text-zinc-600 dark:text-zinc-300">
+            <li>✅ 最大6,000万円の口座</li>
+            <li>✅ 絶対ドローダウン採用</li>
+            <li>✅ cTrader・MT5対応</li>
+            <li>✅ 7日ごとにペイアウト</li>
+          </ul>
+          <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener"
+             class="block text-center bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all">
+            アカウント開設 →
+          </a>
+        </div>
+
+        <!-- FTMO -->
+        <div class="bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 p-6 shadow-sm">
+          <div class="text-center mb-4">
+            <p class="text-3xl mb-2">🌍</p>
+            <h3 class="text-xl font-black text-zinc-900 dark:text-white">FTMO</h3>
+            <p class="text-sm text-zinc-500 mt-1">世界最大手・300万人以上</p>
+          </div>
+          <ul class="space-y-2 mb-6 text-sm text-zinc-600 dark:text-zinc-300">
+            <li>✅ 世界最大手の信頼性</li>
+            <li>✅ 最大200万CZK（約1,300万円）</li>
+            <li>✅ 無料トライアルあり</li>
+            <li>✅ 豊富な実績・出金証明</li>
+          </ul>
+          <a href="https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD" target="_blank" rel="noopener"
+             class="block text-center bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl transition-all">
+            無料トライアル →
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新記事 -->
+  {latestPosts.length > 0 && (
+    <section class="py-20 px-4 bg-white dark:bg-zinc-950">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl md:text-3xl font-black text-center mb-4 text-zinc-900 dark:text-white">最新の攻略記事</h2>
+        <p class="text-center text-zinc-500 dark:text-zinc-400 mb-12">プロップファーム攻略・FX戦略を毎週更新</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {latestPosts.map((post: any) => {
+            const raw = post.eyecatch || "";
+            const imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content");
+            return (
+              <a href={`/${lang}/blog/microcms/${post.id}`}
+                 class="group block bg-zinc-50 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
+                {imgUrl && (
+                  <div class="aspect-video overflow-hidden">
+                    <img src={imgUrl} alt={post.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                  </div>
+                )}
+                <div class="p-4">
+                  <p class="text-sm font-semibold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 transition-colors">{post.title}</p>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <div class="text-center mt-10">
+          <a href={`/${lang}/blog/`} class="inline-flex items-center gap-2 bg-zinc-900 dark:bg-white dark:text-zinc-900 text-white font-bold px-8 py-4 rounded-xl hover:-translate-y-0.5 transition-all">
+            すべての記事を見る →
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Substack CTA -->
+  <section class="py-20 px-4 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+    <div class="max-w-2xl mx-auto text-center">
+      <p class="text-sm font-bold uppercase tracking-widest text-blue-200 mb-3">📬 無料ニュースレター</p>
+      <h2 class="text-2xl md:text-3xl font-black mb-4">プロップ攻略の知見を<br/>無料で受け取る</h2>
+      <p class="text-blue-100 mb-8 leading-relaxed">
+        Fintokei上位2.3%の攻略戦略をSubstackで公開中。<br/>
+        トレード日誌・相場分析・EA開発まで、実践的な情報を毎週お届け。
+      </p>
+      <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+         class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-10 py-4 rounded-xl hover:-translate-y-0.5 transition-all shadow-lg">
+        Substackを無料購読する →
+      </a>
+      <p class="text-blue-200 text-sm mt-4">無料・いつでも解除可能</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="py-20 px-4 bg-zinc-50 dark:bg-zinc-900">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl md:text-3xl font-black text-center mb-12 text-zinc-900 dark:text-white">よくある質問</h2>
+      <div class="space-y-4">
+        {[
+          { q: "プロップファームって何ですか？", a: "会社の資金でトレードできる仕組みです。参加費を払いテストに合格すると、数百万〜数千万円の会社資金でトレードでき、利益の大部分を受け取れます。" },
+          { q: "自己資金がなくても始められますか？", a: "はい。プロップファームは参加費（数万円）だけで始められます。合格すれば自己資金をリスクにさらさずに大きな資金でトレードできます。" },
+          { q: "勝率40%でも稼げるんですか？", a: "はい。重要なのは勝率より損益比率（リスクリワード）です。1回の損失を小さく、1回の利益を大きくすれば、勝率40%でも十分プロップテストに合格できます。" },
+          { q: "Substackは本当に無料ですか？", a: "基本コンテンツは完全無料です。登録するだけでFintokei攻略戦略・相場分析・トレード日誌を受け取れます。" },
+        ].map((item) => (
+          <details class="bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 p-5 group">
+            <summary class="font-bold text-zinc-900 dark:text-white cursor-pointer list-none flex justify-between items-center">
+              {item.q}
+              <span class="text-blue-500 group-open:rotate-45 transition-transform text-xl">+</span>
+            </summary>
+            <p class="mt-3 text-zinc-600 dark:text-zinc-300 text-sm leading-relaxed">{item.a}</p>
+          </details>
         ))}
-    </Stats>
-    </Section>
-
-    <Section class="py-0 overflow-visible">
-    <Testimonials>
-      {testimonials.map((testimonial) => (
-        <Testimonial 
-          text={testimonial.text}
-          author={testimonial.author}
-          role={testimonial.role}
-        />
-      ))}
-    </Testimonials>
-    </Section>
-
-    <Section class="py-0 overflow-visible">
-    <FAQ items={homeFaqs} />
-    </Section>
-
-    <CTA 
-        title={t['cta.readyToLaunch']}
-        description={t['cta.description']}
-        primaryBtn={{ text: t['cta.primary'], href: `https://astro.space/ja/` }}
-        secondaryBtn={{ text: t['cta.secondary'], href: `/${lang}/contact` }}
-        disclaimer={t['cta.disclaimer']}
-    />
+      </div>
+    </div>
+  </section>
 
 </Layout>
