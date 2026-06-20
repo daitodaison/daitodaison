@@ -36,14 +36,34 @@ async function translateHtml(html: string, to: string) {
 }
 
 let displayTitle = post.title;
-let displayContent = (post.content || '')
-  .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-  .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+const rawContent = post.content || '';
+let displayContent = '';
+if (/<html/i.test(rawContent)) {
+  const bodyMatch = rawContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  const styleMatch = rawContent.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+  const bodyContent = bodyMatch ? bodyMatch[1] : rawContent;
+  let styleTag = '';
+  if (styleMatch) {
+    const scopedCss = styleMatch[1].replace(/([^{}]+)\{/g, (m, sel) => {
+      const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
+      return scoped + ' {';
+    });
+    styleTag = '<style>' + scopedCss + '</style>';
+  }
+  displayContent = styleTag + bodyContent;
+} else {
+  displayContent = rawContent
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+}
 
 if (lang === "en") {
   try {
     displayTitle = await translate(post.title, { from: "ja", to: "en" });
-    displayContent = await translateHtml(post.content, "en");
+    const cleanedForTranslate = (post.content || '')
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    displayContent = await translateHtml(cleanedForTranslate, "en");
   } catch {}
 }
 
