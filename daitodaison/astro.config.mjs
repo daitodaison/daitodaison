@@ -50,7 +50,7 @@ function getAdapter() {
 }
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://astro-labo.pages.dev',
+  site: process.env.SITE_URL || 'https://daitodaison.pages.dev',
   output: 'static',
   image: {
     domains: ['vitejs.dev', 'upload.wikimedia.org', 'astro.build', 'pagepro.co'],
