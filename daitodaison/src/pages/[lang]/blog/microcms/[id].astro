@@ -50,8 +50,7 @@ const bodyMatch = rawContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
 const bodyContent = bodyMatch ? bodyMatch[1] : rawContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<!DOCTYPE[^>]*>/gi, '').replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '').replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
 let styleTag = '';
 if (styleMatches.length > 0) {
-  const allCss = styleMatches.map((s: string) => s.replace(/<\/?style[^>]*>/gi, '')).join('
-');
+  const allCss = styleMatches.map((s: string) => s.replace(/<\/?style[^>]*>/gi, '')).join('\n');
   const scopedCss = allCss.replace(/([^{}]+)\{/g, (m: string, sel: string) => {
     if (sel.trim().startsWith('@')) return m;
     const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
