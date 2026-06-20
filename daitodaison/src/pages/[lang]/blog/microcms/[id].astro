@@ -13,7 +13,7 @@ export async function getStaticPaths() {
   let posts: any[] = [];
   let offset = 0;
   while (true) {
-    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch,content" } });
+    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch,content,category,tags,publishedAt,updatedAt" } });
     posts = posts.concat(response.contents);
     if (posts.length >= response.totalCount) break;
     offset += 100;
@@ -114,10 +114,11 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
 
       <!-- 左サイドバー -->
       <aside class="hidden xl:block w-52 shrink-0 sticky top-28 space-y-4">
+        <!-- 最新記事 -->
         <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
-          <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">攻略ブログ</p>
+          <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">🆕 最新記事</p>
           <ul class="space-y-1">
-            {(allPosts as any[]).map((p: any) => {
+            {(allPosts as any[]).slice(0, 8).map((p: any) => {
               const isActive = p.id === post.id;
               return (
                 <li>
@@ -132,6 +133,22 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             })}
           </ul>
         </div>
+        <!-- 関連記事（同カテゴリー） -->
+        {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 5).length > 0 && (
+          <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">🔗 関連記事</p>
+            <ul class="space-y-1">
+              {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 5).map((p: any) => (
+                <li>
+                  <a href={"/" + lang + "/blog/microcms/" + p.id}
+                     class="block text-xs leading-snug py-1.5 px-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                    {p.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener" class="block rounded-xl border border-purple-300 dark:border-purple-500/30 overflow-hidden hover:border-purple-500 transition-all group">
           <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/5 p-4">
             <p class="text-[10px] font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-1">🏆 国内No.1プロップ</p>
@@ -149,9 +166,26 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             <img src={post.eyecatch} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
           </div>
         )}
-        <h1 class="text-xl md:text-2xl font-bold mb-8 leading-snug text-zinc-900 dark:text-white">
+        <h1 class="text-xl md:text-2xl font-bold mb-4 leading-snug text-zinc-900 dark:text-white">
           {displayTitle}
         </h1>
+        <div class="flex flex-wrap items-center gap-3 mb-8 text-xs text-gray-500 dark:text-gray-400">
+          {post.updatedAt && (
+            <span class="flex items-center gap-1">
+              🕒 {new Date(post.updatedAt).toLocaleDateString("ja-JP", {year:"numeric",month:"long",day:"numeric"})}更新
+            </span>
+          )}
+          {post.category?.name && (
+            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
+              📂 {post.category.name}
+            </span>
+          )}
+          {post.tags && post.tags.split(",").map((tag: string) => (
+            <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
+              # {tag.trim()}
+            </span>
+          ))}
+        </div>
         <div class="article-body" set:html={displayContent} />
 
         <div class="mt-16 rounded-2xl border border-gray-200 dark:border-white/10 p-6">
@@ -180,6 +214,29 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
               <span class="mt-auto text-xs font-bold text-white bg-gray-700 px-3 py-1.5 rounded-full">無料トライアル</span>
             </a>
           </div>
+        </div>
+
+        <!-- 記事下メタ情報 -->
+        <div class="flex flex-wrap items-center gap-3 mt-8 mb-2 text-xs text-gray-500 dark:text-gray-400">
+          {post.updatedAt && (
+            <span class="flex items-center gap-1">
+              🕒 {new Date(post.updatedAt).toLocaleDateString("ja-JP", {year:"numeric",month:"long",day:"numeric"})}更新
+            </span>
+          )}
+          {post.category?.name && (
+            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
+              📂 {post.category.name}
+            </span>
+          )}
+          {post.tags && post.tags.split(",").map((tag: string) => (
+            <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
+              # {tag.trim()}
+            </span>
+          ))}
+        </div>
+        <!-- Substack 購読 -->
+        <div class="mt-8 rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden flex justify-center bg-white dark:bg-zinc-900">
+          <iframe src="https://daitodaison.substack.com/embed" width="480" height="320" style="border:none;background:white;display:block;max-width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
         </div>
 
         {otherPosts.length > 0 && (
@@ -234,6 +291,10 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             </span>
           </div>
         </a>
+        <!-- Substack -->
+        <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+          <iframe src="https://daitodaison.substack.com/embed" width="208" height="280" style="border:none;background:white;display:block;width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
+        </div>
       </aside>
 
     </div>
