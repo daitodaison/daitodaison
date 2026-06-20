@@ -276,40 +276,45 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
         )}
       </main>
 
-      <!-- 右サイドバー -->
-      <aside class="hidden lg:block w-52 shrink-0 sticky top-28 space-y-4">
-        {headings.length > 0 && (
-          <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
-            <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">目次</p>
-            <ul class="space-y-0.5" id="toc-list">
-              {headings.map((h) => (
-                <li>
-                  <a href={"#" + h.id}
-                     data-toc-id={h.id}
-                     class={h.level === 3
-                       ? "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 pl-5 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
-                       : "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"}>
-                    <span class="toc-bar mt-1.5 shrink-0 w-0.5 h-2.5 rounded-full transition-all duration-200" style="background:transparent"></span>
-                    <span>{h.text}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+      <!-- 右サイドバー：目次＋固定バナー -->
+      <aside class="hidden lg:block w-52 shrink-0">
+        <div class="sticky top-28 flex flex-col gap-4" style="max-height: calc(100vh - 8rem);">
+          <!-- 目次：独立スクロール -->
+          {headings.length > 0 && (
+            <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 flex flex-col min-h-0">
+              <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3 shrink-0">目次</p>
+              <ul class="space-y-0.5 overflow-y-auto flex-1 pr-1" id="toc-list" style="scrollbar-width:thin;">
+                {headings.map((h) => (
+                  <li>
+                    <a href={"#" + h.id}
+                       data-toc-id={h.id}
+                       class={h.level === 3
+                         ? "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 pl-5 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
+                         : "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"}>
+                      <span class="toc-bar mt-1.5 shrink-0 w-0.5 h-2.5 rounded-full transition-all duration-200" style="background:transparent"></span>
+                      <span>{h.text}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <!-- 固定バナー：Funded7＋Substack -->
+          <div class="shrink-0 space-y-3">
+            <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener" class="block relative rounded-xl p-px bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-500/30 hover:shadow-lg transition-all">
+              <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
+                <p class="text-[10px] font-bold tracking-widest uppercase text-blue-500 mb-1">💰 無料トライアルあり</p>
+                <p class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1">FUNDED7</p>
+                <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">1フェーズ〜速攻プランまで選べる。日本円対応・cTrader使用可。</p>
+                <span class="block text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-2 px-3 rounded-lg">
+                  無料アカウント開設 →
+                </span>
+              </div>
+            </a>
+            <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
+              <iframe src="https://daitodaison.substack.com/embed" width="208" height="280" style="border:none;background:white;display:block;width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
+            </div>
           </div>
-        )}
-        <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener" class="block relative rounded-xl p-px bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-500/30 hover:shadow-lg transition-all">
-          <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
-            <p class="text-[10px] font-bold tracking-widest uppercase text-blue-500 mb-1">💰 無料トライアルあり</p>
-            <p class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1">FUNDED7</p>
-            <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">1フェーズ〜速攻プランまで選べる。日本円対応・cTrader使用可。</p>
-            <span class="block text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-2 px-3 rounded-lg">
-              無料アカウント開設 →
-            </span>
-          </div>
-        </a>
-        <!-- Substack -->
-        <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-          <iframe src="https://daitodaison.substack.com/embed" width="208" height="280" style="border:none;background:white;display:block;width:100%;" frameborder="0" scrolling="no" loading="lazy"></iframe>
         </div>
       </aside>
 
