@@ -9,8 +9,17 @@ import { useTranslations } from "~/i18n/utils";
 
 export async function getStaticPaths() {
   const PER_PAGE = 9;
-  const response = await client.get({ endpoint: "blogs", queries: { limit: 100 } });
-  const allPosts = response.contents;
+  let allPosts: any[] = [];
+  let offset = 0;
+  while (true) {
+    const response = await client.get({
+      endpoint: "blogs",
+      queries: { limit: 100, offset, orders: "-updatedAt" },
+    });
+    allPosts = allPosts.concat(response.contents);
+    if (allPosts.length >= response.totalCount) break;
+    offset += 100;
+  }
   const totalPages = Math.max(1, Math.ceil(allPosts.length / PER_PAGE));
   const paths = [];
   for (const lang of ["ja", "en"]) {
