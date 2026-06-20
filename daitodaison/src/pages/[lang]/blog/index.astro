@@ -109,21 +109,24 @@ if (cur < totalPages) {
       ))}
     </div>
 
-        {totalPages > 1 && (
+            {totalPages > 1 && (
       <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
-        {paginationItems.map((item) => (
-          item.type === 'ellipsis' ? (
-            <span class="px-2 py-2 text-sm text-muted-foreground">...</span>
-          ) : (
-            <a
-              href={item.page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${item.page}/`}
-              class={item.active ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"}
-              aria-current={item.active ? "page" : undefined}
-            >
-              {item.label}
-            </a>
-          )
-        ))}
+        {Number(currentPage) > 1 && (
+          <a href={Number(currentPage) === 2 ? `/${lang}/blog/` : `/${lang}/blog/${Number(currentPage) - 1}/`} class="px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted">＜</a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter((i) => i === 1 || i === totalPages || (i >= Number(currentPage) - 2 && i <= Number(currentPage) + 2))
+          .map((page, idx, arr) => (
+            <>
+              {idx > 0 && arr[idx - 1] !== page - 1 && <span class="px-2 py-2 text-sm text-muted-foreground">...</span>}
+              <a href={page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${page}/`} class={page === Number(currentPage) ? "px-4 py-2 rounded-lg text-sm font-medium bg-primary text-white" : "px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted"} aria-current={page === Number(currentPage) ? "page" : undefined}>
+                {page}
+              </a>
+            </>
+          ))}
+        {Number(currentPage) < totalPages && (
+          <a href={`/${lang}/blog/${Number(currentPage) + 1}/`} class="px-4 py-2 rounded-lg text-sm font-medium border border-border hover:bg-muted">＞</a>
+        )}
       </nav>
     )}
 
