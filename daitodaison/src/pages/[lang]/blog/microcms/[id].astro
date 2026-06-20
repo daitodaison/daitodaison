@@ -44,24 +44,22 @@ async function translateHtml(html: string, to: string) {
 let displayTitle = post.title;
 const rawContent = post.content || '';
 let displayContent = '';
-if (/<html/i.test(rawContent)) {
-  const bodyMatch = rawContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-  const styleMatch = rawContent.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
-  const bodyContent = bodyMatch ? bodyMatch[1] : rawContent;
-  let styleTag = '';
-  if (styleMatch) {
-    const scopedCss = styleMatch[1].replace(/([^{}]+)\{/g, (m, sel) => {
-      const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
-      return scoped + ' {';
-    });
-    styleTag = '<style>' + scopedCss + '</style>';
-  }
-  displayContent = styleTag + bodyContent;
-} else {
-  displayContent = rawContent
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+// Extract body content and styles from full HTML or partial HTML
+const styleMatches = rawContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi) || [];
+const bodyMatch = rawContent.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+const bodyContent = bodyMatch ? bodyMatch[1] : rawContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<!DOCTYPE[^>]*>/gi, '').replace(/<html[^>]*>/gi, '').replace(/<\/html>/gi, '').replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
+let styleTag = '';
+if (styleMatches.length > 0) {
+  const allCss = styleMatches.map((s: string) => s.replace(/<\/?style[^>]*>/gi, '')).join('
+');
+  const scopedCss = allCss.replace(/([^{}]+)\{/g, (m: string, sel: string) => {
+    if (sel.trim().startsWith('@')) return m;
+    const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
+    return scoped + ' {';
+  });
+  styleTag = '<style>' + scopedCss + '</style>';
 }
+displayContent = styleTag + bodyContent;
 
 if (lang === "en") {
   try {
