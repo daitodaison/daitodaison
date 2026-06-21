@@ -386,6 +386,23 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     </div>
   </div>
 
+  <style>
+    .article-body a {
+      color: #3b82f6;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .dark .article-body a {
+      color: #60a5fa;
+    }
+    .article-body a:hover {
+      color: #2563eb;
+    }
+    .dark .article-body a:hover {
+      color: #93c5fd;
+    }
+  </style>
+
   <script is:inline>
   (function() {
     function initToc() {
