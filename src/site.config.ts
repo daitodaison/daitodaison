@@ -1,4 +1,3 @@
-
 export const siteConfig = {
   name: 'daito | FXプロップ攻略',
   description: 'Fintokei上位2.3%のFXトレーダーが教えるプロップファーム攻略ブログ。',
