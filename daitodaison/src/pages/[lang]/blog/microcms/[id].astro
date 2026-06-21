@@ -297,7 +297,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       </main>
 
       <!-- 右サイドバー：目次＋固定バナー -->
-      <aside class="hidden lg:block w-52 shrink-0">
+      <aside class="hidden lg:block w-52 shrink-0" style="align-self: start;">
         <div class="sticky top-28 flex flex-col gap-4" style="max-height: calc(100vh - 7rem); overflow: hidden;">
           <!-- 目次：独立スクロール -->
           {headings.length > 0 && (
