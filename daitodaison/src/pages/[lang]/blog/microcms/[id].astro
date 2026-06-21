@@ -84,7 +84,10 @@ function addImageFallback(html: string) {
   });
 }
 
-displayContent = addImageFallback(styleTag + bodyContent);
+const processedBody = bodyContent
+  .replace(/https:\/\/daitodaison\.pages\.dev\/wp-content/g, "https://www.dysonblog.org/wp-content")
+  .replace(/https:\/\/i0\.wp\.com\/www\.dysonblog\.org/g, "https://www.dysonblog.org");
+displayContent = styleTag + processedBody;
 
 if (false && lang === "en") {
   try {
