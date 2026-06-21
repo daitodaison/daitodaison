@@ -180,7 +180,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       <!-- 最新記事タブ -->
       <div data-tab="latest">
         <ul class="space-y-1">
-          {(allPosts as any[]).slice(0, 6).map((p: any, idx: number) => {
+          {(allPosts as any[]).slice(0, 3).map((p: any, idx: number) => {
             const isActive = p.id === post.id;
             return (
               <li>
@@ -197,34 +197,46 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             );
           })}
         </ul>
+        <a href={"/" + lang + "/blog/microcms"}
+           class="mt-2 flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary hover:bg-primary/5 dark:hover:bg-white/5 rounded-lg py-2 transition-all border border-primary/20">
+          もっと見る
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
       </div>
 
       <!-- 関連記事タブ -->
       <div data-tab="related" style="display:none;">
-        {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 6).length > 0 ? (
-          <ul class="space-y-1">
-            {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 6).map((p: any, idx: number) => {
-              return (
-                <li>
-                  <a href={"/" + lang + "/blog/microcms/" + p.id}
-                     class="flex items-start gap-2 group rounded-lg px-2 py-2.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all">
-                    <span class="text-[11px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors">{String(idx + 1).padStart(2, "0")}</span>
-                    <span class="flex-1 min-w-0">
-                      {p.category?.name && <span class="block text-[10px] text-blue-500 mb-0.5">📂 {p.category.name}</span>}
-                      <span class="block text-[12px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
-                    </span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+        {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 3).length > 0 ? (
+          <>
+            <ul class="space-y-1">
+              {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 3).map((p: any, idx: number) => {
+                return (
+                  <li>
+                    <a href={"/" + lang + "/blog/microcms/" + p.id}
+                       class="flex items-start gap-2 group rounded-lg px-2 py-2.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all">
+                      <span class="text-[11px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors">{String(idx + 1).padStart(2, "0")}</span>
+                      <span class="flex-1 min-w-0">
+                        {p.category?.name && <span class="block text-[10px] text-blue-500 mb-0.5">📂 {p.category.name}</span>}
+                        <span class="block text-[12px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
+                      </span>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+            {post.category?.name && (
+              <a href={"/" + lang + "/blog/?category=" + post.category.name}
+                 class="mt-2 flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary hover:bg-primary/5 dark:hover:bg-white/5 rounded-lg py-2 transition-all border border-primary/20">
+                もっと見る
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            )}
+          </>
         ) : (
           <p class="text-xs text-zinc-400 text-center py-8">関連記事はありません</p>
         )}
       </div>
-    </div>
-  </div>
 
 
 </aside>
