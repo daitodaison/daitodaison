@@ -139,10 +139,32 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     <div class="flex gap-8 items-start">
 
 <!-- 左サイドバー -->
-<aside class="hidden xl:block w-56 shrink-0 overflow-y-auto space-y-4" style="max-height:calc(100vh - 10rem); align-self:start; position:sticky; top:9rem;">
-  <div id="sidebar-root">
-    <!-- タブ -->
-    <div class="flex rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 mb-3">
+
+<aside class="hidden xl:flex xl:flex-col w-56 shrink-0 gap-3" style="align-self:start; position:sticky; top:9rem; max-height:calc(100vh - 10rem);">
+
+  <!-- Fintokei バナー（常に最上部・固定） -->
+  <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
+     class="group block relative rounded-2xl overflow-hidden shrink-0">
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-600 to-violet-800"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,255,255,0.1),transparent_60%)]"></div>
+    <div class="relative z-10 p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-lg">🏆</span>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-200">著者イチオシ</p>
+          <p class="text-sm font-black text-white leading-tight">Fintokei</p>
+        </div>
+      </div>
+      <p class="text-[11px] text-purple-200 leading-snug mb-3">日本初プロップ・著者が上位2.3%を達成した実績あり</p>
+      <span class="block text-center bg-white text-purple-700 font-black text-xs py-2 rounded-xl group-hover:bg-purple-50 transition-all">
+        無料で始める →
+      </span>
+    </div>
+  </a>
+
+  <!-- タブ＋記事リスト -->
+  <div id="sidebar-root" class="flex flex-col min-h-0 flex-1 overflow-hidden">
+    <div class="flex rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 mb-3 shrink-0">
       <button onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=latest]').style.display='block'; r.querySelector('[data-tab=related]').style.display='none'; this.classList.add('bg-primary','text-white'); this.nextElementSibling.classList.remove('bg-primary','text-white');"
         class="flex-1 text-xs py-2 font-bold bg-primary text-white transition-colors">
         🆕 最新
@@ -210,14 +232,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     </div>
   </div>
 
-  <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener" class="block rounded-xl border border-purple-300 dark:border-purple-500/30 overflow-hidden hover:border-purple-500 transition-all group">
-    <div class="bg-gradient-to-br from-purple-500/10 to-pink-500/5 p-4">
-      <p class="text-[10px] font-bold uppercase tracking-widest text-purple-600 dark:text-purple-400 mb-1">🏆 国内No.1プロップ</p>
-      <p class="text-xs font-bold text-zinc-900 dark:text-white leading-snug mb-2 group-hover:text-purple-600 transition-colors">Fintokei（フィントケイ）</p>
-      <p class="text-[11px] text-gray-500 dark:text-gray-400">日本初の本格派プロップファーム。無料デモ大会あり。</p>
-      <p class="text-[11px] text-purple-600 font-medium mt-2">無料で始める →</p>
-    </div>
-  </a>
+
 </aside>
 
       <!-- 本文 -->
