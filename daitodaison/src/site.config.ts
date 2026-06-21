@@ -1,12 +1,12 @@
 
 
 export const siteConfig = {
-  name: 'ASTRO攻略LABO',
-  description: 'ASTRO攻略LABOは、ASTROバイナリーオプション専用ツールと攻略情報を提供する日本語メディアです。',
+name: 'daitodaison',
+  description: '勝率40%・上位2.3%のFXプロップ攻略メディア。Fintokei・FTMO・Funded7の攻略情報とEA開発を発信。',
   logo: {
     src: '/logo.svg',
     srcDark: '/logo.svg',       // Used when strategy is 'switch'
-    alt: 'ASTRO攻略LABO ロゴ',
+    alt: 'daitodaison ロゴ',
     strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
   },
   ogImage: '/og-image.webp',
@@ -25,8 +25,8 @@ export const siteConfig = {
   },
   contact: {
     email: {
-      support: 'support@astro-labo.jp',
-      sales: 'sales@astro-labo.jp',
+  support: '',
+      sales: '',
     },
     phone: {
       main: '+81 3-1234-5678',
@@ -97,9 +97,11 @@ export const ACTION_LINKS = {
   social: {
     twitter: 'https://twitter.com/daitodaison',
     github: 'https://github.com/daitodaison',
-    youtube: 'https://youtube.com/@creator_gaku',
-    linkedin: '',
-    facebook: ''
+    youtube: 'https://youtube.com/daitodaison',
+    linkedin: 'https://www.linkedin.com/in/daitodaison/',
+    facebook: '',
+    note: 'https://note.com/daitodaison',
+    substack: 'https://daitodaison.substack.com/'
   }
 };
 
@@ -118,7 +120,7 @@ export const FOOTER_LINKS = {
     title: '法的情報',
     links: [
       { href: '/privacy', label: 'プライバシーポリシー', localize: false },
-      { href: '/terms', label: '免責事項', localize: false }
+     { href: '/terms', label: '利用規約', localize: false }
     ],
   },
 };
