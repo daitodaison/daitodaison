@@ -83,7 +83,8 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
           />
         )
       )}
-      <span class="inline text-sm md:text-xl">{t['brand.name'] || siteConfig.name}</span>
+      <span class="hidden xl:inline text-sm md:text-xl">{t['brand.name'] || siteConfig.name}</span>
+<span class="inline xl:hidden text-sm font-bold">daito</span>
     </a>
     <div class="flex-1 flex justify-center mx-4 lg:mx-8">
       <DesktopNav client:only="react" links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} currentPath={Astro.url.pathname} />
