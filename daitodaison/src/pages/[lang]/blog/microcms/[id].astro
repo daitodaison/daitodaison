@@ -207,9 +207,9 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             </span>
           )}
           {post.category?.name && (
-            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
-              📂 {post.category.name}
-            </span>
+            <a href={"/" + lang + "/blog/?category=" + post.category.name} class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium hover:bg-blue-200 transition-colors">
+  📂 {post.category.name}
+</a>
           )}
           {post.tags && post.tags.split(",").map((tag: string) => (
             <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
