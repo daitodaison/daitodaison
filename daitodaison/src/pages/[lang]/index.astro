@@ -14,7 +14,7 @@ const { lang = defaultLang } = Astro.params;
 // 最新記事3件取得
 let latestPosts: any[] = [];
 try {
-  const res = await client.get({ endpoint: "blogs", queries: { limit: 3, fields: "id,title,eyecatch,category" } });
+  const res = await client.get({ endpoint: "blogs", queries: { limit: 3, fields: "id,title,eyecatch,category,content" } });
   latestPosts = res.contents;
 } catch(e) {}
 ---
@@ -145,7 +145,13 @@ try {
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           {latestPosts.map((post: any) => {
             const raw = post.eyecatch || "";
-            const imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content");
+            let imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content");
+            if (!imgUrl && post.content) {
+              const match = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+              if (match) {
+                imgUrl = match[1].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content");
+              }
+            }
             return (
               <a href={`/${lang}/blog/microcms/${post.id}`}
                  class="group block bg-zinc-50 dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
