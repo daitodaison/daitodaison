@@ -1,66 +1,39 @@
-
+import { defineCollection } from "astro:content";
 
 export const siteConfig = {
-  name: 'ASTRO攻略LABO',
-  description: 'ASTRO攻略LABOは、ASTROバイナリーオプション専用ツールと攻略情報を提供する日本語メディアです。',
+  name: 'daito | FXプロップ攻略',
+  description: 'Fintokei上位2.3%のFXトレーダーが教えるプロップファーム攻略ブログ。',
   logo: {
     src: '/logo.svg',
-    srcDark: '/logo.svg',       // Used when strategy is 'switch'
-    alt: 'ASTRO攻略LABO ロゴ',
-    strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
+    srcDark: '/logo.svg',
+    alt: 'daito ロゴ',
+    strategy: 'invert' as 'invert' | 'switch' | 'static',
   },
   ogImage: '/og-image.webp',
-  primaryColor: '#2563EB', // Default primary color
-  search: {
-    enabled: true,
-  },
+  primaryColor: '#2563EB',
+  search: { enabled: true },
   announcement: {
     enabled: true,
-    id: 'upgrade_v1_1_1', // Change this ID to reshow the banner
-    link: '/changelog',
-    localizeLink: true, // Set to true to apply i18n routing to the link, false for external/absolute links
+    id: 'substack_2026',
+    link: 'https://daitodaison.substack.com/',
+    localizeLink: false,
   },
-  blog: {
-    postsPerPage: 6,
-  },
+  blog: { postsPerPage: 9 },
   contact: {
-    email: {
-      support: 'support@astro-labo.jp',
-      sales: 'sales@astro-labo.jp',
-    },
-    phone: {
-      main: '+81 3-1234-5678',
-      label: '月〜金 9:00〜18:00 JST'
-    },
-    address: {
-      city: 'Tokyo',
-      full: 'Japan'
-    }
+    email: { support: 'support@daitodaison.com', sales: 'sales@daitodaison.com' },
+    phone: { main: '', label: '' },
+    address: { city: 'Yamanashi', full: 'Japan' }
   },
   analytics: {
     alwaysLoad: import.meta.env.ANALYTICS_ALWAYS_LOAD === 'true',
     vendors: {
-      googleAnalytics: {
-        id: import.meta.env.GA_ID || '',
-        enabled: import.meta.env.GA_ENABLED === 'true',
-      },
-      rybbit: {
-        id: import.meta.env.RYBBIT_ID || '',
-        src: import.meta.env.RYBBIT_SRC || 'https://rybbit.example.com/api/script.js',
-        enabled: import.meta.env.RYBBIT_ENABLED === 'true',
-      },
-      umami: {
-        id: import.meta.env.UMAMI_ID || '',
-        src: import.meta.env.UMAMI_SRC || 'https://analytics.umami.is/script.js',
-        enabled: import.meta.env.UMAMI_ENABLED === 'true',
-      },
+      googleAnalytics: { id: import.meta.env.GA_ID || '', enabled: import.meta.env.GA_ENABLED === 'true' },
+      rybbit: { id: import.meta.env.RYBBIT_ID || '', src: import.meta.env.RYBBIT_SRC || '', enabled: false },
+      umami: { id: import.meta.env.UMAMI_ID || '', src: import.meta.env.UMAMI_SRC || '', enabled: false },
     },
   },
   dateOptions: {
-    localeMapping: {
-        'ar': 'ar-TN', // Force Maghreb Arabic date format (e.g., جانفي instead of يناير)
-        'en': 'en-GB', // Example: Force UK English date format
-    }
+    localeMapping: { 'ar': 'ar-TN', 'en': 'en-GB' }
   }
 };
 
@@ -92,6 +65,7 @@ export const NAV_LINKS = [
     ]
   },
 ];
+
 export const ACTION_LINKS = {
   primary: { label: 'プロップ攻略手法を学ぶ', href: 'https://daitodaison.substack.com/' },
   social: {
@@ -105,19 +79,20 @@ export const ACTION_LINKS = {
 
 export const FOOTER_LINKS = {
   product: {
-    title: 'Product',
+    title: 'コンテンツ',
     links: [
-      { href: '/features', label: 'Features' },
-      { href: '/about', label: 'About' },
-      { href: '/pricing', label: 'Pricing' },
-      { href: '/changelog', label: 'Changelog' },
+      { href: '/blog/', label: '攻略ブログ' },
+      { href: '/sitemap-page/', label: 'サイトマップ' },
+      { href: 'https://www.fintokei.com/jp/?affiliate=64', label: 'Fintokei登録', localize: false },
+      { href: 'https://my.funded7.com/ja/sign-up?affiliateId=111', label: 'FUNDED7登録', localize: false },
+      { href: 'https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD', label: 'FTMO登録', localize: false },
     ],
   },
   legal: {
-    title: 'Legal',
+    title: '法的情報',
     links: [
-      { href: '/privacy', label: 'Privacy', localize: false },
-      { href: '/terms', label: 'Terms', localize: false }
+      { href: '/privacy', label: 'プライバシーポリシー', localize: false },
+      { href: '/terms', label: '免責事項', localize: false }
     ],
   },
 };
