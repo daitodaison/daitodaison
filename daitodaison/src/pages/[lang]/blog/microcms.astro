@@ -15,8 +15,7 @@ const t = useTranslations(lang);
 let posts: any[] = [];
 let off = 0;
 while (true) {
-  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category', orders: '-updatedAt' } });
-  posts = posts.concat(res.contents);
+  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category,content', orders: '-updatedAt' } });
   if (posts.length >= res.totalCount) break;
   off += 100;
 }
@@ -28,7 +27,13 @@ while (true) {
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.map((post: any) => {
         const raw = post.eyecatch || "";
-        const imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
+        let imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
+        if (!imgUrl && post.content) {
+          const match = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+          if (match) {
+            imgUrl = match[1].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
+          }
+        }
         return (
           <a href={`/${lang}/blog/microcms/${post.id}`}
              class="group block bg-white dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
