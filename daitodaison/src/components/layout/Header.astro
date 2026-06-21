@@ -49,6 +49,11 @@ const getLocalizedHref = (href: string) => {
 
 const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
 ---
+<style>
+  .dark .dark-n { fill: white; }
+  #main-header { color: white; }
+  #main-header.scrolled-light { color: #111827; }
+</style>
 
 <header id="main-header" class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4 text-gray-900 dark:text-white">
   <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
