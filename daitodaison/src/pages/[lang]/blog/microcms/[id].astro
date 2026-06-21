@@ -143,11 +143,11 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
   <div id="sidebar-root">
     <!-- タブ -->
     <div class="flex rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 mb-3">
-      onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=latest]').style.display='block'; r.querySelector('[data-tab=related]').style.display='none'; this.classList.add('bg-primary','text-white'); this.nextElementSibling.classList.remove('bg-primary','text-white');"
+      <button onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=latest]').style.display='block'; r.querySelector('[data-tab=related]').style.display='none'; this.classList.add('bg-primary','text-white'); this.nextElementSibling.classList.remove('bg-primary','text-white');"
         class="flex-1 text-xs py-2 font-bold bg-primary text-white transition-colors">
         🆕 最新
       </button>
-      onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=related]').style.display='block'; r.querySelector('[data-tab=latest]').style.display='none'; this.classList.add('bg-primary','text-white'); this.previousElementSibling.classList.remove('bg-primary','text-white');"
+      <button onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=related]').style.display='block'; r.querySelector('[data-tab=latest]').style.display='none'; this.classList.add('bg-primary','text-white'); this.previousElementSibling.classList.remove('bg-primary','text-white');"
         class="flex-1 text-xs py-2 font-bold transition-colors text-gray-500 dark:text-gray-400">
         🔗 関連
       </button>
