@@ -12,7 +12,7 @@ name: 'daitodaison',
   ogImage: '/og-image.webp',
   primaryColor: '#2563EB', // Default primary color
   search: {
-    enabled: false,
+    enabled: true,
   },
   announcement: {
     enabled: true,
