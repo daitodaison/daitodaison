@@ -171,7 +171,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
 
     <div data-sidebar class="flex-1 min-h-0 overflow-y-auto" style="scrollbar-width:thin;">
       <ul class="space-y-0.5" id="sidebar-post-list">
-        {(allPosts as any[]).slice(0, 3).map((p: any, idx: number) => {
+        {(allPosts as any[]).slice(0, 12).map((p: any, idx: number) => {
           const isActive = p.id === post.id;
           return (
             <li data-category={p.category?.name || ""}>
@@ -535,6 +535,40 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
   </style>
 
   <script is:inline>
+  (function() {
+    function initSidebarFilter() {
+      var buttons = Array.from(document.querySelectorAll(".sidebar-cat-btn"));
+      var items = Array.from(document.querySelectorAll("#sidebar-post-list > li"));
+      if (!buttons.length) return;
+      buttons.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          var cat = btn.getAttribute("data-cat-filter");
+          buttons.forEach(function(b) {
+            b.classList.remove("active", "bg-primary", "text-white");
+            b.classList.add("bg-zinc-100", "dark:bg-white/10", "text-zinc-600", "dark:text-zinc-300");
+          });
+          btn.classList.add("active", "bg-primary", "text-white");
+          btn.classList.remove("bg-zinc-100", "dark:bg-white/10", "text-zinc-600", "dark:text-zinc-300");
+          var shown = 0;
+          items.forEach(function(li) {
+            var match = !cat || li.getAttribute("data-category") === cat;
+            if (match && shown < 6) {
+              li.style.display = "";
+              shown++;
+            } else {
+              li.style.display = "none";
+            }
+          });
+        });
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initSidebarFilter);
+    } else {
+      initSidebarFilter();
+    }
+  })();
   (function() {
     function initToc() {
       var headingEls = Array.from(document.querySelectorAll("main h2[id], main h3[id]"));
