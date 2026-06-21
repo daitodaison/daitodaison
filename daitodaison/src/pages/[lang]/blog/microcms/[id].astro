@@ -122,7 +122,8 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     <div class="flex gap-8 items-start">
 
       <!-- 左サイドバー -->
-      <aside class="hidden xl:block w-52 shrink-0 sticky top-28 space-y-4">
+      <aside class="hidden xl:block w-52 shrink-0" style="align-self: start; position: sticky; top: 7rem;">
+  <div style="max-height: calc(100vh - 8rem); overflow-y: auto; scrollbar-width: thin;" class="space-y-4">
         <!-- 最新記事 -->
         <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
           <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">🆕 最新記事</p>
@@ -182,6 +183,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             <p class="text-[11px] text-purple-600 font-medium mt-2">無料で始める →</p>
           </div>
         </a>
+      </div>
       </aside>
 
       <!-- 本文 -->
