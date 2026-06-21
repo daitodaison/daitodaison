@@ -139,15 +139,15 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     <div class="flex gap-8 items-start">
 
 <!-- 左サイドバー -->
-<aside class="hidden xl:block w-56 shrink-0 overflow-y-auto space-y-4" style="max-height:calc(100vh - 8rem); align-self:start; position:sticky; top:7rem;">
-  <div x-data="{ tab: 'latest' }">
+<aside class="hidden xl:block w-56 shrink-0 overflow-y-auto space-y-4" style="max-height:calc(100vh - 10rem); align-self:start; position:sticky; top:9rem;">
+  <div id="sidebar-root">
     <!-- タブ -->
     <div class="flex rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 mb-3">
-      <button onclick="this.closest('[data-sidebar]').querySelector('[data-tab=latest]').style.display='block'; this.closest('[data-sidebar]').querySelector('[data-tab=related]').style.display='none'; this.classList.add('bg-primary','text-white'); this.nextElementSibling.classList.remove('bg-primary','text-white');"
+      onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=latest]').style.display='block'; r.querySelector('[data-tab=related]').style.display='none'; this.classList.add('bg-primary','text-white'); this.nextElementSibling.classList.remove('bg-primary','text-white');"
         class="flex-1 text-xs py-2 font-bold bg-primary text-white transition-colors">
         🆕 最新
       </button>
-      <button onclick="this.closest('[data-sidebar]').querySelector('[data-tab=related]').style.display='block'; this.closest('[data-sidebar]').querySelector('[data-tab=latest]').style.display='none'; this.classList.add('bg-primary','text-white'); this.previousElementSibling.classList.remove('bg-primary','text-white');"
+      onclick="var r=document.getElementById('sidebar-root'); r.querySelector('[data-tab=related]').style.display='block'; r.querySelector('[data-tab=latest]').style.display='none'; this.classList.add('bg-primary','text-white'); this.previousElementSibling.classList.remove('bg-primary','text-white');"
         class="flex-1 text-xs py-2 font-bold transition-colors text-gray-500 dark:text-gray-400">
         🔗 関連
       </button>
@@ -333,7 +333,8 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       </main>
 
       <!-- 右サイドバー：目次＋固定バナー -->
-      <aside class="hidden lg:block w-52 shrink-0" style="align-self: start;">
+     <aside class="hidden lg:block w-52 shrink-0" style="align-self: start; position: sticky; top: 9rem;">
+        <div class="flex flex-col gap-4" style="max-height: calc(100vh - 9rem); overflow: hidden;">
         <div class="sticky top-28 flex flex-col gap-4" style="max-height: calc(100vh - 7rem); overflow: hidden;">
           <!-- 目次：独立スクロール -->
           {headings.length > 0 && (
@@ -389,7 +390,8 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
   (function() {
     function initToc() {
       var headingEls = Array.from(document.querySelectorAll("main h2[id], main h3[id]"));
-      var tocLinks = Array.from(document.querySelectorAll("a[data-toc-id]"));
+     var tocLinks = Array.from(document.querySelectorAll("a[data-toc-id]"));
+      var tocList = document.getElementById("toc-list");
       if (!headingEls.length || !tocLinks.length) return;
 
       function setActive(id) {
