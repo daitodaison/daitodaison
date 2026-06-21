@@ -50,7 +50,18 @@ const getLocalizedHref = (href: string) => {
 const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
 ---
 <style>
-  
+  .header-text-shield,
+  .header-text-shield a,
+  .header-text-shield button,
+  .header-text-shield span {
+    color: #ffffff !important;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.55),
+      0 0 6px rgba(0, 0, 0, 0.35);
+  }
+  .header-text-shield svg {
+    filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.5));
+  }
 </style>
 
 <header id="main-header" class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4 text-white header-text-shield">
@@ -166,21 +177,21 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
     const header = document.getElementById('main-header');
     if (!header) return;
 
-    const handleScroll = () => {
+   const handleScroll = () => {
       const isDark = document.documentElement.classList.contains('dark');
       if (window.scrollY > 20) {
-        header.classList.remove('bg-transparent', 'border-transparent', 'py-4', 'text-white');
+        header.classList.remove('bg-transparent', 'border-transparent', 'py-4');
         header.classList.add('backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
         if (isDark) {
-          header.classList.add('bg-zinc-950/80', 'text-white');
-          header.classList.remove('bg-white/80', 'text-gray-900');
+          header.classList.add('bg-zinc-950/80');
+          header.classList.remove('bg-white/80');
         } else {
-          header.classList.add('bg-white/80', 'text-gray-900');
-          header.classList.remove('bg-zinc-950/80', 'text-white');
+          header.classList.add('bg-white/80');
+          header.classList.remove('bg-zinc-950/80');
         }
       } else {
-        header.classList.add('bg-transparent', 'border-transparent', 'py-4', 'text-white');
-        header.classList.remove('bg-white/80', 'bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm', 'text-gray-900');
+        header.classList.add('bg-transparent', 'border-transparent', 'py-4');
+        header.classList.remove('bg-white/80', 'bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
       }
     };
 
