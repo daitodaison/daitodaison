@@ -12,7 +12,7 @@ export const siteConfig = {
   ogImage: '/og-image.webp',
   primaryColor: '#2563EB', // Default primary color
   search: {
-    enabled: true,
+    enabled: false,
   },
   announcement: {
     enabled: true,
