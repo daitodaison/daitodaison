@@ -96,7 +96,7 @@ export const ACTION_LINKS = {
   primary: { label: 'プロップ攻略手法を学ぶ', href: 'https://daitodaison.substack.com/' },
   social: {
     twitter: 'https://twitter.com/daitodaison',
-    github: 'https://github.com/daitodaison',
+    github: '',
     youtube: 'https://youtube.com/daitodaison',
     linkedin: 'https://www.linkedin.com/in/daitodaison/',
     facebook: '',
