@@ -70,7 +70,21 @@ if (styleMatches.length > 0) {
   });
   styleTag = '<style>' + scopedCss + '</style>';
 }
-displayContent = styleTag + bodyContent;
+function addImageFallback(html: string) {
+  return html.replace(/<img([^>]*)src="([^"]+)"([^>]*)>/gi, (match, before, src, after) => {
+    if (/onerror=/i.test(before) || /onerror=/i.test(after)) return match;
+    let fallback = "";
+    if (src.includes("daitodaison.pages.dev/wp-content")) {
+      fallback = src.replace("https://daitodaison.pages.dev/wp-content", "https://www.dysonblog.org/wp-content");
+    } else if (src.includes("dysonblog.org/wp-content") && !src.includes("daitodaison.pages.dev")) {
+      fallback = src.replace(/https:\/\/(www\.)?dysonblog\.org\/wp-content/, "https://daitodaison.pages.dev/wp-content");
+    }
+    if (!fallback) return match;
+    return '<img' + before + 'src="' + src + '"' + after + ' onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\'' + fallback + '\';}" >';
+  });
+}
+
+displayContent = addImageFallback(styleTag + bodyContent);
 
 if (false && lang === "en") {
   try {
