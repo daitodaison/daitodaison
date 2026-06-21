@@ -8,7 +8,7 @@ interface NavChild {
   href: string;
   icon?: string;
   description?: string;
-}
+}　
 
 interface NavLink {
   label: string;
@@ -71,7 +71,7 @@ export default function DesktopNav({ links, currentPath = '/' }: DesktopNavProps
                 <a 
                     href={link.href}
                     className={`text-sm font-medium transition-colors ${
-                        isLinkActive ? 'text-primary dark:text-blue-300' : 'text-foreground/70 hover:text-foreground dark:text-white dark:hover:text-blue-300'
+                        isLinkActive ? 'text-primary dark:text-blue-300' : 'text-current opacity-80 hover:opacity-100'
                     }`}
                 >
                     {link.label}
