@@ -1,54 +1,42 @@
-import { getCollection } from 'astro:content';
-
+import { client } from '~/library/microcms';
 export const prerender = false;
 
 export async function GET() {
-  const docs = await getCollection('docs').catch(() => []);
-  const blog = await getCollection('blog').catch(() => []);
-  const portfolio = await getCollection('portfolio').catch(() => []);
+  const results: any[] = [];
 
-  const results = [];
-
-  for (const doc of docs) {
-    if (doc.data?.noindex) continue;
-    const slug = doc.id.replace(/\.[^/.]+$/, "");
-    results.push({
-      title: doc.data?.title || slug,
-      description: doc.data?.description || '',
-      url: `/docs/${slug}`,
-      body: doc.body || ''
+  try {
+    const res = await client.get({
+      endpoint: "blogs",
+      queries: {
+        limit: 100,
+        fields: "id,title,category,content,publishedAt"
+      }
     });
-  }
 
-  for (const post of blog) {
-    if (post.data?.noindex) continue;
-    const [lang, ...slugParts] = post.id.replace(/\.[^/.]+$/, "").split('/');
-    const slug = slugParts.join('/');
-    results.push({
-      title: post.data?.title || slug,
-      description: post.data?.description || '',
-      url: `/${lang}/blog/${slug}`,
-      body: post.body || ''
-    });
-  }
+    for (const post of res.contents) {
+      const plainText = (post.content || "")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 300);
 
-  for (const item of portfolio) {
-    if (item.data?.noindex) continue;
-    const [lang, ...slugParts] = item.id.replace(/\.[^/.]+$/, "").split('/');
-    const slug = slugParts.join('/');
-    results.push({
-      title: item.data?.title || slug,
-      description: item.data?.description || '',
-      url: `/${lang}/portfolio/${slug}`,
-      body: item.body || ''
-    });
+      results.push({
+        title: post.title || post.id,
+        description: plainText,
+        url: `/ja/blog/microcms/${post.id}`,
+        body: plainText,
+        category: post.category?.name || ''
+      });
+    }
+  } catch (e) {
+    // microCMS取得失敗時は空配列を返す
   }
 
   return new Response(JSON.stringify(results), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=86400'
+      'Cache-Control': 'public, max-age=3600'
     }
   });
 }
