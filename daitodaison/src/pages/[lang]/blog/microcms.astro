@@ -4,39 +4,71 @@ import Layout from "~/layouts/Layout.astro";
 import { client } from "~/library/microcms";
 import { languages } from "~/i18n/ui";
 import { useTranslations } from "~/i18n/utils";
-
 export async function getStaticPaths() {
   return Object.keys(languages).map((lang) => ({ params: { lang } }));
 }
-
 const { lang } = Astro.params;
 const t = useTranslations(lang);
-
 let posts: any[] = [];
 let off = 0;
 while (true) {
-  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category', orders: '-updatedAt'} });
+  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category,tags', orders: '-updatedAt'} });
+  posts = posts.concat(res.contents);
   if (posts.length >= res.totalCount) break;
   off += 100;
 }
+// カテゴリー・タグ一覧を抽出
+const categories = [...new Set(posts.map((p:any) => p.category?.name).filter(Boolean))];
+const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map((t:string) => t.trim()).filter(Boolean)))];
 ---
-
 <Layout title="ブログ記事一覧" description="プロップファーム攻略記事の一覧">
   <div class="max-w-5xl mx-auto px-4 pt-32 pb-20">
-    <h1 class="text-2xl font-bold mb-8">{t["blog.title"] || "ブログ"}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <h1 class="text-2xl font-bold mb-6">{t["blog.title"] || "ブログ"}</h1>
+
+    <!-- フィルターUI -->
+    <div class="mb-8 space-y-3">
+      <div class="flex flex-wrap gap-2 items-center">
+        <span class="text-xs font-bold text-zinc-500 dark:text-zinc-400 w-12">📂</span>
+        <button onclick="filterPosts(null, null)"
+          id="filter-all"
+          class="filter-btn text-xs px-3 py-1 rounded-full border border-blue-400 bg-blue-500 text-white font-medium transition-all">
+          すべて
+        </button>
+        {categories.map((cat) => (
+          <button onclick={`filterPosts('${cat}', null)`}
+            data-category={cat}
+            class="filter-btn text-xs px-3 py-1 rounded-full border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:border-blue-400 hover:text-blue-600 transition-all">
+            {cat}
+          </button>
+        ))}
+      </div>
+      {tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 items-center">
+          <span class="text-xs font-bold text-zinc-500 dark:text-zinc-400 w-12"># </span>
+          {tags.map((tag) => (
+            <button onclick={`filterPosts(null, '${tag}')`}
+              data-tag={tag}
+              class="filter-btn text-xs px-3 py-1 rounded-full border border-zinc-300 dark:border-zinc-600 text-zinc-600 dark:text-zinc-300 hover:border-purple-400 hover:text-purple-600 transition-all">
+              {tag}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <!-- 件数表示 -->
+    <p id="post-count" class="text-xs text-zinc-400 mb-4">{posts.length}件</p>
+
+    <div id="post-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.map((post: any) => {
         const raw = post.eyecatch || "";
-        let imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
-        if (!imgUrl && post.content) {
-          const match = post.content.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if (match) {
-            imgUrl = match[1].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
-          }
-        }
+        const imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://", "https://");
+        const postTags = (post.tags || '').split(',').map((t: string) => t.trim()).filter(Boolean);
         return (
           <a href={`/${lang}/blog/microcms/${post.id}`}
-             class="group block bg-white dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
+             data-category={post.category?.name || ''}
+             data-tags={postTags.join(',')}
+             class="post-card group block bg-white dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
             <div class="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-700">
               {imgUrl ? (
                 <img src={imgUrl} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -52,6 +84,13 @@ while (true) {
                   {post.category.name}
                 </span>
               )}
+              {postTags.length > 0 && (
+                <div class="flex flex-wrap gap-1 mb-2">
+                  {postTags.map((tag: string) => (
+                    <span class="text-[10px] bg-zinc-100 dark:bg-white/10 text-zinc-500 dark:text-zinc-400 px-1.5 py-0.5 rounded-full">#{tag}</span>
+                  ))}
+                </div>
+              )}
               <h2 class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 transition-colors leading-snug">
                 {post.title}
               </h2>
@@ -60,5 +99,47 @@ while (true) {
         );
       })}
     </div>
+
+    <p id="no-results" class="hidden text-center text-zinc-400 py-20">該当する記事がありません</p>
   </div>
+
+  <script is:inline>
+  function filterPosts(category, tag) {
+    var cards = document.querySelectorAll('.post-card');
+    var allBtn = document.getElementById('filter-all');
+    var btns = document.querySelectorAll('.filter-btn');
+    var count = 0;
+
+    // ボタンのスタイルリセット
+    btns.forEach(function(b) {
+      b.classList.remove('border-blue-400', 'bg-blue-500', 'text-white', 'border-purple-400', 'bg-purple-500');
+      b.classList.add('border-zinc-300', 'dark:border-zinc-600', 'text-zinc-600', 'dark:text-zinc-300');
+    });
+
+    if (!category && !tag) {
+      allBtn.classList.add('border-blue-400', 'bg-blue-500', 'text-white');
+      allBtn.classList.remove('border-zinc-300', 'text-zinc-600');
+    } else if (category) {
+      var btn = document.querySelector('[data-category="' + category + '"]');
+      if (btn) { btn.classList.add('border-blue-400', 'bg-blue-500', 'text-white'); btn.classList.remove('border-zinc-300', 'text-zinc-600'); }
+    } else if (tag) {
+      var btn = document.querySelector('[data-tag="' + tag + '"]');
+      if (btn) { btn.classList.add('border-purple-400', 'bg-purple-500', 'text-white'); btn.classList.remove('border-zinc-300', 'text-zinc-600'); }
+    }
+
+    cards.forEach(function(card) {
+      var show = true;
+      if (category && card.dataset.category !== category) show = false;
+      if (tag) {
+        var cardTags = (card.dataset.tags || '').split(',');
+        if (!cardTags.includes(tag)) show = false;
+      }
+      card.style.display = show ? '' : 'none';
+      if (show) count++;
+    });
+
+    document.getElementById('post-count').textContent = count + '件';
+    document.getElementById('no-results').classList.toggle('hidden', count > 0);
+  }
+  </script>
 </Layout>
