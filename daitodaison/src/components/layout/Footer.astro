@@ -1,90 +1,108 @@
 ---
-import { siteConfig, ACTION_LINKS, FOOTER_LINKS } from '~/site.config';
+import { ACTION_LINKS } from '~/site.config';
 import BrandIcon from '~/components/common/BrandIcon.astro';
 import { defaultLang } from '~/i18n/ui';
 import { useTranslations } from '~/i18n/utils';
 
 const today = new Date();
 const { lang = defaultLang } = Astro.params;
-const t = useTranslations(lang);
 ---
 
-<footer class="mt-auto border-t border-gray-200 dark:border-white/10 bg-white dark:bg-[#141820] py-12">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-      <div class="col-span-1 md:col-span-2 flex flex-col items-start gap-4">
-        <div class="flex flex-col gap-2">
-          <span class="text-xl font-bold font-display tracking-tight">{t['brand.name'] || siteConfig.name}</span>
-          <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
-            {t['footer.quote']}
-          </p>
-        </div>
+<footer class="mt-auto bg-zinc-950 text-white">
 
-        <div class="mt-4 w-full">
-          <p class="text-xs text-gray-500 dark:text-gray-          <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">自己資金不要・合格すれば会社資金でトレードできる</p>
-          <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener" class="group flex items-center gap-3 max-w-sm w-full bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-300 dark:border-purple-500/30 rounded-xl p-3 hover:border-purple-500 transition-all">
-            <div class="shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center text-lg">🏆</div>
-            <div class="min-w-0">
-              <p class="text-xs font-bold text-zinc-900 dark:text-white leading-snug line-clamp-2">Fintokei（フィントケイ）で無料登録する</p>
-              <p class="text-[11px] text-purple-600 font-medium mt-0.5">日本初の本格派プロップファーム →</p>
-            </div>
-          </a>
-        </div>
-      </div>
-      
-      {Object.entries(FOOTER_LINKS).map(([key, section]) => (
+  <!-- Fintokei CTAバナー -->
+  <div class="border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
         <div>
-          <div class="font-semibold mb-4 text-gray-900 dark:text-white">{t[`footer.${key}` as keyof typeof t] || section.title}</div>
-          <ul class="space-y-2 text-sm text-gray-900/90 dark:text-white/90">
-            {section.links.map((link: any) => {
-              
-              const shouldLocalize = link.localize !== false;
-              const href = (!shouldLocalize)
-                ? link.href 
-                : `/${lang}${link.href.startsWith('/') ? '' : '/'}${link.href}`.replace(/\/$/, '') || `/${lang}`;
-              
-              return (
-                <li>
-                  <a 
-                    href={href} 
-                    class="inline-flex items-center px-2 py-2 rounded-md hover:text-slate-900 dark:hover:text-white transition-colors"
-                    aria-label={(link.key && t[`footer.${link.key}` as keyof typeof t]) || link.label}
-                  >
-                    {(link.key && t[`footer.${link.key}` as keyof typeof t]) || link.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+          <p class="text-xs font-bold uppercase tracking-widest text-purple-400 mb-1">🏆 著者イチオシ・日本初プロップファーム</p>
+          <p class="text-lg font-black text-white">Fintokei（フィントケイ）で無料登録する</p>
+          <p class="text-sm text-zinc-400 mt-1">参加費全額返金キャンペーン中（2026年6月末まで）・自己資金不要</p>
         </div>
-      ))}
-    </div>
-
-    <div class="pt-8 border-t border-gray-200 dark:border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-      <div class="text-gray-500 dark:text-gray-400 text-sm">
-        {(t['footer.copyright'] || '').replace('{year}', today.getFullYear().toString())}
-      </div>
-      
-      <div class="flex gap-4">
-        <a href={ACTION_LINKS.social.linkedin} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="LinkedIn">
-          <BrandIcon icon="linkedin" className="w-5 h-5" strokeWidth={1.5} />
-        </a>
-        <a href={ACTION_LINKS.social.youtube} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="YouTube">
-          <BrandIcon icon="youtube" className="w-5 h-5" strokeWidth={1.5} />
-        </a>
-        <a href={ACTION_LINKS.social.github} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="GitHub">
-          <BrandIcon icon="github" className="w-5 h-5" strokeWidth={1.5} />
-        </a>
-       <a href={ACTION_LINKS.social.note} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="note">
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><rect width="24" height="24" rx="6"/><text x="12" y="16.5" font-size="12" font-weight="bold" fill="white" text-anchor="middle" font-family="sans-serif">n</text></svg>
-        </a>
-        <a href={ACTION_LINKS.social.substack} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="Substack">
-          <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
-        </a>
-        <a href={ACTION_LINKS.social.twitter} target="_blank" rel="noopener noreferrer" class="text-gray-500 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10" aria-label="X (Twitter)">
-          <BrandIcon icon="x" className="w-5 h-5" strokeWidth={1.5} />
+        <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
+           class="shrink-0 inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-black px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-purple-500/20 whitespace-nowrap">
+          無料で始める →
         </a>
       </div>
     </div>
   </div>
+
+  <!-- フッター本体 -->
+  <div class="max-w-7xl mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+
+      <!-- ブランド -->
+      <div class="md:col-span-2">
+        <p class="text-lg font-black tracking-tight mb-2">daito | 勝率40%・上位2.3%のFXプロップ攻略</p>
+        <p class="text-sm text-zinc-400 leading-relaxed max-w-sm mb-6">
+          Fintokei上位2.3%（2587人中61位）のFXトレーダーが、プロップファーム攻略・EA開発・相場分析をSubstackで毎週無料公開中。
+        </p>
+        <div class="flex gap-3 flex-wrap">
+          <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-all hover:-translate-y-0.5">
+            📬 Substack購読
+          </a>
+          <a href={`/${lang}/blog/microcms`}
+             class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-all hover:-translate-y-0.5">
+            📖 攻略ブログ
+          </a>
+        </div>
+      </div>
+
+      <!-- コンテンツ -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">コンテンツ</p>
+        <ul class="space-y-3 text-sm">
+          <li><a href={`/${lang}/blog/microcms`} class="text-zinc-300 hover:text-white transition-colors">攻略ブログ</a></li>
+          <li><a href={`/${lang}/sitemap-page/`} class="text-zinc-300 hover:text-white transition-colors">サイトマップ</a></li>
+          <li>
+            <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener" class="text-zinc-300 hover:text-white transition-colors inline-flex items-center gap-2">
+              Fintokei登録
+              <span class="text-[10px] bg-purple-600 text-white px-1.5 py-0.5 rounded font-bold">おすすめ</span>
+            </a>
+          </li>
+          <li><a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener" class="text-zinc-300 hover:text-white transition-colors">FUNDED7登録</a></li>
+          <li><a href="https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD" target="_blank" rel="noopener" class="text-zinc-300 hover:text-white transition-colors">FTMO登録</a></li>
+        </ul>
+      </div>
+
+      <!-- 法的情報＋ソーシャル -->
+      <div>
+        <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">法的情報</p>
+        <ul class="space-y-3 text-sm mb-8">
+          <li><a href="/privacy" class="text-zinc-300 hover:text-white transition-colors">プライバシーポリシー</a></li>
+          <li><a href="/terms" class="text-zinc-300 hover:text-white transition-colors">利用規約</a></li>
+        </ul>
+        <p class="text-xs font-bold uppercase tracking-widest text-zinc-500 mb-4">フォロー</p>
+        <div class="flex flex-wrap gap-2">
+          <a href={ACTION_LINKS.social.twitter} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="X">
+            <BrandIcon icon="x" className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+          <a href={ACTION_LINKS.social.youtube} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="YouTube">
+            <BrandIcon icon="youtube" className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+          <a href={ACTION_LINKS.social.github} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="GitHub">
+            <BrandIcon icon="github" className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+          <a href={ACTION_LINKS.social.linkedin} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="LinkedIn">
+            <BrandIcon icon="linkedin" className="w-5 h-5" strokeWidth={1.5} />
+          </a>
+          <a href={ACTION_LINKS.social.note} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="note">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><rect width="24" height="24" rx="6"/><text x="12" y="16.5" font-size="12" font-weight="bold" fill="white" text-anchor="middle" font-family="sans-serif">n</text></svg>
+          </a>
+          <a href={ACTION_LINKS.social.substack} target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10" aria-label="Substack">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- コピーライト -->
+    <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-zinc-500 text-sm">© {today.getFullYear()} daitodaison. All rights reserved.</p>
+      <p class="text-zinc-600 text-xs">本サイトはアフィリエイト広告を含みます</p>
+    </div>
+  </div>
+
 </footer>
