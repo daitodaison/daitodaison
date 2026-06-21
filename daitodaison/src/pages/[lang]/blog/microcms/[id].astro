@@ -253,30 +253,70 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
         </div>
         <div class="article-body" set:html={displayContent} />
 
-        <div class="mt-16 rounded-2xl border border-gray-200 dark:border-white/10 p-6">
-          <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1 text-center">🏦 おすすめプロップファーム3選</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mb-6 text-center">自己資金不要・合格すれば会社資金でトレードできる</p>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
-               class="flex flex-col items-center gap-2 rounded-xl border border-purple-200 dark:border-purple-500/30 bg-purple-50 dark:bg-purple-500/5 p-4 hover:border-purple-500 hover:-translate-y-0.5 transition-all text-center">
-              <span class="text-2xl">🇯🇵</span>
-              <p class="text-sm font-bold text-zinc-900 dark:text-white">Fintokei</p>
-              <p class="text-[11px] text-gray-500 dark:text-gray-400">日本初・無料デモ大会あり</p>
-              <span class="mt-auto text-xs font-bold text-white bg-purple-600 px-3 py-1.5 rounded-full">無料で始める</span>
-            </a>
+<!-- プロップファーム強化CTA -->
+        <div class="mt-16 bg-zinc-950 rounded-3xl overflow-hidden">
+          <!-- Fintokei メイン -->
+          <div class="relative p-8 bg-gradient-to-br from-purple-900/80 via-zinc-900 to-blue-950 border border-purple-500/30">
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(139,92,246,0.1),transparent_60%)]"></div>
+            <div class="relative z-10 flex flex-col md:flex-row gap-6 items-center">
+              <div class="flex-1 text-white">
+                <div class="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-full px-3 py-1 text-xs font-bold text-purple-300 mb-3">
+                  🏆 著者イチオシ・最も稼ぎやすい
+                </div>
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="text-3xl">🇯🇵</span>
+                  <h3 class="text-2xl font-black">Fintokei</h3>
+                </div>
+                <p class="text-zinc-400 text-sm mb-4">日本初の本格派プロップファーム。著者がFintokei上位2.3%を達成した実績あり。</p>
+                <ul class="grid grid-cols-2 gap-1.5 text-xs text-zinc-300 mb-5">
+                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> 利益配分80〜100%</li>
+                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> 最大5,000万円</li>
+                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> MT4・MT5・TradingView対応</li>
+                  <li class="flex items-center gap-1.5"><span class="text-yellow-400 font-bold">✓</span> <span class="text-yellow-300 font-bold">参加費全額返金中</span></li>
+                </ul>
+                <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
+                   class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-black px-7 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-purple-500/20">
+                  無料で始める →
+                </a>
+              </div>
+              <div class="shrink-0 text-center bg-white/5 border border-white/10 rounded-2xl p-5 min-w-[140px]">
+                <p class="text-xs text-zinc-400 mb-1">著者の実績</p>
+                <p class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-300 to-purple-500">2.3%</p>
+                <p class="text-xs text-zinc-400 mt-1">2587人中61位</p>
+              </div>
+            </div>
+          </div>
+          <!-- FUNDED7・FTMO サブ -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
             <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener"
-               class="flex flex-col items-center gap-2 rounded-xl border border-blue-200 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/5 p-4 hover:border-blue-500 hover:-translate-y-0.5 transition-all text-center">
-              <span class="text-2xl">7️⃣</span>
-              <p class="text-sm font-bold text-zinc-900 dark:text-white">FUNDED7</p>
-              <p class="text-[11px] text-gray-500 dark:text-gray-400">1フェーズ・速攻プランあり</p>
-              <span class="mt-auto text-xs font-bold text-white bg-blue-600 px-3 py-1.5 rounded-full">アカウント開設</span>
+               class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-2xl">7️⃣</span>
+                <div>
+                  <p class="font-black text-white text-sm">FUNDED7</p>
+                  <p class="text-[11px] text-zinc-500">1フェーズ・スプレッド最狭</p>
+                </div>
+              </div>
+              <ul class="space-y-1 text-xs text-zinc-400 mb-4">
+                <li>✅ 最大6,000万円・利益配分最大90%</li>
+                <li>✅ ドル円0.1pipsの極狭スプレッド</li>
+              </ul>
+              <span class="block text-center bg-blue-600 group-hover:bg-blue-500 text-white text-xs font-bold py-2 rounded-lg transition-all">アカウント開設 →</span>
             </a>
             <a href="https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD" target="_blank" rel="noopener"
-               class="flex flex-col items-center gap-2 rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 p-4 hover:border-gray-400 hover:-translate-y-0.5 transition-all text-center">
-              <span class="text-2xl">🌍</span>
-              <p class="text-sm font-bold text-zinc-900 dark:text-white">FTMO</p>
-              <p class="text-[11px] text-gray-500 dark:text-gray-400">世界最大手・300万人以上</p>
-              <span class="mt-auto text-xs font-bold text-white bg-gray-700 px-3 py-1.5 rounded-full">無料トライアル</span>
+               class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="text-2xl">🌍</span>
+                <div>
+                  <p class="font-black text-white text-sm">FTMO</p>
+                  <p class="text-[11px] text-zinc-500">世界最大手・300万人以上</p>
+                </div>
+              </div>
+              <ul class="space-y-1 text-xs text-zinc-400 mb-4">
+                <li>✅ 累計690億円超の出金実績</li>
+                <li>✅ Trustpilot4.8・2015年創業</li>
+              </ul>
+              <span class="block text-center bg-zinc-700 group-hover:bg-zinc-600 text-white text-xs font-bold py-2 rounded-lg transition-all">無料トライアル →</span>
             </a>
           </div>
         </div>
@@ -299,16 +339,32 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             </span>
           ))}
         </div>
-        <!-- Substack 購読 -->
-        <div class="mt-8 rounded-2xl border border-blue-200 dark:border-blue-500/30 bg-gradient-to-br from-blue-600 to-blue-800 p-8 text-center text-white">
-          <p class="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2">📬 無料ニュースレター</p>
-          <h3 class="text-lg font-black mb-2">プロップ攻略の知見を無料で受け取る</h3>
-          <p class="text-blue-100 text-sm mb-5">Fintokei上位2.3%の攻略戦略をSubstackで毎週公開中</p>
-          <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
-             class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3 rounded-xl hover:-translate-y-0.5 transition-all shadow-lg">
-            Substackを無料購読する →
-          </a>
-          <p class="text-blue-200 text-xs mt-3">無料・いつでも解除可能</p>
+
+        <!-- Substack 強化CTA -->
+        <div class="mt-8 relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-violet-700 p-8 text-white">
+          <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_70%,rgba(255,255,255,0.05),transparent_60%)]"></div>
+          <div class="relative z-10 flex flex-col md:flex-row gap-6 items-center">
+            <div class="flex-1">
+              <p class="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2">📬 無料ニュースレター</p>
+              <h3 class="text-xl font-black mb-2 leading-tight">プロップ攻略の知見を<br/>毎週無料で受け取る</h3>
+              <div class="grid grid-cols-1 gap-1.5 text-xs text-blue-100 mb-5">
+                <p>📈 週次トレード日誌・実際の損益を公開</p>
+                <p>🧠 プロップテストで使える相場シナリオ解説</p>
+                <p>🤖 MQL5・EA開発の実践ノウハウ</p>
+              </div>
+              <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
+                 class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3.5 rounded-xl hover:-translate-y-0.5 transition-all shadow-xl">
+                今すぐ無料で購読する →
+              </a>
+              <p class="text-blue-200 text-xs mt-3">無料・いつでも解除可能・スパムなし</p>
+            </div>
+            <div class="shrink-0 text-center hidden md:block">
+              <div class="bg-white/10 border border-white/20 rounded-2xl p-5">
+                <p class="text-3xl font-black mb-1">無料</p>
+                <p class="text-xs text-blue-200">登録するだけ</p>
+              </div>
+            </div>
+          </div>
         </div>
 
      {otherPosts.length > 0 && (
