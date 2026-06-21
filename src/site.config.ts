@@ -1,4 +1,3 @@
-import { defineCollection } from "astro:content";
 
 export const siteConfig = {
   name: 'daito | FXプロップ攻略',
