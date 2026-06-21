@@ -102,7 +102,6 @@ export const ACTION_LINKS = {
     facebook: ''
   }
 };
-};
 
 export const FOOTER_LINKS = {
   product: {
