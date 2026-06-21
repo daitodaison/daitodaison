@@ -15,7 +15,7 @@ const t = useTranslations(lang);
 let posts: any[] = [];
 let off = 0;
 while (true) {
-  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category,content', orders: '-updatedAt' } });
+  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category', orders: '-updatedAt'} });
   if (posts.length >= res.totalCount) break;
   off += 100;
 }
