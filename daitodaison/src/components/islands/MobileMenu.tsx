@@ -82,7 +82,7 @@ export default function MobileMenu({
       <button 
         type="button"
         onClick={() => setIsOpen(true)}
-        className="p-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-white/5 rounded-md transition-colors z-50 relative"
+        className="p-2 text-white hover:bg-white/10 rounded-md transition-colors z-50 relative"
         aria-label="Open Mobile Menu"
         aria-expanded={isOpen}
         aria-controls={isOpen ? "mobile-menu-panel" : undefined}
