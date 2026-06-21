@@ -176,7 +176,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       </button>
     </div>
 
-    <div data-sidebar>
+    <div data-sidebar class="flex-1 min-h-0 overflow-y-auto" style="scrollbar-width:thin;">
       <!-- 最新記事タブ -->
       <div data-tab="latest">
         <ul class="space-y-1">
