@@ -142,21 +142,22 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
 
 <aside class="hidden xl:flex xl:flex-col w-56 shrink-0 gap-3" style="align-self:start; position:sticky; top:9rem; max-height:calc(100vh - 10rem);">
 
-  <!-- Fintokei バナー（常に最上部・固定） -->
+ <!-- Fintokei バナー（常に最上部・固定・光るアニメーション） -->
   <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
-     class="group block relative rounded-2xl overflow-hidden shrink-0">
-    <div class="absolute inset-0 bg-gradient-to-br from-purple-600 to-violet-800"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,255,255,0.1),transparent_60%)]"></div>
+     class="group block relative rounded-2xl overflow-hidden shrink-0 sidebar-glow-banner">
+    <div class="absolute inset-0 sidebar-gradient-bg"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,255,255,0.15),transparent_60%)]"></div>
+    <div class="sidebar-shine"></div>
     <div class="relative z-10 p-4">
       <div class="flex items-center gap-2 mb-2">
-        <span class="text-lg">🏆</span>
+        <span class="text-lg animate-bounce-slow">🏆</span>
         <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-200">著者イチオシ</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-200">著者イチオシ・上位2.3%</p>
           <p class="text-sm font-black text-white leading-tight">Fintokei</p>
         </div>
       </div>
-      <p class="text-[11px] text-purple-200 leading-snug mb-3">日本初プロップ・著者が上位2.3%を達成した実績あり</p>
-      <span class="block text-center bg-white text-purple-700 font-black text-xs py-2 rounded-xl group-hover:bg-purple-50 transition-all">
+      <p class="text-[11px] text-purple-100 leading-snug mb-3">日本初プロップ・著者が実際に上位2.3%を達成した実績あり</p>
+      <span class="block text-center bg-white text-purple-700 font-black text-xs py-2.5 rounded-xl group-hover:bg-purple-50 group-hover:scale-[1.02] transition-all shadow-lg">
         無料で始める →
       </span>
     </div>
@@ -178,23 +179,19 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
     <div data-sidebar>
       <!-- 最新記事タブ -->
       <div data-tab="latest">
-        <ul class="space-y-4">
-          {(allPosts as any[]).slice(0, 6).map((p: any) => {
+        <ul class="space-y-1">
+          {(allPosts as any[]).slice(0, 6).map((p: any, idx: number) => {
             const isActive = p.id === post.id;
-            const rawImg = p.eyecatch || "";
-            const imgUrl = rawImg.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content");
             return (
               <li>
                 <a href={"/" + lang + "/blog/microcms/" + p.id}
-                   class={"block group rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-primary/40 transition-all " + (isActive ? "opacity-60 pointer-events-none" : "")}>
-                  <div class="aspect-video w-full overflow-hidden bg-zinc-200 dark:bg-zinc-700">
-                    {imgUrl && <img src={imgUrl} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />}
-                  </div>
-                  <div class="p-2">
-                    {p.updatedAt && <p class="text-[10px] text-zinc-400 mb-0.5">{new Date(p.updatedAt).toLocaleDateString("ja-JP",{year:"numeric",month:"numeric",day:"numeric"})}</p>}
-                    {p.category?.name && <p class="text-[10px] text-blue-500 mb-1">📂 {p.category.name}</p>}
-                    <p class="text-[11px] leading-snug text-zinc-700 dark:text-zinc-300 group-hover:text-primary transition-colors line-clamp-3">{p.title}</p>
-                  </div>
+                   class={"flex items-start gap-2 group rounded-lg px-2 py-2.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all " + (isActive ? "opacity-50 pointer-events-none" : "")}>
+                  <span class="text-[11px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors">{String(idx + 1).padStart(2, "0")}</span>
+                  <span class="flex-1 min-w-0">
+                    <span class="block text-[12px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
+                    {p.updatedAt && <span class="block text-[10px] text-zinc-400 dark:text-zinc-500 mt-1">{new Date(p.updatedAt).toLocaleDateString("ja-JP",{year:"numeric",month:"numeric",day:"numeric"})}</span>}
+                  </span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
               </li>
             );
@@ -205,21 +202,18 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       <!-- 関連記事タブ -->
       <div data-tab="related" style="display:none;">
         {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 6).length > 0 ? (
-          <ul class="space-y-4">
-            {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 6).map((p: any) => {
-              const rawImg = p.eyecatch || "";
-              const imgUrl = rawImg.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content");
+          <ul class="space-y-1">
+            {(allPosts as any[]).filter((p: any) => p.id !== post.id && p.category?.name === post.category?.name).slice(0, 6).map((p: any, idx: number) => {
               return (
                 <li>
                   <a href={"/" + lang + "/blog/microcms/" + p.id}
-                     class="block group rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 hover:border-primary/40 transition-all">
-                    <div class="aspect-video w-full overflow-hidden bg-zinc-200 dark:bg-zinc-700">
-                      {imgUrl && <img src={imgUrl} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />}
-                    </div>
-                    <div class="p-2">
-                      {p.category?.name && <p class="text-[10px] text-blue-500 mb-1">📂 {p.category.name}</p>}
-                      <p class="text-[11px] leading-snug text-zinc-700 dark:text-zinc-300 group-hover:text-primary transition-colors line-clamp-3">{p.title}</p>
-                    </div>
+                     class="flex items-start gap-2 group rounded-lg px-2 py-2.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all">
+                    <span class="text-[11px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors">{String(idx + 1).padStart(2, "0")}</span>
+                    <span class="flex-1 min-w-0">
+                      {p.category?.name && <span class="block text-[10px] text-blue-500 mb-0.5">📂 {p.category.name}</span>}
+                      <span class="block text-[12px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                   </a>
                 </li>
               );
@@ -479,6 +473,45 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
   </div>
 
   <style>
+    .sidebar-gradient-bg {
+      background: linear-gradient(135deg, #9333ea, #6d28d9, #2563eb, #9333ea);
+      background-size: 300% 300%;
+      animation: sidebar-gradient-shift 6s ease infinite;
+    }
+    @keyframes sidebar-gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    .sidebar-glow-banner {
+      animation: sidebar-pulse-glow 3s ease-in-out infinite;
+    }
+    @keyframes sidebar-pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
+      50% { box-shadow: 0 0 20px 4px rgba(147, 51, 234, 0.5); }
+    }
+    .sidebar-shine {
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: skewX(-20deg);
+      animation: sidebar-shine-move 3.5s ease-in-out infinite;
+      z-index: 5;
+    }
+    @keyframes sidebar-shine-move {
+      0% { left: -75%; }
+      40% { left: 125%; }
+      100% { left: 125%; }
+    }
+    .animate-bounce-slow {
+      animation: sidebar-bounce-slow 2.5s ease-in-out infinite;
+    }
+    @keyframes sidebar-bounce-slow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
     .article-body a {
       color: #3b82f6;
       text-decoration: underline;
