@@ -1,88 +1,110 @@
 ---
 export const prerender = true;
-import Layout from '~/layouts/Layout.astro';
-import PageHeader from '~/components/layout/PageHeader.astro';
-import Container from '~/components/ui/Container.astro';
-import Card from '~/components/ui/Card.astro';
-import { client } from '~/library/microcms';
-import { useTranslations } from '~/i18n/utils';
-import { languages } from '~/i18n/ui';
-import translate from 'translate';
-
-// Google翻訳を有効化
-translate.engine = 'google';
+import Layout from "~/layouts/Layout.astro";
+import Card from "~/components/ui/Card.astro";
+import Container from "~/components/ui/Container.astro";
+import { client } from "~/library/microcms";
+import { useTranslations } from "~/i18n/utils";
+import { languages } from "~/i18n/ui";
 
 export async function getStaticPaths() {
-  const response = await client.get({ endpoint: 'blogs' });
-  const posts = response.contents;
-
+  const PER_PAGE = 9;
+  let allPosts: any[] = [];
+  let offset = 0;
+  while (true) {
+    const response = await client.get({
+      endpoint: "blogs",
+      queries: { limit: 100, offset, orders: "-updatedAt", fields: "id,title,eyecatch,category,tags,updatedAt" },
+    });
+    allPosts = allPosts.concat(response.contents);
+    if (allPosts.length >= response.totalCount) break;
+    offset += 100;
+  }
+  const totalPages = Math.max(1, Math.ceil(allPosts.length / PER_PAGE));
+  const posts = allPosts.slice(0, PER_PAGE);
   return Object.keys(languages).map((lang) => ({
     params: { lang },
-    props: { posts },
+    props: { posts, currentPage: 1, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE },
   }));
 }
 
-const { posts } = Astro.props;
+const { posts, currentPage, totalPages, totalPosts, perPage } = Astro.props;
 const { lang } = Astro.params;
 const t = useTranslations(lang);
-
-// 英語（en）モードのときだけ、一覧記事のタイトルをビルド時に自動翻訳する
-const displayPosts = await Promise.all(
-  posts.map(async (post: any) => {
-    if (lang === 'en') {
-      try {
-        const translatedTitle = await translate(post.title, { from: 'ja', to: 'en' });
-        return {
-          ...post,
-          title: translatedTitle
-        };
-      } catch (error) {
-        console.error("Index.astro translation failed:", error);
-      }
-    }
-    return post;
-  })
-);
 ---
 
-<Layout title="Blog" description={t['blog.microcms.desc']}>
-  <PageHeader title={t['blog.hero.title']} description={t['blog.hero.subtitle']} />
-
-  <Container as="section" class="pb-24">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-      {displayPosts.map((post: any) => (
-        <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
-          <div class="relative aspect-video w-full overflow-hidden bg-muted">
-            {post.eyecatch ? (
-              <img
-                src={post.eyecatch.url}
-                alt={post.title}
-                loading="lazy"
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
-              <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
-                <span class="text-4xl">📝</span>
-              </div>
-            )}
-            <div class="absolute inset-0 bg-linear-to-t from-background/80 via-background/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
-          </div>
-          <div class="p-6">
-            <div class="flex items-center gap-2 text-xs text-muted-foreground mb-3">
-              <time>{new Date(post.createdAt).toLocaleDateString(lang, { year: 'numeric', month: 'short', day: 'numeric' })}</time>
-              <span>•</span>
-              <span>{t['nav.blog']}</span>
-            </div>
-            <h2 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
-              {post.title}
-            </h2>
-            <div class="mt-4 flex items-center gap-2 text-sm font-medium text-primary opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 -translate-x-2">
-              <span>{t['blog.readMore']}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            </div>
-          </div>
-        </Card>
-      ))}
+<Layout title="攻略ブログ | daito FXプロップ攻略" description="Fintokei上位2.3%のFXトレーダーによるプロップファーム攻略ブログ。全記事一覧。">
+  <div class="max-w-7xl mx-auto px-4 pt-32 pb-20">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl md:text-4xl font-black mb-4 text-zinc-900 dark:text-white">攻略ブログ</h1>
+      <p class="text-zinc-500 dark:text-zinc-400">全{totalPosts}件の記事 / Fintokei上位2.3%のFXトレーダーが執筆</p>
     </div>
-  </Container>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      {posts.map((post: any) => {
+        const raw = post.eyecatch || "";
+        const imgUrl = raw.split("|")[0].replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content").replace("http://","https://");
+        return (
+          <a href={`/${lang}/blog/microcms/${post.id}`}
+             class="group block bg-white dark:bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 hover:shadow-lg transition-all hover:-translate-y-1">
+            <div class="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-700">
+              {imgUrl ? (
+                <img src={imgUrl} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              ) : (
+                <div class="h-full w-full flex items-center justify-center">
+                  <span class="text-4xl">📝</span>
+                </div>
+              )}
+            </div>
+            <div class="p-4">
+              <div class="flex flex-wrap gap-2 mb-2">
+                {post.category?.name && (
+                  <span class="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
+                    {post.category.name}
+                  </span>
+                )}
+                {post.updatedAt && (
+                  <span class="text-[10px] text-zinc-400">
+                    {new Date(post.updatedAt).toLocaleDateString("ja-JP", {year:"numeric",month:"numeric",day:"numeric"})}
+                  </span>
+                )}
+              </div>
+              <h2 class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 transition-colors leading-snug">
+                {post.title}
+              </h2>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- ページネーション -->
+    {totalPages > 1 && (
+      <nav class="flex items-center justify-center gap-2 mt-8" aria-label="ページナビゲーション">
+        {currentPage > 1 && (
+          <a href={currentPage === 2 ? `/${lang}/blog/` : `/${lang}/blog/${currentPage - 1}/`}
+             class="px-4 py-2 rounded-lg text-sm font-medium border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-700">＜</a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter((i) => i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2))
+          .map((page, idx, arr) => (
+            <>
+              {idx > 0 && arr[idx - 1] !== page - 1 && <span class="px-2 text-sm text-zinc-400">...</span>}
+              <a href={page === 1 ? `/${lang}/blog/` : `/${lang}/blog/${page}/`}
+                 class={page === currentPage
+                   ? "px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 text-white"
+                   : "px-4 py-2 rounded-lg text-sm font-medium border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-700"}
+                 aria-current={page === currentPage ? "page" : undefined}>
+                {page}
+              </a>
+            </>
+          ))}
+        {currentPage < totalPages && (
+          <a href={`/${lang}/blog/${currentPage + 1}/`}
+             class="px-4 py-2 rounded-lg text-sm font-medium border border-zinc-300 dark:border-zinc-600 hover:bg-zinc-100 dark:hover:bg-zinc-700">＞</a>
+        )}
+      </nav>
+    )}
+    <p class="text-center text-sm text-zinc-400 mt-4">{totalPosts}件中 1〜{Math.min(perPage, totalPosts)}件を表示</p>
+  </div>
 </Layout>
