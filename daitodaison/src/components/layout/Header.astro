@@ -83,8 +83,10 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
           />
         )
       )}
-      <span class="hidden xl:inline text-sm md:text-xl">{t['brand.name'] || siteConfig.name}</span>
-<span class="inline xl:hidden text-sm font-bold">daito</span>
+      <span class="flex flex-col leading-tight">
+  <span class="text-xs font-black tracking-widest text-primary uppercase">daito</span>
+  <span class="text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap">勝率40%・上位2.3%・FXプロップ攻略</span>
+</span>
     </a>
     <div class="flex-1 flex justify-center mx-4 lg:mx-8">
       <DesktopNav client:only="react" links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} currentPath={Astro.url.pathname} />
