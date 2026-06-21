@@ -35,3 +35,14 @@ for (const path in locales) {
 }
 
 export const defaultLang = import.meta.env.DEFAULT_LOCALE || 'en';
+
+nav.propfarm=プロップ
+nav.propfarm.desc=プロップファーム一覧
+nav.fintokei=Fintokei
+nav.fintokei.desc=日本初・著者イチオシのプロップ
+nav.funded7=FUNDED7
+nav.funded7.desc=1フェーズ・最大6000万円
+nav.ftmo=FTMO
+nav.ftmo.desc=世界最大手・300万人以上
+nav.substack=Substack
+nav.substack.desc=無料ニュースレターを購読する
