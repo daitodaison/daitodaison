@@ -401,6 +401,14 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             link.classList.add("text-primary", "font-semibold", "bg-primary/5");
             link.classList.remove("text-gray-500");
             if (bar) bar.style.background = "#2563EB";
+            if (tocList) {
+              var linkTop = link.offsetTop;
+              var listScroll = tocList.scrollTop;
+              var listHeight = tocList.clientHeight;
+              if (linkTop < listScroll || linkTop > listScroll + listHeight - 40) {
+                tocList.scrollTo({ top: linkTop - listHeight / 2, behavior: "smooth" });
+              }
+            }
           } else {
             link.classList.remove("text-primary", "font-semibold", "bg-primary/5");
             link.classList.add("text-gray-500");
@@ -410,7 +418,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       }
 
       function onScroll() {
-        var y = window.scrollY + 140;
+        var y = window.scrollY + 160;
         var cur = headingEls[0].id;
         for (var i = 0; i < headingEls.length; i++) {
           if (headingEls[i].offsetTop <= y) cur = headingEls[i].id;
