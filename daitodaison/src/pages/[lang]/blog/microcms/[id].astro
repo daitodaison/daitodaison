@@ -177,7 +177,7 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             <li data-category={p.category?.name || ""}>
               <a href={"/" + lang + "/blog/microcms/" + p.id}
                  class={"flex items-start gap-2 group rounded-lg px-2 py-1.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all " + (isActive ? "opacity-50 pointer-events-none" : "")}>
-                <span class="text-[10px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors">{String(idx + 1).padStart(2, "0")}</span>
+                <span class="text-[10px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors sidebar-item-num">{String(idx + 1).padStart(2, "0")}</span>
                 <span class="flex-1 min-w-0">
                   <span class="block text-[11px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
                 </span>
@@ -540,6 +540,23 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
       var buttons = Array.from(document.querySelectorAll(".sidebar-cat-btn"));
       var items = Array.from(document.querySelectorAll("#sidebar-post-list > li"));
       if (!buttons.length) return;
+      var MAX_SHOW = 5;
+
+      function applyFilter(cat) {
+        var shown = 0;
+        items.forEach(function(li) {
+          var match = !cat || li.getAttribute("data-category") === cat;
+          if (match && shown < MAX_SHOW) {
+            li.style.display = "";
+            shown++;
+            var numEl = li.querySelector(".sidebar-item-num");
+            if (numEl) numEl.textContent = String(shown).padStart(2, "0");
+          } else {
+            li.style.display = "none";
+          }
+        });
+      }
+
       buttons.forEach(function(btn) {
         btn.addEventListener("click", function() {
           var cat = btn.getAttribute("data-cat-filter");
@@ -549,18 +566,12 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
           });
           btn.classList.add("active", "bg-primary", "text-white");
           btn.classList.remove("bg-zinc-100", "dark:bg-white/10", "text-zinc-600", "dark:text-zinc-300");
-          var shown = 0;
-          items.forEach(function(li) {
-            var match = !cat || li.getAttribute("data-category") === cat;
-            if (match && shown < 6) {
-              li.style.display = "";
-              shown++;
-            } else {
-              li.style.display = "none";
-            }
-          });
+          applyFilter(cat);
         });
       });
+
+      // 初期表示も5件固定＋番号01から
+      applyFilter("");
     }
 
     if (document.readyState === "loading") {
