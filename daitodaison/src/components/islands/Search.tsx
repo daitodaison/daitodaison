@@ -19,10 +19,10 @@ interface PopularLink {
 }
 
 const POPULAR_LINKS: PopularLink[] = [
-  { label: "Getting Started", href: "/docs/getting-started/", icon: Book, localize: false },
-  { label: "Features", href: "/features/", icon: Zap },
-  { label: "Design System", href: "/design/", icon: LayoutGrid },
-  { label: "Blog", href: "/blog/", icon: FileText },
+  { label: "攻略ブログ一覧", href: "/blog/", icon: FileText },
+  { label: "Fintokei登録", href: "https://www.fintokei.com/jp/?affiliate=64", icon: Zap, localize: false },
+  { label: "サイトマップ", href: "/sitemap-page/", icon: LayoutGrid },
+  { label: "Substack購読", href: "https://daitodaison.substack.com/", icon: Book, localize: false },
 ];
 
 interface SearchProps {
