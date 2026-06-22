@@ -49,6 +49,7 @@ if (styleMatches.length > 0) {
   const allCss = styleMatches.map((s: string) => s.replace(/<\/?style[^>]*>/gi, '')).join('\n');
   const scopedCss = allCss.replace(/([^{}]+)\{/g, (m: string, sel: string) => {
     if (sel.trim().startsWith('@')) return m;
+    if (sel.includes('.dark') || sel.includes(':root') || sel.includes('body')) return m;
     const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
     return scoped + ' {';
   });
