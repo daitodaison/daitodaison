@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant navy (&:where(.navy, .navy *));
@@ -15,15 +15,6 @@
 @import "./theme.css";
 @import "./typography.css";
 @import "./components.css";
-
-/* iOS Safari 強制修正 */
-button, a[class*="btn"], [class*="Button"] {
-  -webkit-text-fill-color: inherit !important;
-}
-img {
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
 
 /* iOS Safari 強制修正 */
 button, a[class*="btn"], [class*="Button"] {
@@ -60,8 +51,8 @@ img {
   scroll-margin-top: 7rem;
 }
 .dark .article-body h2 {
-  background: linear-gradient(90deg, rgba(37,99,235,0.18) 0%, transparent 100%);
-  color: #f1f5f9;
+  background: linear-gradient(90deg, rgba(96,165,250,0.12) 0%, transparent 100%);
+  color: #e2e8f0;
 }
 
 /* H3 */
@@ -77,7 +68,7 @@ img {
   scroll-margin-top: 7rem;
 }
 .dark .article-body h3 {
-  color: #e2e8f0;
+  color: #cbd5e1;
   border-left-color: #60a5fa;
 }
 
@@ -95,8 +86,8 @@ img {
   padding: 0 2px;
 }
 .dark .article-body strong {
-  color: #f9fafb;
-  background: linear-gradient(transparent 60%, rgba(37,99,235,0.25) 60%);
+  color: #f1f5f9;
+  background: linear-gradient(transparent 60%, rgba(96,165,250,0.3) 60%);
 }
 
 /* UL */
@@ -223,6 +214,13 @@ img {
 .article-body a:hover {
   border-bottom-color: #2563EB;
 }
+.dark .article-body a {
+  color: #60a5fa;
+  border-bottom-color: rgba(96,165,250,0.4);
+}
+.dark .article-body a:hover {
+  border-bottom-color: #60a5fa;
+}
 
 /* Blockquote */
 .article-body blockquote {
@@ -247,10 +245,17 @@ img {
 }
 .dark .article-body blockquote {
   color: #94a3b8;
-  background: rgba(37,99,235,0.1);
+  background: rgba(96,165,250,0.08);
 }
 
-/* Inline Code */
+/* Image */
+.article-body img {
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  margin: 1.5rem auto;
+}
+
+/* Code */
 .article-body code:not(pre code) {
   font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 0.875em;
@@ -265,8 +270,6 @@ img {
   border-color: rgba(96,165,250,0.2);
   color: #93c5fd;
 }
-
-/* Code Block */
 .article-body pre {
   margin: 1.5rem 0 2rem;
   padding: 1.25rem 1.5rem;
@@ -282,13 +285,6 @@ img {
   border: none;
   padding: 0;
   color: #e2e8f0;
-}
-
-/* Image */
-.article-body img {
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  margin: 1.5rem auto;
 }
 
 /* TOC scroll */
