@@ -1,0 +1,1 @@
+const fs=require('fs');const f='src/pages/[lang]/blog/microcms/[id].astro';let c=fs.readFileSync(f,'utf8');const i=c.indexOf('startsWith');console.log(JSON.stringify(c.substring(i-4,i+4)));
