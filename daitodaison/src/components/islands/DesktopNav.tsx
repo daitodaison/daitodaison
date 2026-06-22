@@ -54,7 +54,7 @@ export default function DesktopNav({ links, currentPath = '/' }: DesktopNavProps
             {link.children ? (
               <button
                 className={`flex items-center gap-1 text-sm font-medium transition-colors bg-transparent border-0 cursor-pointer p-0 ${
-                  hoveredIndex === index || isLinkActive ? 'text-white' : 'text-white/80 hover:text-white'
+                  hoveredIndex === index || isLinkActive ? 'text-cyan-300' : 'text-white/80 hover:text-cyan-300'
                 }`}
                 aria-expanded={hoveredIndex === index}
                 aria-haspopup="menu"
