@@ -74,7 +74,7 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
                 <img src={imgUrl} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               ) : (
                 <div class="h-full w-full flex items-center justify-center">
-                  <span class="text-4xl">📝</span>
+                  <span class="text-4xl"><img src="/og-image.webp" alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" /></span>
                 </div>
               )}
             </div>
