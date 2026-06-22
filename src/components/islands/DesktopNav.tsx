@@ -39,7 +39,7 @@ export default function DesktopNav({ links, currentPath = '/' }: DesktopNavProps
   };
 
   return (
-    <nav className="hidden md:flex items-center gap-6" data-version="white-v1" onMouseLeave={() => setHoveredIndex(null)} aria-label="Main Navigation">
+    <nav className="hidden md:flex items-center gap-6" data-version="white-v1" style={{outline: "3px solid red"}} onMouseLeave={() => setHoveredIndex(null)} aria-label="Main Navigation">
       <ul className="flex items-center gap-6 m-0 p-0 list-none">
         {links.map((link, index) => {
           const isLinkActive = isActive(link.href || '') || (link.children && link.children.some(child => isActive(child.href)));
