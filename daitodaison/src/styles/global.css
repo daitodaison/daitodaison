@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant navy (&:where(.navy, .navy *));
@@ -333,4 +333,31 @@ img {
 /* サイドバーのヘッダー重複修正 */
 aside.sticky {
   top: 7rem !important;
+}
+
+/* ===== ダークモード強化 ===== */
+.dark .article-body h2 {
+  color: #89dceb;
+  border-left-color: #89dceb;
+  background: linear-gradient(90deg, rgba(137,220,235,0.1) 0%, transparent 100%);
+}
+.dark .article-body h3 {
+  color: #cba6f7;
+  border-left-color: #cba6f7;
+}
+.dark .article-body a {
+  color: #89dceb;
+  border-bottom-color: rgba(137,220,235,0.4);
+}
+.dark .article-body a:hover {
+  border-bottom-color: #89dceb;
+}
+.dark .article-body strong {
+  color: #f5e0dc;
+  background: linear-gradient(transparent 60%, rgba(203,166,247,0.3) 60%);
+}
+.dark .article-body code:not(pre code) {
+  color: #89dceb;
+  background: rgba(137,220,235,0.1);
+  border-color: rgba(137,220,235,0.2);
 }
