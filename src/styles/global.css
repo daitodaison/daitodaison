@@ -36,52 +36,57 @@ img {
 
 /* ===== Article Body Styles ===== */
 .article-body {
-  font-size: 1rem;
-  line-height: 1.9;
-  color: #374151;
+  font-size: 1.0625rem; /* 17px: 読みやすい最適サイズ */
+  line-height: 1.8;
+  color: #3d4451; /* 目が疲れにくい柔らかいダークグレー */
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 .dark .article-body {
-  color: #d1d5db;
+  color: #cbd5e1; /* スレートグレー: 高コントラストになりすぎない */
 }
 
 /* H2 */
 .article-body h2 {
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-  padding: 0.6rem 1rem;
+  margin-top: 3.5rem;
+  margin-bottom: 1.25rem;
+  padding: 0.65rem 1.1rem;
   border-left: 4px solid #2563EB;
-  background: linear-gradient(90deg, rgba(37,99,235,0.07) 0%, transparent 100%);
+  background: linear-gradient(90deg, rgba(37,99,235,0.08) 0%, transparent 100%);
   border-radius: 0 8px 8px 0;
-  color: #111827;
-  line-height: 1.5;
+  color: #1a202c;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 7rem;
 }
 .dark .article-body h2 {
-  background: linear-gradient(90deg, rgba(37,99,235,0.15) 0%, transparent 100%);
-  color: #f9fafb;
+  background: linear-gradient(90deg, rgba(37,99,235,0.18) 0%, transparent 100%);
+  color: #f1f5f9;
 }
 
 /* H3 */
 .article-body h3 {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  padding-left: 0.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 0.875rem;
+  padding-left: 0.875rem;
   border-left: 3px solid #93c5fd;
-  color: #1f2937;
-  line-height: 1.5;
+  color: #1e293b;
+  line-height: 1.45;
+  scroll-margin-top: 7rem;
 }
 .dark .article-body h3 {
-  color: #e5e7eb;
-  border-left-color: #3b82f6;
+  color: #e2e8f0;
+  border-left-color: #60a5fa;
 }
 
 /* Paragraph */
 .article-body p {
-  margin-bottom: 1.25rem;
-  line-height: 1.9;
+  margin-bottom: 1.6rem;
+  line-height: 1.8;
 }
 
 /* Strong */
@@ -223,17 +228,66 @@ img {
 
 /* Blockquote */
 .article-body blockquote {
-  margin: 1.5rem 0;
-  padding: 1rem 1.25rem;
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem 1.25rem 1.75rem;
   border-left: 4px solid #2563EB;
   background: rgba(37,99,235,0.05);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 10px 10px 0;
   font-style: italic;
   color: #4b5563;
+  position: relative;
+}
+.article-body blockquote::before {
+  content: '\201C';
+  position: absolute;
+  top: -0.25rem;
+  left: 1rem;
+  font-size: 2.5rem;
+  color: rgba(37,99,235,0.25);
+  font-style: normal;
+  line-height: 1;
+  font-family: Georgia, serif;
 }
 .dark .article-body blockquote {
-  color: #9ca3af;
+  color: #94a3b8;
   background: rgba(37,99,235,0.1);
+}
+
+/* Inline Code */
+.article-body code:not(pre code) {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.875em;
+  padding: 0.15em 0.45em;
+  background: rgba(37,99,235,0.08);
+  border: 1px solid rgba(37,99,235,0.15);
+  border-radius: 4px;
+  color: #1d4ed8;
+  word-break: break-word;
+}
+.dark .article-body code:not(pre code) {
+  background: rgba(96,165,250,0.1);
+  border-color: rgba(96,165,250,0.2);
+  color: #93c5fd;
+}
+
+/* Code Block */
+.article-body pre {
+  margin: 1.75rem 0 2rem;
+  padding: 1.25rem 1.5rem;
+  background: #0f172a;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.article-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #e2e8f0;
+  font-size: inherit;
 }
 
 /* Image */
