@@ -83,7 +83,10 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
           />
         )
       )}
-      <span class="inline text-sm md:text-xl">{t['brand.name'] || siteConfig.name}</span>
+      <span class="flex flex-col leading-tight">
+        <span class="text-sm md:text-xl font-bold">{t['brand.name'] || siteConfig.name}</span>
+        <span class="text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap">勝率40%・上位2.3%のFXプロップ攻略</span>
+      </span>
     </a>
     <div class="flex-1 flex justify-center mx-4 lg:mx-8">
       <DesktopNav client:only="react" links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} currentPath={Astro.url.pathname} />
