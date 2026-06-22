@@ -36,14 +36,12 @@ img {
 
 /* ===== Article Body Styles ===== */
 .article-body {
-  font-size: 1.0625rem; /* 17px: 読みやすい最適サイズ */
+  font-size: 1.0625rem;
   line-height: 1.8;
-  color: #3d4451; /* 目が疲れにくい柔らかいダークグレー */
-  word-break: break-word;
-  overflow-wrap: break-word;
+  color: #3d4451;
 }
 .dark .article-body {
-  color: #cbd5e1; /* スレートグレー: 高コントラストになりすぎない */
+  color: #cbd5e1;
 }
 
 /* H2 */
@@ -52,7 +50,7 @@ img {
   font-weight: 800;
   margin-top: 3.5rem;
   margin-bottom: 1.25rem;
-  padding: 0.65rem 1.1rem;
+  padding: 0.65rem 1rem;
   border-left: 4px solid #2563EB;
   background: linear-gradient(90deg, rgba(37,99,235,0.08) 0%, transparent 100%);
   border-radius: 0 8px 8px 0;
@@ -229,7 +227,7 @@ img {
 /* Blockquote */
 .article-body blockquote {
   margin: 2rem 0;
-  padding: 1.25rem 1.5rem 1.25rem 1.75rem;
+  padding: 1.25rem 1.5rem;
   border-left: 4px solid #2563EB;
   background: rgba(37,99,235,0.05);
   border-radius: 0 10px 10px 0;
@@ -240,13 +238,12 @@ img {
 .article-body blockquote::before {
   content: '\201C';
   position: absolute;
-  top: -0.25rem;
+  top: -0.5rem;
   left: 1rem;
-  font-size: 2.5rem;
-  color: rgba(37,99,235,0.25);
+  font-size: 3rem;
+  color: rgba(37,99,235,0.2);
   font-style: normal;
   line-height: 1;
-  font-family: Georgia, serif;
 }
 .dark .article-body blockquote {
   color: #94a3b8;
@@ -262,7 +259,6 @@ img {
   border: 1px solid rgba(37,99,235,0.15);
   border-radius: 4px;
   color: #1d4ed8;
-  word-break: break-word;
 }
 .dark .article-body code:not(pre code) {
   background: rgba(96,165,250,0.1);
@@ -272,7 +268,7 @@ img {
 
 /* Code Block */
 .article-body pre {
-  margin: 1.75rem 0 2rem;
+  margin: 1.5rem 0 2rem;
   padding: 1.25rem 1.5rem;
   background: #0f172a;
   border-radius: 10px;
@@ -280,14 +276,12 @@ img {
   font-size: 0.875rem;
   line-height: 1.7;
   border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 .article-body pre code {
   background: none;
   border: none;
   padding: 0;
   color: #e2e8f0;
-  font-size: inherit;
 }
 
 /* Image */
