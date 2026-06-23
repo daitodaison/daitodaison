@@ -1,23 +1,21 @@
-/* Light Theme (Default) */
+﻿/* Light Theme (Default) */
 :root {
   --background: #ffffff;
-  --foreground: #09090b;
+  --foreground: #0f1117;
   --muted: #f1f5f9;
   --muted-foreground: #334155;
   --primary-foreground: #ffffff;
   --color-primary: #2563EB;
 }
-
 /* Dark Theme */
 .dark {
-  --background: #141820;
+  --background: #292c32;
   --foreground: #e8eaf0;
-  --muted: #1e2433;
+  --muted: #32363d;
   --muted-foreground: #9ba8bf;
   --primary-foreground: #ffffff;
-  --color-primary: #4f8ef7;
+  --color-primary: #5b9cf6;
 }
-
 body {
   background-color: var(--background);
   color: var(--foreground);
