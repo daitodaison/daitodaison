@@ -7,7 +7,7 @@ name: 'daitodaison',
     src: '/site-logo.png',
     srcDark: '/site-logo.png',       // Used when strategy is 'switch'
     alt: 'daitodaison ロゴ',
-    strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
+    strategy: 'none' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
   },
   ogImage: '/og-image.webp',
   primaryColor: '#2563EB', // Default primary color
