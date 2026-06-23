@@ -1,4 +1,4 @@
----
+﻿---
 import BrandIcon from '~/components/common/BrandIcon.astro';
 import ThemeToggle from '~/components/common/ThemeToggle.astro';
 import MobileMenu from '~/components/islands/MobileMenu';
@@ -105,16 +105,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
       )}
       <LanguagePicker availableLangs={availableLangs} />
       <span class="block md:block"><ThemeToggle /></span>
-      <a 
-        href={ACTION_LINKS.social.github}
-        target="_blank" 
-        rel="noopener noreferrer"
-        class="text-gray-900 hover:text-gray-700 dark:text-white dark:hover:text-blue-300 transition-colors hidden md:block"
-        aria-label="GitHub"
-      >
-        <BrandIcon icon="github" className="w-5 h-5" />
-      </a>
-      <a 
+<a 
         href={primaryHref}
         class="hidden md:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all"
       >
@@ -145,13 +136,16 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
     const header = document.getElementById('main-header');
     if (!header) return;
 
+    const SCROLLED_CLASSES = ['bg-zinc-900/70', 'dark:bg-zinc-950/70', 'backdrop-blur-md', 'border-gray-200/10', 'dark:border-white/10', 'py-2', 'shadow-sm'];
+    const TOP_CLASSES = ['bg-transparent', 'border-transparent', 'py-4'];
+
     const handleScroll = () => {
       if (window.scrollY > 20) {
-        header.classList.remove('bg-transparent', 'border-transparent', 'py-4');
-        header.classList.add('bg-zinc-950/90', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
+        header.classList.remove(...TOP_CLASSES);
+        header.classList.add(...SCROLLED_CLASSES);
       } else {
-        header.classList.add('bg-transparent', 'border-transparent', 'py-4');
-        header.classList.remove('bg-white/80', 'dark:bg-zinc-950/80', 'backdrop-blur-md', 'border-gray-200', 'dark:border-white/10', 'py-2', 'shadow-sm');
+        header.classList.remove(...SCROLLED_CLASSES);
+        header.classList.add(...TOP_CLASSES);
       }
     };
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+﻿import { useState, useEffect, useRef } from "react";
 import { Search as SearchIcon, X, Book, Zap, LayoutGrid, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import Fuse from 'fuse.js';
@@ -44,7 +44,7 @@ export default function Search({ placeholder = "Search...", lang = "en" }: Searc
 
   useEffect(() => {
     if (open && !fuse) {
-      fetch('/api/search.json')
+      fetch('/search-index.json')
         .then(res => res.json())
         .then(data => {
           const fuseInstance = new Fuse<SearchItem>(data, {
