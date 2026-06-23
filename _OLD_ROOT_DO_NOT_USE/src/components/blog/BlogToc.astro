@@ -1,0 +1,104 @@
+---
+interface Heading {
+  id: string;
+  text: string;
+  level: number;
+}
+interface Props {
+  headings: Heading[];
+}
+const { headings } = Astro.props;
+---
+<aside class="hidden lg:flex lg:flex-col w-52 shrink-0 sticky top-28 gap-4" style="max-height:calc(100vh - 6rem); overflow:visible; position:relative">
+  {headings.length > 0 && (
+    <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4">
+      <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3">目次</p>
+      <nav>
+        <ul class="space-y-0.5" id="toc-list" style="max-height:50vh; overflow-y:auto; scrollbar-width:none">
+          {headings.map((h) => (
+            <li>
+              
+                href={"#" + h.id}
+                data-toc-id={h.id}
+                class={h.level === 3
+                  ? "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 pl-5 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
+                  : "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"}
+              >
+                <span class="toc-bar mt-1.5 shrink-0 w-0.5 h-2.5 rounded-full transition-all duration-200" style="background:transparent"></span>
+                <span>{h.text}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  )}
+
+  <div class="relative rounded-xl p-[1px] bg-gradient-to-br from-primary via-blue-500 to-primary/30">
+    <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
+      <p class="text-[10px] font-bold tracking-widest uppercase text-primary mb-1">🎁 限定特典</p>
+      <p class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1">サインツール完全版</p>
+      <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">口座開設だけで無料解放</p>
+      <a href="https://astro.space/ja/" class="block text-center bg-primary text-white text-xs font-bold py-2 px-3 rounded-lg hover:bg-primary/90 transition-colors">
+        今すぐ無料で開設 →
+      </a>
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+(function() {
+  function initToc() {
+    const headingEls = Array.from(document.querySelectorAll("main h2[id], main h3[id]"));
+    const tocLinks = Array.from(document.querySelectorAll("a[data-toc-id]"));
+
+    if (headingEls.length === 0 || tocLinks.length === 0) return;
+
+    function setActive(id) {
+      // アクティブ項目をTOCの中央に
+      var tocList = document.getElementById("toc-list");
+      var activeLink = document.querySelector("a[data-toc-id='" + id + "']");
+      if (activeLink && tocList) {
+        var linkRect = activeLink.getBoundingClientRect();
+        var listRect = tocList.getBoundingClientRect();
+        var current = tocList.scrollTop;
+        var target = current + (linkRect.top - listRect.top) - (tocList.clientHeight / 2) + (activeLink.clientHeight / 2);
+        tocList.scrollTop = target;
+      }
+      tocLinks.forEach(function(link) {
+        const bar = link.querySelector(".toc-bar");
+        if (link.dataset.tocId === id) {
+          link.classList.add("text-primary", "font-semibold", "bg-primary/5");
+          link.classList.remove("text-gray-500");
+          if (bar) bar.style.background = "#2563EB";
+        } else {
+          link.classList.remove("text-primary", "font-semibold", "bg-primary/5");
+          link.classList.add("text-gray-500");
+          if (bar) bar.style.background = "transparent";
+        }
+      });
+      // アクティブ項目がTOCリスト内で見えるようスクロール
+
+    }
+
+    function onScroll() {
+      const y = window.scrollY + 140;
+      let cur = headingEls[0].id;
+      for (var i = 0; i < headingEls.length; i++) {
+        if (headingEls[i].offsetTop <= y) cur = headingEls[i].id;
+        else break;
+      }
+      setActive(cur);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initToc);
+  } else {
+    initToc();
+  }
+})();
+</script>
