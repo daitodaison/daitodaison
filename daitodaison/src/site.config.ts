@@ -1,11 +1,11 @@
-
+﻿
 
 export const siteConfig = {
 name: 'daitodaison',
   description: '勝率40%・上位2.3%のFXプロップ攻略メディア。Fintokei・FTMO・Funded7の攻略情報とEA開発を発信。',
   logo: {
-    src: '/logo.svg',
-    srcDark: '/logo.svg',       // Used when strategy is 'switch'
+    src: '/site-logo.png',
+    srcDark: '/site-logo.png',       // Used when strategy is 'switch'
     alt: 'daitodaison ロゴ',
     strategy: 'invert' as 'invert' | 'switch' | 'static', // 'invert' | 'switch' | 'static'
   },
