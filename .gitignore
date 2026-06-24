@@ -3,3 +3,4 @@ _OLD_ROOT_DO_NOT_USE/node_modules/
 .astro/
 dist/
 .env
+repomix-output.xml
