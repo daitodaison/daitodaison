@@ -1,6 +1,16 @@
 import type { APIRoute } from 'astro';
 
 export const post: APIRoute = async ({ request }) => {
+  const expectedSecret = import.meta.env.WEBHOOK_SECRET;
+  const receivedSecret = request.headers.get('x-webhook-secret');
+
+  if (!expectedSecret || receivedSecret !== expectedSecret) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   const deployHookUrl = import.meta.env.DEPLOY_HOOK_URL;
   if (!deployHookUrl) {
     return new Response(JSON.stringify({ error: 'DEPLOY_HOOK_URL is not configured' }), {

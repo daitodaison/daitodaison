@@ -38,6 +38,7 @@
     "astro-mermaid": "^2.0.1",
     "clsx": "^2.1.1",
     "fuse.js": "^7.2.0",
+    "isomorphic-dompurify": "^3.18.0",
     "lucide-react": "1.11.0",
     "mermaid": "^11.14.0",
     "microcms-js-sdk": "^3.4.0",

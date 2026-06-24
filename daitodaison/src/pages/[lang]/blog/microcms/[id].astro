@@ -1,4 +1,4 @@
-﻿---
+---
 export const prerender = true;
 import Layout from "~/layouts/Layout.astro";
 import ScrollProgress from "~/components/layout/ScrollProgress.astro";
@@ -6,6 +6,7 @@ import { client } from "~/library/microcms";
 import { useTranslations } from "~/i18n/utils";
 import { languages } from "~/i18n/ui";
 import translate from "translate";
+import DOMPurify from 'isomorphic-dompurify';
 
 translate.engine = "google";
 
@@ -122,6 +123,17 @@ function addIds(html: string, hs: { id: string }[]) {
 
 const headings = extractHeadings(displayContent);
 displayContent = addIds(displayContent, headings);
+
+const safeContent = DOMPurify.sanitize(displayContent, {
+  ALLOWED_TAGS: ['p','h1','h2','h3','h4','h5','h6','a','ul','ol','li',
+                 'strong','em','br','img','table','thead','tbody','tr','td','th',
+                 'blockquote','pre','code','div','span','style'],
+  ALLOWED_ATTR: ['href','src','alt','class','id','target','rel',
+                 'data-toc-id','style','loading'],
+  FORBID_TAGS: ['script','iframe','object','embed','form'],
+  FORBID_ATTR: ['onerror','onload','onclick','onmouseover'],
+});
+
 const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slice(0, 3);
 ---
 
@@ -282,7 +294,8 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
             </span>
           ))}
         </div>
-        <div class="article-body" set:html={displayContent} />
+        <div class="article-body" set:html={safeContent} />
+
 
 <!-- プロップファーム強化CTA -->
         <div class="mt-16 bg-zinc-950 rounded-3xl overflow-hidden">
