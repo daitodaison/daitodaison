@@ -1,0 +1,115 @@
+---
+export const prerender = true;
+import Layout from '@'~/layouts/Layout.astro'@';
+import { languages } from '@'~/i18n/ui'@';
+export async function getStaticPaths() {
+  return Object.keys(languages).map((lang) => ({ params: { lang } }));
+}
+const { lang } = Astro.params;
+---
+<Layout title="daitoのプロフィール | daitodaison" description="Fintokei上位2.3%のFXプロップトレーダー。勝率40%のスナイパー型手法でプロップファームを攻略中。">
+
+  <section class="bg-gradient-to-br from-zinc-900 via-zinc-900 to-blue-950 text-white py-20 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-400/40 shadow-xl mx-auto mb-6">
+        <img src="/site-logo.png" alt="daito" class="w-full h-full object-cover invert" />
+      </div>
+      <h1 class="text-3xl md:text-4xl font-black mb-2">daito</h1>
+      <p class="text-blue-300 font-bold mb-6">FXプロップトレーダー / コンテンツクリエイター</p>
+      <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-200 to-blue-500">2.3%</p>
+          <p class="text-[10px] text-zinc-400 mt-1">Fintokei上位</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-200 to-blue-500">40%</p>
+          <p class="text-[10px] text-zinc-400 mt-1">勝率</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-200 to-blue-500">6年</p>
+          <p class="text-[10px] text-zinc-400 mt-1">FX経験</p>
+        </div>
+      </div>
+      <a href="https://daitodaison.substack.com" target="_blank" rel="noopener"
+         class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-3 rounded-xl transition-colors">
+        Substackで読む（無料）
+      </a>
+    </div>
+  </section>
+
+  <section class="py-16 px-4">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black mb-8 pb-2 border-b-2 border-blue-500 inline-flex items-center gap-2">自己紹介</h2>
+      <div class="space-y-4 text-zinc-700 dark:text-zinc-300 leading-relaxed">
+        <p>製造業・営業・音楽キュレーション・転売・Webライター・SEOブログ・イラスト・小説執筆・YouTubeスクリプト・ゲーム開発など、多様なキャリアを経てFXトレードへ転向。</p>
+        <p>「不透明な評価基準に振り回されない、自分で完結する収入」を求めた結果、プロップトレードにたどり着きました。</p>
+        <p>現在はFintokeiデモ大会で上位2.3%（61位/2587人）を獲得した手法をベースに、プロップファーム攻略の情報をSubstackとこのブログで発信しています。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 bg-zinc-50 dark:bg-zinc-800/30">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black mb-8 pb-2 border-b-2 border-blue-500 inline-flex items-center gap-2">実績</h2>
+      <div class="space-y-4">
+        <div class="flex gap-4 p-4 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+          <span class="text-2xl shrink-0">🥇</span>
+          <div>
+            <p class="font-bold text-zinc-900 dark:text-white">Fintokeiデモ大会 上位2.3%</p>
+            <p class="text-sm text-zinc-500 mt-1">2587人中61位。勝率40%のスナイパー型手法で達成。</p>
+          </div>
+        </div>
+        <div class="flex gap-4 p-4 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+          <span class="text-2xl shrink-0">📈</span>
+          <div>
+            <p class="font-bold text-zinc-900 dark:text-white">デモ口座10倍成長</p>
+            <p class="text-sm text-zinc-500 mt-1">同手法でデモ口座を10倍に増やすことに成功。</p>
+          </div>
+        </div>
+        <div class="flex gap-4 p-4 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700">
+          <span class="text-2xl shrink-0">✍️</span>
+          <div>
+            <p class="font-bold text-zinc-900 dark:text-white">756記事以上のFX攻略コンテンツ</p>
+            <p class="text-sm text-zinc-500 mt-1">Fintokei・FTMO・Funded7などプロップファーム攻略記事を随時更新中。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="text-2xl font-black mb-8 pb-2 border-b-2 border-blue-500 inline-flex items-center gap-2">発信媒体</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a href="https://daitodaison.substack.com" target="_blank" rel="noopener"
+           class="flex gap-3 p-4 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 transition-colors">
+          <span class="text-2xl shrink-0">📧</span>
+          <div>
+            <p class="font-bold text-zinc-900 dark:text-white">Substack</p>
+            <p class="text-xs text-zinc-500 mt-1">トレード日誌・手法解説をニュースレターで配信</p>
+          </div>
+        </a>
+        <a href=`/${lang}/blog/`
+           class="flex gap-3 p-4 bg-white dark:bg-zinc-800 rounded-xl border border-zinc-200 dark:border-zinc-700 hover:border-blue-400 transition-colors">
+          <span class="text-2xl shrink-0">📝</span>
+          <div>
+            <p class="font-bold text-zinc-900 dark:text-white">このブログ</p>
+            <p class="text-xs text-zinc-500 mt-1">プロップファーム攻略・FX手法の記事756件以上</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 px-4 bg-gradient-to-br from-blue-600 to-indigo-700 text-white text-center">
+    <div class="max-w-xl mx-auto">
+      <p class="text-xl font-black mb-3">Fintokei上位2.3%の手法、無料で読めます</p>
+      <p class="text-blue-100 text-sm mb-6">Substackで毎週トレード記録と攻略情報を発信中。</p>
+      <a href="https://daitodaison.substack.com" target="_blank" rel="noopener"
+         class="inline-block bg-white text-blue-700 font-black px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors">
+        無料で購読する
+      </a>
+    </div>
+  </section>
+
+</Layout>
