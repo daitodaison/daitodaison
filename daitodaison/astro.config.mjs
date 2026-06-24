@@ -57,7 +57,7 @@ export default defineConfig({
     service: { entrypoint: 'astro/assets/services/sharp' },
     quality: 80,
   },
-  adapter: process.env.ADAPTER !== 'cloudflare' ? getAdapter() : undefined,
+  adapter: getAdapter(),
   markdown: {
     remarkPlugins: [stripIdsPlugin],
     rehypePlugins: [stripIdsPlugin],
