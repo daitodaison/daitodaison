@@ -14,7 +14,7 @@ import process from "node:process";
 const stripIdsPlugin = () => (tree, file) => {
   const filePath = (file.path || (file.history && file.history[0]) || '').replace(/\\/g, '/');
   const isChangelog = filePath.toLowerCase().includes('changelog') || filePath.match(/v\d+-\d+-\d+/);
-  
+
   if (isChangelog) {
     const visit = (node) => {
       // Remark phase: preemptively block the internal slugifier
@@ -23,14 +23,14 @@ const stripIdsPlugin = () => (tree, file) => {
         node.data.hProperties = node.data.hProperties || {};
         node.data.hProperties.id = "";
       }
-      
+
       // Rehype phase: final sweep to make sure IDs are actually gone from the HTML
       if (node.type === 'element' && /^h[1-6]$/.test(node.tagName)) {
         if (node.properties && ('id' in node.properties)) {
           delete node.properties.id;
         }
       }
-      
+
       if (node.children) node.children.forEach(visit);
     };
     visit(tree);
@@ -43,8 +43,8 @@ function getAdapter() {
   const adapter = process.env.ADAPTER || 'node';
   switch (adapter) {
     case 'vercel': return vercel({ webAnalytics: { enabled: true } });
-    case 'netlify': return netlify();
-    case 'cloudflare': return cloudflare({ platformProxy: { enabled: true }, runtime: { mode: 'advanced', type: 'worker', nodejsCompat: true } });
+    case 'netlify': return netlify(); case 'cloudflare': return cloudflare({ platformProxy: { enabled: true } });
+
     case 'node': default: return node({ mode: 'standalone' });
   }
 }
@@ -79,8 +79,8 @@ export default defineConfig({
     routing: { prefixDefaultLocale: true }
   },
   integrations: [
-    sitemap(), 
-    react(), 
+    sitemap(),
+    react(),
     mdx({
       remarkPlugins: [stripIdsPlugin],
       rehypePlugins: [stripIdsPlugin]
