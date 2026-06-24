@@ -77,13 +77,13 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
             alt={siteConfig.logo.alt} 
             width="32"
             height="32"
-            class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 invert"
+            id="header-logo-img" class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 invert"
           />
         )
       )}
       <span class="flex flex-col leading-tight">
         <span class="text-sm md:text-xl font-bold">{t['brand.name'] || siteConfig.name}</span>
-        <span class="text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap">勝率40%・上位2.3%のFXプロップ攻略</span>
+        <span id="header-subtext" class="text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap">勝率40%・上位2.3%のFXプロップ攻略</span>
       </span>
     </a>
     <div class="flex-1 flex justify-center mx-4 lg:mx-8">
@@ -136,14 +136,20 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
 
     const SCROLLED_CLASSES = ['bg-zinc-900/70', 'dark:bg-zinc-950/70', 'backdrop-blur-md', 'border-gray-200/10', 'dark:border-white/10', 'py-2', 'shadow-sm'];
     const TOP_CLASSES = ['bg-transparent', 'border-transparent', 'py-4'];
+    const logoImg = document.getElementById('header-logo-img');
+    const subText = document.getElementById('header-subtext');
 
     const handleScroll = () => {
       if (window.scrollY > 20) {
         header.classList.remove(...TOP_CLASSES);
         header.classList.add(...SCROLLED_CLASSES);
+        if (logoImg) { logoImg.classList.remove('invert-0'); logoImg.classList.add('invert'); }
+        if (subText) { subText.classList.remove('text-zinc-400'); subText.classList.add('text-zinc-300'); }
       } else {
         header.classList.remove(...SCROLLED_CLASSES);
         header.classList.add(...TOP_CLASSES);
+        if (logoImg) { logoImg.classList.remove('invert'); logoImg.classList.add('invert-0'); }
+        if (subText) { subText.classList.remove('text-zinc-300'); subText.classList.add('text-zinc-400'); }
       }
     };
 
