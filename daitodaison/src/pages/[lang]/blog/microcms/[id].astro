@@ -6,7 +6,7 @@ import { client } from "~/library/microcms";
 import { useTranslations } from "~/i18n/utils";
 import { languages } from "~/i18n/ui";
 import translate from "translate";
-import DOMPurify from 'isomorphic-dompurify';
+import DOMPurify from "isomorphic-dompurify";
 
 translate.engine = "google";
 
@@ -14,7 +14,14 @@ export async function getStaticPaths() {
   let posts: any[] = [];
   let offset = 0;
   while (true) {
-    const response = await client.get({ endpoint: "blogs", queries: { limit: 100, offset, fields: "id,title,eyecatch,content,category,tags,publishedAt,updatedAt" } });
+    const response = await client.get({
+      endpoint: "blogs",
+      queries: {
+        limit: 100,
+        offset,
+        fields: "id,title,eyecatch,content,category,tags,publishedAt,updatedAt",
+      },
+    });
     posts = posts.concat(response.contents);
     if (posts.length >= response.totalCount) break;
     offset += 100;
@@ -23,7 +30,14 @@ export async function getStaticPaths() {
   let lightPosts: any[] = [];
   let offset2 = 0;
   while (true) {
-    const res2 = await client.get({ endpoint: "blogs", queries: { limit: 100, offset: offset2, fields: "id,title,eyecatch,category,updatedAt" } });
+    const res2 = await client.get({
+      endpoint: "blogs",
+      queries: {
+        limit: 100,
+        offset: offset2,
+        fields: "id,title,eyecatch,category,updatedAt",
+      },
+    });
     lightPosts = lightPosts.concat(res2.contents);
     if (lightPosts.length >= res2.totalCount) break;
     offset2 += 100;
@@ -32,7 +46,7 @@ export async function getStaticPaths() {
     Object.keys(languages).map((lang) => ({
       params: { lang, id: post.id },
       props: { post, allPosts: lightPosts },
-    }))
+    })),
   );
 }
 
@@ -45,57 +59,117 @@ async function translateHtml(html: string, to: string) {
   try {
     const ph: string[] = [];
     let n = 0;
-    const masked = html.replace(/<[^>]+>/g, (m) => { ph.push(m); return " [[" + (n++) + "]] "; });
+    const masked = html.replace(/<[^>]+>/g, (m) => {
+      ph.push(m);
+      return " [[" + n++ + "]] ";
+    });
     const tr = await translate(masked, { from: "ja", to });
-    return tr.replace(/\[\[([0-9]+)\]\]/g, (_: string, i: string) => ph[+i] || _);
-  } catch { return html; }
+    return tr.replace(
+      /\[\[([0-9]+)\]\]/g,
+      (_: string, i: string) => ph[+i] || _,
+    );
+  } catch {
+    return html;
+  }
 }
 
 let displayTitle = post.title;
-const rawContent = post.content || '';
-let displayContent = '';
+const rawContent = post.content || "";
+let displayContent = "";
 // Extract body content and styles from full HTML or partial HTML
-const styleMatches = rawContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi) || [];
-const bodyStart = rawContent.toLowerCase().indexOf('<body');
-const bodyEnd = rawContent.toLowerCase().lastIndexOf('</body>');
-const bodyContent = bodyStart >= 0 && bodyEnd > bodyStart
-  ? rawContent.slice(rawContent.indexOf('>', bodyStart) + 1, bodyEnd)
-  : rawContent.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '').replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').replace(/<!DOCTYPE[^>]*>/gi, '').replace(/<\/?html[^>]*>/gi, '').replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '');
-let styleTag = '';
+const styleMatches =
+  rawContent.match(/<style[^>]*>([\s\S]*?)<\/style>/gi) || [];
+const bodyStart = rawContent.toLowerCase().indexOf("<body");
+const bodyEnd = rawContent.toLowerCase().lastIndexOf("</body>");
+const bodyContent =
+  bodyStart >= 0 && bodyEnd > bodyStart
+    ? rawContent.slice(rawContent.indexOf(">", bodyStart) + 1, bodyEnd)
+    : rawContent
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+        .replace(/<!DOCTYPE[^>]*>/gi, "")
+        .replace(/<\/?html[^>]*>/gi, "")
+        .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "");
+let styleTag = "";
 if (styleMatches.length > 0) {
-  const allCss = styleMatches.map((s: string) => s.replace(/<\/?style[^>]*>/gi, '')).join('\n');
+  const allCss = styleMatches
+    .map((s: string) => s.replace(/<\/?style[^>]*>/gi, ""))
+    .join("\n");
   const scopedCss = allCss.replace(/([^{}]+)\{/g, (m: string, sel: string) => {
-    if (sel.trim().startsWith('@')) return m;
-    const scoped = sel.split(',').map((s: string) => '.article-body ' + s.trim()).join(', ');
-    return scoped + ' {';
+    if (sel.trim().startsWith("@")) return m;
+    const scoped = sel
+      .split(",")
+      .map((s: string) => ".article-body " + s.trim())
+      .join(", ");
+    return scoped + " {";
   });
-  styleTag = '<style>' + scopedCss + '</style>';
+  styleTag = "<style>" + scopedCss + "</style>";
 }
 function addImageFallback(html: string) {
-  return html.replace(/<img([^>]*)src="([^"]+)"([^>]*)>/gi, (match, before, src, after) => {
-    if (/onerror=/i.test(before) || /onerror=/i.test(after)) return match;
-    let fallback = "";
-    if (src.includes("daitodaison.pages.dev/wp-content")) {
-      fallback = src.replace("https://daitodaison.pages.dev/wp-content", "https://www.dysonblog.org/wp-content");
-    } else if (src.includes("dysonblog.org/wp-content") && !src.includes("daitodaison.pages.dev")) {
-      fallback = src.replace(/https:\/\/(www\.)?dysonblog\.org\/wp-content/, "https://daitodaison.pages.dev/wp-content");
-    }
-    if (!fallback) return match;
-    return '<img' + before + 'src="' + src + '"' + after + ' onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src=\'' + fallback + '\';}" >';
-  });
+  const ALLOWED_HOSTS = [
+    "daitodaison.pages.dev",
+    "dysonblog.org",
+    "www.dysonblog.org",
+  ];
+  return html.replace(
+    /<img([^>]*)src="([^"]+)"([^>]*)>/gi,
+    (match, before, src, after) => {
+      if (/onerror=/i.test(before) || /onerror=/i.test(after)) return match;
+      try {
+        const srcUrl = new URL(src);
+        if (!ALLOWED_HOSTS.includes(srcUrl.hostname)) return match;
+      } catch {
+        return match;
+      }
+      let fallback = "";
+      if (src.includes("daitodaison.pages.dev/wp-content")) {
+        fallback = src.replace(
+          "https://daitodaison.pages.dev/wp-content",
+          "https://www.dysonblog.org/wp-content",
+        );
+      } else if (
+        src.includes("dysonblog.org/wp-content") &&
+        !src.includes("daitodaison.pages.dev")
+      ) {
+        fallback = src.replace(
+          /https:\/\/(www\.)?dysonblog\.org\/wp-content/,
+          "https://daitodaison.pages.dev/wp-content",
+        );
+      }
+      if (!fallback) return match;
+      const safeFallback = fallback.replace(/'/g, "%27").replace(/"/g, "%22");
+      return (
+        "<img" +
+        before +
+        'src="' +
+        src +
+        '"' +
+        after +
+        " onerror=\"if(!this.dataset.fallback){this.dataset.fallback=1;this.src='" +
+        safeFallback +
+        "';}\">"
+      );
+    },
+  );
 }
 
 const processedBody = bodyContent
-  .replace(/https:\/\/daitodaison\.pages\.dev\/wp-content/g, "https://www.dysonblog.org/wp-content")
-  .replace(/https:\/\/i0\.wp\.com\/www\.dysonblog\.org/g, "https://www.dysonblog.org");
+  .replace(
+    /https:\/\/daitodaison\.pages\.dev\/wp-content/g,
+    "https://www.dysonblog.org/wp-content",
+  )
+  .replace(
+    /https:\/\/i0\.wp\.com\/www\.dysonblog\.org/g,
+    "https://www.dysonblog.org",
+  );
 displayContent = styleTag + processedBody;
 
 if (false && lang === "en") {
   try {
     displayTitle = await translate(post.title, { from: "ja", to: "en" });
-    const cleanedForTranslate = (post.content || '')
-      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
-      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+    const cleanedForTranslate = (post.content || "")
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
     displayContent = await translateHtml(cleanedForTranslate, "en");
   } catch {}
 }
@@ -103,304 +177,603 @@ if (false && lang === "en") {
 function extractHeadings(html: string) {
   const result: { id: string; text: string; level: number }[] = [];
   const re = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
-  let m; let n = 0;
+  let m;
+  let n = 0;
   while ((m = re.exec(html)) !== null) {
-    result.push({ id: "toc-" + (n++), text: m[2].replace(/<[^>]+>/g, ""), level: +m[1] });
+    result.push({
+      id: "toc-" + n++,
+      text: m[2].replace(/<[^>]+>/g, ""),
+      level: +m[1],
+    });
   }
   return result;
 }
 
 function addIds(html: string, hs: { id: string }[]) {
   let i = 0;
-  return html.replace(/<h([23])([^>]*)>(.*?)<\/h[23]>/gi,
+  return html.replace(
+    /<h([23])([^>]*)>(.*?)<\/h[23]>/gi,
     (_: string, lv: string, attrs: string, inner: string) => {
       const h = hs[i++];
       if (!h) return _;
       const clean = attrs.replace(/\s*id="[^"]*"/g, "");
-      return "<h" + lv + clean + " id=\"" + h.id + "\">" + inner + "</h" + lv + ">";
-    });
+      return (
+        "<h" + lv + clean + ' id="' + h.id + '">' + inner + "</h" + lv + ">"
+      );
+    },
+  );
 }
 
 const headings = extractHeadings(displayContent);
 displayContent = addIds(displayContent, headings);
 
 const safeContent = DOMPurify.sanitize(displayContent, {
-  ALLOWED_TAGS: ['p','h1','h2','h3','h4','h5','h6','a','ul','ol','li',
-                 'strong','em','br','img','table','thead','tbody','tr','td','th',
-                 'blockquote','pre','code','div','span','style'],
-  ALLOWED_ATTR: ['href','src','alt','class','id','target','rel',
-                 'data-toc-id','style','loading'],
-  FORBID_TAGS: ['script','iframe','object','embed','form'],
-  FORBID_ATTR: ['onerror','onload','onclick','onmouseover'],
+  ALLOWED_TAGS: [
+    "p",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "a",
+    "ul",
+    "ol",
+    "li",
+    "strong",
+    "em",
+    "br",
+    "img",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "td",
+    "th",
+    "blockquote",
+    "pre",
+    "code",
+    "div",
+    "span",
+    "style",
+  ],
+  ALLOWED_ATTR: [
+    "href",
+    "src",
+    "alt",
+    "class",
+    "id",
+    "target",
+    "rel",
+    "data-toc-id",
+    "style",
+    "loading",
+  ],
+  FORBID_TAGS: ["script", "iframe", "object", "embed", "form"],
+  FORBID_ATTR: ["onerror", "onload", "onclick", "onmouseover"],
 });
 
-const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slice(0, 3);
+const otherPosts = (allPosts as any[])
+  .filter((p: any) => p.id !== post.id)
+  .slice(0, 3);
 ---
 
-<Layout title={displayTitle} description={displayTitle} image={post.eyecatch} imageAlt={displayTitle} article={true}>
+<Layout
+  title={displayTitle}
+  description={displayTitle}
+  image={post.eyecatch}
+  imageAlt={displayTitle}
+  article={true}
+>
   <ScrollProgress />
   <div class="max-w-7xl mx-auto px-4 pt-32 pb-20 bg-background">
-
     <div class="mb-6">
-      <a href={"/" + lang + "/blog/microcms"} class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      <a
+        href={"/" + lang + "/blog/microcms"}
+        class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg
+        >
         {t["blog.back"]}
       </a>
     </div>
 
     <div class="flex gap-8 items-start">
+      <!-- 左サイドバー -->
 
-<!-- 左サイドバー -->
-
-<aside class="hidden xl:flex xl:flex-col w-56 shrink-0 gap-3" style="align-self:start; position:sticky; top:9rem; max-height:calc(100vh - 10rem);">
-
-
-  <!-- プロフィールカード -->
-    <div class="rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 shrink-0">
-      <div class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 pt-5 pb-8 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20" style="background-image:radial-gradient(circle at 70% 30%, rgba(255,255,255,0.4) 0%, transparent 60%)"></div>
-        <div class="relative z-10 flex flex-col items-center text-center">
-          <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/40 shadow-lg mb-3">
-            <img src="/site-logo.png" alt="daito" class="w-full h-full object-cover" />
+      <aside
+        class="hidden xl:flex xl:flex-col w-56 shrink-0 gap-3"
+        style="align-self:start; position:sticky; top:9rem; max-height:calc(100vh - 10rem);"
+      >
+        <!-- プロフィールカード -->
+        <div
+          class="rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 shrink-0"
+        >
+          <div
+            class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 pt-5 pb-8 relative overflow-hidden"
+          >
+            <div
+              class="absolute inset-0 opacity-20"
+              style="background-image:radial-gradient(circle at 70% 30%, rgba(255,255,255,0.4) 0%, transparent 60%)"
+            >
+            </div>
+            <div class="relative z-10 flex flex-col items-center text-center">
+              <div
+                class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/40 shadow-lg mb-3"
+              >
+                <img
+                  src="/site-logo.png"
+                  alt="daito"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <p class="text-white font-bold text-sm tracking-wide">daito</p>
+              <p class="text-blue-200 text-[10px] mt-0.5 font-medium">
+                FXプロップトレーダー
+              </p>
+            </div>
           </div>
-          <p class="text-white font-bold text-sm tracking-wide">daito</p>
-          <p class="text-blue-200 text-[10px] mt-0.5 font-medium">FXプロップトレーダー</p>
-        </div>
-      </div>
-      <div class="px-4 py-3 -mt-4 relative z-10">
-        <div class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-white/10 px-3 py-2.5 mb-3">
-          <div class="grid grid-cols-3 gap-1 text-center">
-            <div>
-              <p class="text-primary font-black text-sm leading-none">40%</p>
-              <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">勝率</p>
+          <div class="px-4 py-3 -mt-4 relative z-10">
+            <div
+              class="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-100 dark:border-white/10 px-3 py-2.5 mb-3"
+            >
+              <div class="grid grid-cols-3 gap-1 text-center">
+                <div>
+                  <p class="text-primary font-black text-sm leading-none">
+                    40%
+                  </p>
+                  <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">
+                    勝率
+                  </p>
+                </div>
+                <div class="border-x border-zinc-100 dark:border-white/10">
+                  <p class="text-primary font-black text-sm leading-none">
+                    2.3%
+                  </p>
+                  <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">
+                    上位
+                  </p>
+                </div>
+                <div>
+                  <p class="text-primary font-black text-sm leading-none">
+                    6年
+                  </p>
+                  <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">
+                    経験
+                  </p>
+                </div>
+              </div>
             </div>
-            <div class="border-x border-zinc-100 dark:border-white/10">
-              <p class="text-primary font-black text-sm leading-none">2.3%</p>
-              <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">上位</p>
-            </div>
-            <div>
-              <p class="text-primary font-black text-sm leading-none">6年</p>
-              <p class="text-[9px] text-zinc-400 mt-0.5 leading-tight">経験</p>
-            </div>
+            <p
+              class="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed mb-3"
+            >
+              製造業・営業を経てFXへ転向。Fintokei上位2.3%（61位/2587人）のスナイパー型手法で攻略中。
+            </p>
+            <a
+              href="/ja/about"
+              class="block text-center text-[11px] font-bold text-primary border border-primary/30 rounded-lg py-1.5 hover:bg-primary hover:text-white transition-all duration-200"
+            >
+              プロフィール詳細 →
+            </a>
           </div>
         </div>
-        <p class="text-[11px] text-zinc-500 dark:text-zinc-400 leading-relaxed mb-3">製造業・営業を経てFXへ転向。Fintokei上位2.3%（61位/2587人）のスナイパー型手法で攻略中。</p>
-        <a href="/ja/about" class="block text-center text-[11px] font-bold text-primary border border-primary/30 rounded-lg py-1.5 hover:bg-primary hover:text-white transition-all duration-200">
-          プロフィール詳細 →
+
+        <!-- Fintokei バナー（常に最上部・固定・光るアニメーション） -->
+        <a
+          href="https://www.fintokei.com/jp/?affiliate=64"
+          target="_blank"
+          rel="noopener"
+          class="group block relative rounded-2xl overflow-hidden shrink-0 sidebar-glow-banner"
+        >
+          <div class="absolute inset-0 sidebar-gradient-bg"></div>
+          <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,255,255,0.15),transparent_60%)]"
+          >
+          </div>
+          <div class="sidebar-shine"></div>
+          <div class="relative z-10 p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-lg animate-bounce-slow">🏆</span>
+              <div>
+                <p
+                  class="text-[10px] font-bold uppercase tracking-widest text-purple-200"
+                >
+                  著者イチオシ・上位2.3%
+                </p>
+                <p class="text-sm font-black text-white leading-tight">
+                  Fintokei
+                </p>
+              </div>
+            </div>
+            <p class="text-[11px] text-purple-100 leading-snug mb-3">
+              日本初プロップ・著者が実際に上位2.3%を達成した実績あり
+            </p>
+            <span
+              class="block text-center bg-white text-purple-700 font-black text-xs py-2.5 rounded-xl group-hover:bg-purple-50 group-hover:scale-[1.02] transition-all shadow-lg"
+            >
+              無料で始める →
+            </span>
+          </div>
         </a>
-      </div>
-    </div>
 
-     <!-- Fintokei バナー（常に最上部・固定・光るアニメーション） -->
-  <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
-     class="group block relative rounded-2xl overflow-hidden shrink-0 sidebar-glow-banner">
-    <div class="absolute inset-0 sidebar-gradient-bg"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,rgba(255,255,255,0.15),transparent_60%)]"></div>
-    <div class="sidebar-shine"></div>
-    <div class="relative z-10 p-4">
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-lg animate-bounce-slow">🏆</span>
-        <div>
-          <p class="text-[10px] font-bold uppercase tracking-widest text-purple-200">著者イチオシ・上位2.3%</p>
-          <p class="text-sm font-black text-white leading-tight">Fintokei</p>
+        <!-- タブ＋記事リスト -->
+        <div class="flex items-center gap-1.5 mb-3 shrink-0">
+          <span class="text-base">🆕</span>
+          <p class="text-xs font-bold text-zinc-700 dark:text-zinc-300">
+            最新記事
+          </p>
         </div>
-      </div>
-      <p class="text-[11px] text-purple-100 leading-snug mb-3">日本初プロップ・著者が実際に上位2.3%を達成した実績あり</p>
-      <span class="block text-center bg-white text-purple-700 font-black text-xs py-2.5 rounded-xl group-hover:bg-purple-50 group-hover:scale-[1.02] transition-all shadow-lg">
-        無料で始める →
-      </span>
-    </div>
-  </a>
 
-  <!-- タブ＋記事リスト -->
-  <div class="flex items-center gap-1.5 mb-3 shrink-0">
-      <span class="text-base">🆕</span>
-      <p class="text-xs font-bold text-zinc-700 dark:text-zinc-300">最新記事</p>
-    </div>
+        <div
+          data-sidebar
+          class="flex-1 min-h-0 overflow-y-auto"
+          style="scrollbar-width:thin;"
+        >
+          <ul class="space-y-0.5" id="sidebar-post-list">
+            {
+              (allPosts as any[]).slice(0, 12).map((p: any, idx: number) => {
+                const isActive = p.id === post.id;
+                return (
+                  <li data-category={p.category?.name || ""}>
+                    <a
+                      href={"/" + lang + "/blog/microcms/" + p.id}
+                      class={
+                        "flex items-start gap-2 group rounded-lg px-2 py-1.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all " +
+                        (isActive ? "opacity-50 pointer-events-none" : "")
+                      }
+                    >
+                      <span class="text-[10px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors sidebar-item-num">
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+                      <span class="flex-1 min-w-0">
+                        <span class="block text-[11px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">
+                          {p.title}
+                        </span>
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="11"
+                        height="11"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"
+                      >
+                        <path d="M5 12h14M13 6l6 6-6 6" />
+                      </svg>
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
 
-    <div data-sidebar class="flex-1 min-h-0 overflow-y-auto" style="scrollbar-width:thin;">
-      <ul class="space-y-0.5" id="sidebar-post-list">
-        {(allPosts as any[]).slice(0, 12).map((p: any, idx: number) => {
-          const isActive = p.id === post.id;
-          return (
-            <li data-category={p.category?.name || ""}>
-              <a href={"/" + lang + "/blog/microcms/" + p.id}
-                 class={"flex items-start gap-2 group rounded-lg px-2 py-1.5 hover:bg-primary/5 dark:hover:bg-white/5 transition-all " + (isActive ? "opacity-50 pointer-events-none" : "")}>
-                <span class="text-[10px] font-black text-primary/40 group-hover:text-primary shrink-0 mt-0.5 transition-colors sidebar-item-num">{String(idx + 1).padStart(2, "0")}</span>
-                <span class="flex-1 min-w-0">
-                  <span class="block text-[11px] leading-snug font-medium text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors line-clamp-2">{p.title}</span>
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 mt-1 text-zinc-300 dark:text-zinc-600 group-hover:text-primary group-hover:translate-x-0.5 transition-all"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+          <!-- カテゴリー絞り込みタグ -->
+          {
+            (() => {
+              const cats = Array.from(
+                new Set(
+                  (allPosts as any[])
+                    .map((p: any) => p.category?.name)
+                    .filter(Boolean),
+                ),
+              );
+              return cats.length > 0 ? (
+                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
+                  <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">
+                    カテゴリーで探す
+                  </p>
+                  <div class="flex flex-wrap gap-1.5">
+                    <button
+                      data-cat-filter=""
+                      class="sidebar-cat-btn active text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary text-white transition-all"
+                    >
+                      すべて
+                    </button>
+                    {cats.map((c: any) => (
+                      <button
+                        data-cat-filter={c}
+                        class="sidebar-cat-btn text-[10px] font-bold px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 hover:bg-primary/10 hover:text-primary transition-all"
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : null;
+            })()
+          }
 
-      <!-- カテゴリー絞り込みタグ -->
-      {(() => {
-        const cats = Array.from(new Set((allPosts as any[]).map((p: any) => p.category?.name).filter(Boolean)));
-        return cats.length > 0 ? (
-          <div class="mt-3 pt-3 border-t border-gray-200 dark:border-white/10">
-            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">カテゴリーで探す</p>
-            <div class="flex flex-wrap gap-1.5">
-              <button data-cat-filter="" class="sidebar-cat-btn active text-[10px] font-bold px-2.5 py-1 rounded-full bg-primary text-white transition-all">すべて</button>
-              {cats.map((c: any) => (
-                <button data-cat-filter={c} class="sidebar-cat-btn text-[10px] font-bold px-2.5 py-1 rounded-full bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 hover:bg-primary/10 hover:text-primary transition-all">{c}</button>
-              ))}
-            </div>
-          </div>
-        ) : null;
-      })()}
-
-      <a href={"/" + lang + "/blog/microcms"}
-         class="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary hover:bg-primary/5 dark:hover:bg-white/5 rounded-lg py-1.5 transition-all border border-primary/20">
-        記事一覧を見る
-        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-    </div>
-
-
-</aside>
+          <a
+            href={"/" + lang + "/blog/microcms"}
+            class="mt-3 flex items-center justify-center gap-1.5 text-[11px] font-bold text-primary hover:bg-primary/5 dark:hover:bg-white/5 rounded-lg py-1.5 transition-all border border-primary/20"
+          >
+            記事一覧を見る
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+            >
+          </a>
+        </div>
+      </aside>
 
       <!-- 本文 -->
       <main class="min-w-0 flex-1">
-{(() => {
-          const rawEye = post.eyecatch || "";
-          const eyeUrl = rawEye.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content").replace("http://","https://");
-          return eyeUrl ? (
-            <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
-              <img src={eyeUrl} alt={displayTitle} loading="eager" class="w-full object-cover aspect-video" />
-            </div>
-          ) : null;
-        })()}
-        <h1 class="text-xl md:text-2xl font-bold mb-4 leading-snug text-zinc-900 dark:text-white">
+        {
+          (() => {
+            const rawEye = post.eyecatch || "";
+            const eyeUrl = rawEye
+              .split("|")[0]
+              .replace(
+                "https://daitodaison.pages.dev/wp-content",
+                "https://dysonblog.org/wp-content",
+              )
+              .replace("http://", "https://");
+            return eyeUrl ? (
+              <div class="rounded-xl overflow-hidden mb-6 border border-black/10 dark:border-white/10 shadow-md">
+                <img
+                  src={eyeUrl}
+                  alt={displayTitle}
+                  loading="eager"
+                  class="w-full object-cover aspect-video"
+                />
+              </div>
+            ) : null;
+          })()
+        }
+        <h1
+          class="text-xl md:text-2xl font-bold mb-4 leading-snug text-zinc-900 dark:text-white"
+        >
           {displayTitle}
         </h1>
-        <div class="flex flex-wrap items-center gap-3 mb-8 text-xs text-gray-500 dark:text-gray-400">
-          {post.updatedAt && (
-            <span class="flex items-center gap-1">
-              🕒 {new Date(post.updatedAt).toLocaleDateString("ja-JP", {year:"numeric",month:"long",day:"numeric"})}更新
-            </span>
-          )}
-          {post.category?.name && (
-            <a href={"/" + lang + "/blog/?category=" + post.category.name} class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium hover:bg-blue-200 transition-colors">
-  📂 {post.category.name}
-</a>
-          )}
-          {post.tags && post.tags.split(",").map((tag: string) => (
-            <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
-              # {tag.trim()}
-            </span>
-          ))}
+        <div
+          class="flex flex-wrap items-center gap-3 mb-8 text-xs text-gray-500 dark:text-gray-400"
+        >
+          {
+            post.updatedAt && (
+              <span class="flex items-center gap-1">
+                🕒{" "}
+                {new Date(post.updatedAt).toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+                更新
+              </span>
+            )
+          }
+          {
+            post.category?.name && (
+              <a
+                href={"/" + lang + "/blog/?category=" + post.category.name}
+                class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium hover:bg-blue-200 transition-colors"
+              >
+                📂 {post.category.name}
+              </a>
+            )
+          }
+          {
+            post.tags &&
+              post.tags
+                .split(",")
+                .map((tag: string) => (
+                  <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
+                    # {tag.trim()}
+                  </span>
+                ))
+          }
         </div>
         <div class="article-body" set:html={safeContent} />
 
-
-<!-- プロップファーム強化CTA -->
+        <!-- プロップファーム強化CTA -->
         <div class="mt-16 bg-zinc-950 rounded-3xl overflow-hidden">
           <!-- Fintokei メイン -->
-          <div class="relative p-8 bg-gradient-to-br from-purple-900/80 via-zinc-900 to-blue-950 border border-purple-500/30">
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(139,92,246,0.1),transparent_60%)]"></div>
-            <div class="relative z-10 flex flex-col md:flex-row gap-6 items-center">
+          <div
+            class="relative p-8 bg-gradient-to-br from-purple-900/80 via-zinc-900 to-blue-950 border border-purple-500/30"
+          >
+            <div
+              class="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(139,92,246,0.1),transparent_60%)]"
+            >
+            </div>
+            <div
+              class="relative z-10 flex flex-col md:flex-row gap-6 items-center"
+            >
               <div class="flex-1 text-white">
-                <div class="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-full px-3 py-1 text-xs font-bold text-purple-300 mb-3">
+                <div
+                  class="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-full px-3 py-1 text-xs font-bold text-purple-300 mb-3"
+                >
                   🏆 著者イチオシ・最も稼ぎやすい
                 </div>
                 <div class="flex items-center gap-3 mb-2">
                   <span class="text-3xl">🇯🇵</span>
                   <h3 class="text-2xl font-black">Fintokei</h3>
                 </div>
-                <p class="text-zinc-400 text-sm mb-4">日本初の本格派プロップファーム。著者がFintokei上位2.3%を達成した実績あり。</p>
+                <p class="text-zinc-400 text-sm mb-4">
+                  日本初の本格派プロップファーム。著者がFintokei上位2.3%を達成した実績あり。
+                </p>
                 <ul class="grid grid-cols-2 gap-1.5 text-xs text-zinc-300 mb-5">
-                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> 利益配分80〜100%</li>
-                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> 最大5,000万円</li>
-                  <li class="flex items-center gap-1.5"><span class="text-green-400">✓</span> MT4・MT5・TradingView対応</li>
-                  <li class="flex items-center gap-1.5"><span class="text-yellow-400 font-bold">✓</span> <span class="text-yellow-300 font-bold">参加費全額返金中</span></li>
+                  <li class="flex items-center gap-1.5">
+                    <span class="text-green-400">✓</span> 利益配分80〜100%
+                  </li>
+                  <li class="flex items-center gap-1.5">
+                    <span class="text-green-400">✓</span> 最大5,000万円
+                  </li>
+                  <li class="flex items-center gap-1.5">
+                    <span class="text-green-400">✓</span> MT4・MT5・TradingView対応
+                  </li>
+                  <li class="flex items-center gap-1.5">
+                    <span class="text-yellow-400 font-bold">✓</span>
+                    <span class="text-yellow-300 font-bold"
+                      >参加費全額返金中</span>
+                  </li>
                 </ul>
-                <a href="https://www.fintokei.com/jp/?affiliate=64" target="_blank" rel="noopener"
-                   class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-black px-7 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-purple-500/20">
+                <a
+                  href="https://www.fintokei.com/jp/?affiliate=64"
+                  target="_blank"
+                  rel="noopener"
+                  class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-black px-7 py-3.5 rounded-xl transition-all hover:-translate-y-0.5 shadow-lg shadow-purple-500/20"
+                >
                   無料で始める →
                 </a>
               </div>
-              <div class="shrink-0 text-center bg-white/5 border border-white/10 rounded-2xl p-5 min-w-[140px]">
+              <div
+                class="shrink-0 text-center bg-white/5 border border-white/10 rounded-2xl p-5 min-w-[140px]"
+              >
                 <p class="text-xs text-zinc-400 mb-1">著者の実績</p>
-                <p class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-300 to-purple-500">2.3%</p>
+                <p
+                  class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-300 to-purple-500"
+                >
+                  2.3%
+                </p>
                 <p class="text-xs text-zinc-400 mt-1">2587人中61位</p>
               </div>
             </div>
           </div>
           <!-- FUNDED7・FTMO サブ -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/5">
-            <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener"
-               class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all">
+            <a
+              href="https://my.funded7.com/ja/sign-up?affiliateId=111"
+              target="_blank"
+              rel="noopener"
+              class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all"
+            >
               <div class="flex items-center gap-3 mb-3">
                 <span class="text-2xl">7️⃣</span>
                 <div>
                   <p class="font-black text-white text-sm">FUNDED7</p>
-                  <p class="text-[11px] text-zinc-500">1フェーズ・スプレッド最狭</p>
+                  <p class="text-[11px] text-zinc-500">
+                    1フェーズ・スプレッド最狭
+                  </p>
                 </div>
               </div>
               <ul class="space-y-1 text-xs text-zinc-400 mb-4">
                 <li>✅ 最大6,000万円・利益配分最大90%</li>
                 <li>✅ ドル円0.1pipsの極狭スプレッド</li>
               </ul>
-              <span class="block text-center bg-blue-600 group-hover:bg-blue-500 text-white text-xs font-bold py-2 rounded-lg transition-all">アカウント開設 →</span>
+              <span
+                class="block text-center bg-blue-600 group-hover:bg-blue-500 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                >アカウント開設 →</span
+              >
             </a>
-            <a href="https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD" target="_blank" rel="noopener"
-               class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all">
+            <a
+              href="https://trader.ftmo.com/?affiliates=fEZqWBlMdBrTtxUjIJYD"
+              target="_blank"
+              rel="noopener"
+              class="group bg-zinc-900 p-5 hover:bg-zinc-800 transition-all"
+            >
               <div class="flex items-center gap-3 mb-3">
                 <span class="text-2xl">🌍</span>
                 <div>
                   <p class="font-black text-white text-sm">FTMO</p>
-                  <p class="text-[11px] text-zinc-500">世界最大手・300万人以上</p>
+                  <p class="text-[11px] text-zinc-500">
+                    世界最大手・300万人以上
+                  </p>
                 </div>
               </div>
               <ul class="space-y-1 text-xs text-zinc-400 mb-4">
                 <li>✅ 累計690億円超の出金実績</li>
                 <li>✅ Trustpilot4.8・2015年創業</li>
               </ul>
-              <span class="block text-center bg-zinc-700 group-hover:bg-zinc-600 text-white text-xs font-bold py-2 rounded-lg transition-all">無料トライアル →</span>
+              <span
+                class="block text-center bg-zinc-700 group-hover:bg-zinc-600 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                >無料トライアル →</span
+              >
             </a>
           </div>
         </div>
 
         <!-- 記事下メタ情報 -->
-        <div class="flex flex-wrap items-center gap-3 mt-8 mb-2 text-xs text-gray-500 dark:text-gray-400">
-          {post.updatedAt && (
-            <span class="flex items-center gap-1">
-              🕒 {new Date(post.updatedAt).toLocaleDateString("ja-JP", {year:"numeric",month:"long",day:"numeric"})}更新
-            </span>
-          )}
-          {post.category?.name && (
-            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
-              📂 {post.category.name}
-            </span>
-          )}
-          {post.tags && post.tags.split(",").map((tag: string) => (
-            <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
-              # {tag.trim()}
-            </span>
-          ))}
+        <div
+          class="flex flex-wrap items-center gap-3 mt-8 mb-2 text-xs text-gray-500 dark:text-gray-400"
+        >
+          {
+            post.updatedAt && (
+              <span class="flex items-center gap-1">
+                🕒{" "}
+                {new Date(post.updatedAt).toLocaleDateString("ja-JP", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+                更新
+              </span>
+            )
+          }
+          {
+            post.category?.name && (
+              <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium">
+                📂 {post.category.name}
+              </span>
+            )
+          }
+          {
+            post.tags &&
+              post.tags
+                .split(",")
+                .map((tag: string) => (
+                  <span class="bg-zinc-100 dark:bg-white/10 text-zinc-600 dark:text-zinc-300 px-2 py-0.5 rounded-full">
+                    # {tag.trim()}
+                  </span>
+                ))
+          }
         </div>
 
         <!-- Substack 強化CTA -->
-        <div class="mt-8 relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-violet-700 p-8 text-white">
-          <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_70%,rgba(255,255,255,0.05),transparent_60%)]"></div>
-          <div class="relative z-10 flex flex-col md:flex-row gap-6 items-center">
+        <div
+          class="mt-8 relative rounded-3xl overflow-hidden bg-gradient-to-br from-blue-700 via-blue-600 to-violet-700 p-8 text-white"
+        >
+          <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_70%,rgba(255,255,255,0.05),transparent_60%)]"
+          >
+          </div>
+          <div
+            class="relative z-10 flex flex-col md:flex-row gap-6 items-center"
+          >
             <div class="flex-1">
-              <p class="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2">📬 無料ニュースレター</p>
-              <h3 class="text-xl font-black mb-2 leading-tight">プロップ攻略の知見を<br/>毎週無料で受け取る</h3>
+              <p
+                class="text-xs font-bold uppercase tracking-widest text-blue-200 mb-2"
+              >
+                📬 無料ニュースレター
+              </p>
+              <h3 class="text-xl font-black mb-2 leading-tight">
+                プロップ攻略の知見を<br />毎週無料で受け取る
+              </h3>
               <div class="grid grid-cols-1 gap-1.5 text-xs text-blue-100 mb-5">
                 <p>📈 週次トレード日誌・実際の損益を公開</p>
                 <p>🧠 プロップテストで使える相場シナリオ解説</p>
                 <p>🤖 MQL5・EA開発の実践ノウハウ</p>
               </div>
-              <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
-                 class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3.5 rounded-xl hover:-translate-y-0.5 transition-all shadow-xl">
+              <a
+                href="https://daitodaison.substack.com/"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-2 bg-white text-blue-700 font-black px-8 py-3.5 rounded-xl hover:-translate-y-0.5 transition-all shadow-xl"
+              >
                 今すぐ無料で購読する →
               </a>
-              <p class="text-blue-200 text-xs mt-3">無料・いつでも解除可能・スパムなし</p>
+              <p class="text-blue-200 text-xs mt-3">
+                無料・いつでも解除可能・スパムなし
+              </p>
             </div>
             <div class="shrink-0 text-center hidden md:block">
               <div class="bg-white/10 border border-white/20 rounded-2xl p-5">
@@ -411,275 +784,415 @@ const otherPosts = (allPosts as any[]).filter((p: any) => p.id !== post.id).slic
           </div>
         </div>
 
-     {otherPosts.length > 0 && (
-          <div class="mt-12">
-            <div class="flex items-center gap-3 mb-6">
-              <span class="w-1 h-5 bg-primary rounded-full"></span>
-              <h2 class="text-lg font-bold text-zinc-900 dark:text-white">関連記事</h2>
+        {
+          otherPosts.length > 0 && (
+            <div class="mt-12">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="w-1 h-5 bg-primary rounded-full" />
+                <h2 class="text-lg font-bold text-zinc-900 dark:text-white">
+                  関連記事
+                </h2>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {otherPosts.map((p: any) => {
+                  const rawImg = p.eyecatch || "";
+                  const imgUrl = rawImg
+                    .split("|")[0]
+                    .replace(
+                      "https://daitodaison.pages.dev/wp-content",
+                      "https://dysonblog.org/wp-content",
+                    )
+                    .replace("http://", "https://");
+                  return (
+                    <a
+                      href={"/" + lang + "/blog/microcms/" + p.id}
+                      class="group block bg-white dark:bg-zinc-800/80 rounded-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                    >
+                      <div class="aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-700">
+                        {imgUrl ? (
+                          <img
+                            src={imgUrl}
+                            alt={p.title}
+                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div class="w-full h-full flex items-center justify-center text-3xl">
+                            📝
+                          </div>
+                        )}
+                      </div>
+                      <div class="p-4">
+                        {p.category?.name && (
+                          <span class="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium mb-2 inline-block">
+                            {p.category.name}
+                          </span>
+                        )}
+                        {p.updatedAt && (
+                          <p class="text-[10px] text-zinc-400 mb-1">
+                            {new Date(p.updatedAt).toLocaleDateString("ja-JP", {
+                              year: "numeric",
+                              month: "numeric",
+                              day: "numeric",
+                            })}
+                          </p>
+                        )}
+                        <p class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                          {p.title}
+                        </p>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
             </div>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {otherPosts.map((p: any) => {
-                const rawImg = p.eyecatch || "";
-                const imgUrl = rawImg.split("|")[0]
-                  .replace("https://daitodaison.pages.dev/wp-content", "https://dysonblog.org/wp-content")
-                  .replace("http://", "https://");
-                return (
-                  <a href={"/" + lang + "/blog/microcms/" + p.id}
-                     class="group block bg-white dark:bg-zinc-800/80 rounded-2xl border border-zinc-200 dark:border-zinc-700 overflow-hidden hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                    <div class="aspect-video overflow-hidden bg-zinc-100 dark:bg-zinc-700">
-                      {imgUrl ? (
-                        <img src={imgUrl} alt={p.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-                      ) : (
-                        <div class="w-full h-full flex items-center justify-center text-3xl">📝</div>
-                      )}
-                    </div>
-                    <div class="p-4">
-                      {p.category?.name && (
-                        <span class="text-[10px] bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full font-medium mb-2 inline-block">
-                          {p.category.name}
-                        </span>
-                      )}
-                      {p.updatedAt && (
-                        <p class="text-[10px] text-zinc-400 mb-1">{new Date(p.updatedAt).toLocaleDateString("ja-JP", {year:"numeric", month:"numeric", day:"numeric"})}</p>
-                      )}
-                      <p class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">{p.title}</p>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
+          )
+        }
       </main>
 
       <!-- 右サイドバー：目次＋固定バナー -->
-     <aside class="hidden lg:block w-52 shrink-0" style="align-self: start; position: sticky; top: 9rem;">
-        <div class="flex flex-col gap-4" style="max-height: calc(100vh - 9rem); overflow: hidden;">
-        <div class="sticky top-28 flex flex-col gap-4" style="max-height: calc(100vh - 7rem); overflow: hidden;">
-          <!-- 目次：独立スクロール -->
-          {headings.length > 0 && (
-            <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 flex flex-col min-h-0">
-              <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3 shrink-0">目次</p>
-              <ul class="space-y-0.5 overflow-y-auto flex-1 pr-1" id="toc-list" style="scrollbar-width:thin;">
-                {headings.map((h) => (
-                  <li>
-                    <a href={"#" + h.id}
-                       data-toc-id={h.id}
-                       class={h.level === 3
-                         ? "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 pl-5 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
-                         : "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"}>
-                      <span class="toc-bar mt-1.5 shrink-0 w-0.5 h-2.5 rounded-full transition-all duration-200" style="background:transparent"></span>
-                      <span>{h.text}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          <!-- 固定バナー：Funded7＋Substack -->
-          <div class="shrink-0 space-y-3">
-            <a href="https://my.funded7.com/ja/sign-up?affiliateId=111" target="_blank" rel="noopener" class="block relative rounded-xl p-px bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-500/30 hover:shadow-lg transition-all">
-              <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
-                <p class="text-[10px] font-bold tracking-widest uppercase text-blue-500 mb-1">💰 無料トライアルあり</p>
-                <p class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1">FUNDED7</p>
-                <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">1フェーズ〜速攻プランまで選べる。日本円対応・cTrader使用可。</p>
-                <span class="block text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-2 px-3 rounded-lg">
-                  無料アカウント開設 →
-                </span>
-              </div>
-            </a>
-            <div class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden">
-              <div class="rounded-xl border border-blue-200 dark:border-blue-500/30 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-zinc-800/50 p-4">
-                <p class="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-1">📬 無料購読</p>
-                <p class="text-xs font-bold text-zinc-900 dark:text-white mb-1">Substack</p>
-                <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">プロップ攻略戦略を毎週無料配信中</p>
-                <a href="https://daitodaison.substack.com/" target="_blank" rel="noopener"
-                   class="block text-center bg-gradient-to-r from-blue-600 to-blue-500 text-white text-xs font-bold py-2 px-3 rounded-lg hover:opacity-90 transition-all">
-                  無料購読する →
-                </a>
+      <aside
+        class="hidden lg:block w-52 shrink-0"
+        style="align-self: start; position: sticky; top: 9rem;"
+      >
+        <div
+          class="flex flex-col gap-4"
+          style="max-height: calc(100vh - 9rem); overflow: hidden;"
+        >
+          <div
+            class="sticky top-28 flex flex-col gap-4"
+            style="max-height: calc(100vh - 7rem); overflow: hidden;"
+          >
+            <!-- 目次：独立スクロール -->
+            {
+              headings.length > 0 && (
+                <div class="bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 flex flex-col min-h-0">
+                  <p class="text-xs font-bold uppercase tracking-widest text-primary mb-3 shrink-0">
+                    目次
+                  </p>
+                  <ul
+                    class="space-y-0.5 overflow-y-auto flex-1 pr-1"
+                    id="toc-list"
+                    style="scrollbar-width:thin;"
+                  >
+                    {headings.map((h) => (
+                      <li>
+                        <a
+                          href={"#" + h.id}
+                          data-toc-id={h.id}
+                          class={
+                            h.level === 3
+                              ? "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 pl-5 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
+                              : "toc-link flex items-start gap-1.5 text-xs leading-snug py-1.5 px-2 rounded-lg transition-all duration-200 text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-primary/5"
+                          }
+                        >
+                          <span
+                            class="toc-bar mt-1.5 shrink-0 w-0.5 h-2.5 rounded-full transition-all duration-200"
+                            style="background:transparent"
+                          />
+                          <span>{h.text}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            }
+            <!-- 固定バナー：Funded7＋Substack -->
+            <div class="shrink-0 space-y-3">
+              <a
+                href="https://my.funded7.com/ja/sign-up?affiliateId=111"
+                target="_blank"
+                rel="noopener"
+                class="block relative rounded-xl p-px bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-500/30 hover:shadow-lg transition-all"
+              >
+                <div class="rounded-xl bg-gray-50 dark:bg-zinc-900 p-4">
+                  <p
+                    class="text-[10px] font-bold tracking-widest uppercase text-blue-500 mb-1"
+                  >
+                    💰 無料トライアルあり
+                  </p>
+                  <p
+                    class="text-sm font-bold text-zinc-900 dark:text-white leading-snug mb-1"
+                  >
+                    FUNDED7
+                  </p>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">
+                    1フェーズ〜速攻プランまで選べる。日本円対応・cTrader使用可。
+                  </p>
+                  <span
+                    class="block text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold py-2 px-3 rounded-lg"
+                  >
+                    無料アカウント開設 →
+                  </span>
+                </div>
+              </a>
+              <div
+                class="rounded-xl border border-gray-200 dark:border-white/10 overflow-hidden"
+              >
+                <div
+                  class="rounded-xl border border-blue-200 dark:border-blue-500/30 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-zinc-800/50 p-4"
+                >
+                  <p
+                    class="text-[10px] font-bold uppercase tracking-widest text-blue-500 mb-1"
+                  >
+                    📬 無料購読
+                  </p>
+                  <p
+                    class="text-xs font-bold text-zinc-900 dark:text-white mb-1"
+                  >
+                    Substack
+                  </p>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">
+                    プロップ攻略戦略を毎週無料配信中
+                  </p>
+                  <a
+                    href="https://daitodaison.substack.com/"
+                    target="_blank"
+                    rel="noopener"
+                    class="block text-center bg-gradient-to-r from-blue-600 to-blue-500 text-white text-xs font-bold py-2 px-3 rounded-lg hover:opacity-90 transition-all"
+                  >
+                    無料購読する →
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </aside>
-
     </div>
-  </div>
 
-  <style>
-    .sidebar-gradient-bg {
-      background: linear-gradient(135deg, #9333ea, #6d28d9, #2563eb, #9333ea);
-      background-size: 300% 300%;
-      animation: sidebar-gradient-shift 6s ease infinite;
-    }
-    @keyframes sidebar-gradient-shift {
-      0%, 100% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-    }
-    .sidebar-glow-banner {
-      animation: sidebar-pulse-glow 3s ease-in-out infinite;
-    }
-    @keyframes sidebar-pulse-glow {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4); }
-      50% { box-shadow: 0 0 20px 4px rgba(147, 51, 234, 0.5); }
-    }
-    .sidebar-shine {
-      position: absolute;
-      top: 0;
-      left: -75%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.25), transparent);
-      transform: skewX(-20deg);
-      animation: sidebar-shine-move 3.5s ease-in-out infinite;
-      z-index: 5;
-    }
-    @keyframes sidebar-shine-move {
-      0% { left: -75%; }
-      40% { left: 125%; }
-      100% { left: 125%; }
-    }
-    .animate-bounce-slow {
-      animation: sidebar-bounce-slow 2.5s ease-in-out infinite;
-    }
-    @keyframes sidebar-bounce-slow {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
-    }
-    .article-body a {
-      color: #3b82f6;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-    }
-    .dark .article-body a {
-      color: #60a5fa;
-    }
-    .article-body a:hover {
-      color: #2563eb;
-    }
-    .dark .article-body a:hover {
-      color: #93c5fd;
-    }
-    .dark .article-body h1,
-    .dark .article-body h2,
-    .dark .article-body h3,
-    .dark .article-body h4,
-    .dark .article-body h5,
-    .dark .article-body h6 {
-      color: #f4f4f5;
-    }
-    .dark .article-body p,
-    .dark .article-body li,
-    .dark .article-body td,
-    .dark .article-body th {
-      color: #d4d4d8;
-    }
-    .dark .article-body blockquote {
-      border-left-color: #3b82f6;
-      color: #a1a1aa;
-    }
-    .dark .article-body strong {
-      color: #ffffff;
-    }
-  </style>
-
-  <script is:inline>
-  (function() {
-    function initSidebarFilter() {
-      var buttons = Array.from(document.querySelectorAll(".sidebar-cat-btn"));
-      var items = Array.from(document.querySelectorAll("#sidebar-post-list > li"));
-      if (!buttons.length) return;
-      var MAX_SHOW = 5;
-
-      function applyFilter(cat) {
-        var shown = 0;
-        items.forEach(function(li) {
-          var match = !cat || li.getAttribute("data-category") === cat;
-          if (match && shown < MAX_SHOW) {
-            li.style.display = "";
-            shown++;
-            var numEl = li.querySelector(".sidebar-item-num");
-            if (numEl) numEl.textContent = String(shown).padStart(2, "0");
-          } else {
-            li.style.display = "none";
-          }
-        });
+    <style>
+      .sidebar-gradient-bg {
+        background: linear-gradient(135deg, #9333ea, #6d28d9, #2563eb, #9333ea);
+        background-size: 300% 300%;
+        animation: sidebar-gradient-shift 6s ease infinite;
       }
-
-      buttons.forEach(function(btn) {
-        btn.addEventListener("click", function() {
-          var cat = btn.getAttribute("data-cat-filter");
-          buttons.forEach(function(b) {
-            b.classList.remove("active", "bg-primary", "text-white");
-            b.classList.add("bg-zinc-100", "dark:bg-white/10", "text-zinc-600", "dark:text-zinc-300");
-          });
-          btn.classList.add("active", "bg-primary", "text-white");
-          btn.classList.remove("bg-zinc-100", "dark:bg-white/10", "text-zinc-600", "dark:text-zinc-300");
-          applyFilter(cat);
-        });
-      });
-
-      // 初期表示も5件固定＋番号01から
-      applyFilter("");
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initSidebarFilter);
-    } else {
-      initSidebarFilter();
-    }
-  })();
-  (function() {
-    function initToc() {
-      var headingEls = Array.from(document.querySelectorAll("main h2[id], main h3[id]"));
-     var tocLinks = Array.from(document.querySelectorAll("a[data-toc-id]"));
-      var tocList = document.getElementById("toc-list");
-      if (!headingEls.length || !tocLinks.length) return;
-
-      function setActive(id) {
-        tocLinks.forEach(function(link) {
-          var bar = link.querySelector(".toc-bar");
-          if (link.dataset.tocId === id) {
-            link.classList.add("text-primary", "font-semibold", "bg-primary/5");
-            link.classList.remove("text-gray-500");
-            if (bar) bar.style.background = "#2563EB";
-            if (tocList) {
-              var linkTop = link.offsetTop;
-              var listScroll = tocList.scrollTop;
-              var listHeight = tocList.clientHeight;
-              if (linkTop < listScroll || linkTop > listScroll + listHeight - 40) {
-                tocList.scrollTo({ top: linkTop - listHeight / 2, behavior: "smooth" });
-              }
-            }
-          } else {
-            link.classList.remove("text-primary", "font-semibold", "bg-primary/5");
-            link.classList.add("text-gray-500");
-            if (bar) bar.style.background = "transparent";
-          }
-        });
-      }
-
-      function onScroll() {
-        var y = window.scrollY + 160;
-        var cur = headingEls[0].id;
-        for (var i = 0; i < headingEls.length; i++) {
-          if (headingEls[i].offsetTop <= y) cur = headingEls[i].id;
-          else break;
+      @keyframes sidebar-gradient-shift {
+        0%,
+        100% {
+          background-position: 0% 50%;
         }
-        setActive(cur);
+        50% {
+          background-position: 100% 50%;
+        }
       }
+      .sidebar-glow-banner {
+        animation: sidebar-pulse-glow 3s ease-in-out infinite;
+      }
+      @keyframes sidebar-pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 20px 4px rgba(147, 51, 234, 0.5);
+        }
+      }
+      .sidebar-shine {
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent,
+          rgba(255, 255, 255, 0.25),
+          transparent
+        );
+        transform: skewX(-20deg);
+        animation: sidebar-shine-move 3.5s ease-in-out infinite;
+        z-index: 5;
+      }
+      @keyframes sidebar-shine-move {
+        0% {
+          left: -75%;
+        }
+        40% {
+          left: 125%;
+        }
+        100% {
+          left: 125%;
+        }
+      }
+      .animate-bounce-slow {
+        animation: sidebar-bounce-slow 2.5s ease-in-out infinite;
+      }
+      @keyframes sidebar-bounce-slow {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-2px);
+        }
+      }
+      .article-body a {
+        color: #3b82f6;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      .dark .article-body a {
+        color: #60a5fa;
+      }
+      .article-body a:hover {
+        color: #2563eb;
+      }
+      .dark .article-body a:hover {
+        color: #93c5fd;
+      }
+      .dark .article-body h1,
+      .dark .article-body h2,
+      .dark .article-body h3,
+      .dark .article-body h4,
+      .dark .article-body h5,
+      .dark .article-body h6 {
+        color: #f4f4f5;
+      }
+      .dark .article-body p,
+      .dark .article-body li,
+      .dark .article-body td,
+      .dark .article-body th {
+        color: #d4d4d8;
+      }
+      .dark .article-body blockquote {
+        border-left-color: #3b82f6;
+        color: #a1a1aa;
+      }
+      .dark .article-body strong {
+        color: #ffffff;
+      }
+    </style>
 
-      window.addEventListener("scroll", onScroll, { passive: true });
-      onScroll();
-    }
+    <script is:inline>
+      (function () {
+        function initSidebarFilter() {
+          var buttons = Array.from(
+            document.querySelectorAll(".sidebar-cat-btn"),
+          );
+          var items = Array.from(
+            document.querySelectorAll("#sidebar-post-list > li"),
+          );
+          if (!buttons.length) return;
+          var MAX_SHOW = 5;
 
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", initToc);
-    } else {
-      initToc();
-    }
-  })();
-  </script>
+          function applyFilter(cat) {
+            var shown = 0;
+            items.forEach(function (li) {
+              var match = !cat || li.getAttribute("data-category") === cat;
+              if (match && shown < MAX_SHOW) {
+                li.style.display = "";
+                shown++;
+                var numEl = li.querySelector(".sidebar-item-num");
+                if (numEl) numEl.textContent = String(shown).padStart(2, "0");
+              } else {
+                li.style.display = "none";
+              }
+            });
+          }
+
+          buttons.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var cat = btn.getAttribute("data-cat-filter");
+              buttons.forEach(function (b) {
+                b.classList.remove("active", "bg-primary", "text-white");
+                b.classList.add(
+                  "bg-zinc-100",
+                  "dark:bg-white/10",
+                  "text-zinc-600",
+                  "dark:text-zinc-300",
+                );
+              });
+              btn.classList.add("active", "bg-primary", "text-white");
+              btn.classList.remove(
+                "bg-zinc-100",
+                "dark:bg-white/10",
+                "text-zinc-600",
+                "dark:text-zinc-300",
+              );
+              applyFilter(cat);
+            });
+          });
+
+          // 初期表示も5件固定＋番号01から
+          applyFilter("");
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initSidebarFilter);
+        } else {
+          initSidebarFilter();
+        }
+      })();
+      (function () {
+        function initToc() {
+          var headingEls = Array.from(
+            document.querySelectorAll("main h2[id], main h3[id]"),
+          );
+          var tocLinks = Array.from(
+            document.querySelectorAll("a[data-toc-id]"),
+          );
+          var tocList = document.getElementById("toc-list");
+          if (!headingEls.length || !tocLinks.length) return;
+
+          function setActive(id) {
+            tocLinks.forEach(function (link) {
+              var bar = link.querySelector(".toc-bar");
+              if (link.dataset.tocId === id) {
+                link.classList.add(
+                  "text-primary",
+                  "font-semibold",
+                  "bg-primary/5",
+                );
+                link.classList.remove("text-gray-500");
+                if (bar) bar.style.background = "#2563EB";
+                if (tocList) {
+                  var linkTop = link.offsetTop;
+                  var listScroll = tocList.scrollTop;
+                  var listHeight = tocList.clientHeight;
+                  if (
+                    linkTop < listScroll ||
+                    linkTop > listScroll + listHeight - 40
+                  ) {
+                    tocList.scrollTo({
+                      top: linkTop - listHeight / 2,
+                      behavior: "smooth",
+                    });
+                  }
+                }
+              } else {
+                link.classList.remove(
+                  "text-primary",
+                  "font-semibold",
+                  "bg-primary/5",
+                );
+                link.classList.add("text-gray-500");
+                if (bar) bar.style.background = "transparent";
+              }
+            });
+          }
+
+          function onScroll() {
+            var y = window.scrollY + 160;
+            var cur = headingEls[0].id;
+            for (var i = 0; i < headingEls.length; i++) {
+              if (headingEls[i].offsetTop <= y) cur = headingEls[i].id;
+              else break;
+            }
+            setActive(cur);
+          }
+
+          window.addEventListener("scroll", onScroll, { passive: true });
+          onScroll();
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initToc);
+        } else {
+          initToc();
+        }
+      })();
+    </script>
+  </div>
 </Layout>
-
