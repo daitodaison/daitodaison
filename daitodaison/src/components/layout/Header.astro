@@ -61,14 +61,14 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
               alt={siteConfig.logo.alt} 
               width="32"
               height="32"
-              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 dark:hidden block"
+              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 dark:hidden block invert"
             />
             <img 
               src={siteConfig.logo.srcDark || siteConfig.logo.src} 
               alt={siteConfig.logo.alt} 
               width="32"
               height="32"
-              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 hidden dark:block"
+              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 hidden dark:block invert"
             />
           </>
         ) : (
@@ -77,7 +77,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
             alt={siteConfig.logo.alt} 
             width="32"
             height="32"
-            id="header-logo-img" class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300"
+            id="header-logo-img" class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 invert"
           />
         )
       )}
@@ -143,12 +143,10 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
       if (window.scrollY > 20) {
         header.classList.remove(...TOP_CLASSES);
         header.classList.add(...SCROLLED_CLASSES);
-        if (logoImg) { logoImg.classList.remove('invert-0'); logoImg.classList.add('invert'); }
         if (subText) { subText.classList.remove('text-zinc-400'); subText.classList.add('text-zinc-300'); }
       } else {
         header.classList.remove(...SCROLLED_CLASSES);
         header.classList.add(...TOP_CLASSES);
-        if (logoImg) { logoImg.classList.remove('invert'); logoImg.classList.add('invert-0'); }
         if (subText) { subText.classList.remove('text-zinc-300'); subText.classList.add('text-zinc-400'); }
       }
     };
