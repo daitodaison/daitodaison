@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import * as Icons from 'lucide-react';
@@ -54,7 +54,7 @@ export default function DesktopNav({ links, currentPath = '/' }: DesktopNavProps
             {link.children ? (
               <button
                 className={`flex items-center gap-1 text-sm font-medium transition-colors bg-transparent border-0 cursor-pointer p-0 ${
-                  hoveredIndex === index || isLinkActive ? 'text-blue-300' : 'text-white/80 hover:text-blue-300'
+                  hoveredIndex === index || isLinkActive ? 'text-blue-300' : 'text-current opacity-80 hover:opacity-100 hover:text-blue-300'
                 }`}
                 aria-expanded={hoveredIndex === index}
                 aria-haspopup="menu"

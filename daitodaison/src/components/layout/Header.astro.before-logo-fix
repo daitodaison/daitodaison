@@ -50,9 +50,9 @@ const getLocalizedHref = (href: string) => {
 const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
 ---
 
-<header id="main-header" data-is-home={Astro.url.pathname === `/${lang}` || Astro.url.pathname === `/${lang}/`} class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4">
+<header id="main-header" class="w-full transition-all duration-500 border-b border-transparent bg-transparent py-4 text-white dark:text-white">
   <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href={`/${lang}`} id="header-brand-link" class="flex items-center gap-3 text-xl font-bold tracking-tight group shrink-0 whitespace-nowrap">
+    <a href={`/${lang}`} class="flex items-center gap-3 text-xl font-bold tracking-tight text-white group shrink-0 whitespace-nowrap">
       {siteConfig.logo && (
         siteConfig.logo.strategy === 'switch' ? (
           <>
@@ -61,14 +61,14 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
               alt={siteConfig.logo.alt} 
               width="32"
               height="32"
-              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 dark:hidden block"
+              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 dark:hidden block invert"
             />
             <img 
               src={siteConfig.logo.srcDark || siteConfig.logo.src} 
               alt={siteConfig.logo.alt} 
               width="32"
               height="32"
-              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 hidden dark:block"
+              class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 hidden dark:block invert"
             />
           </>
         ) : (
@@ -77,7 +77,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
             alt={siteConfig.logo.alt} 
             width="32"
             height="32"
-            id="header-logo-img" class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300"
+            id="header-logo-img" class="h-8 w-auto group-hover:rotate-6 transition-transform duration-300 invert"
           />
         )
       )}
@@ -86,7 +86,7 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
         <span id="header-subtext" class="text-[10px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium whitespace-nowrap">勝率40%・上位2.3%のFXプロップ攻略</span>
       </span>
     </a>
-    <div id="header-nav-wrap" class="flex-1 flex justify-center mx-4 lg:mx-8">
+    <div class="flex-1 flex justify-center mx-4 lg:mx-8">
       <DesktopNav client:only="react" links={links} lang={lang} availableLangs={availableLangs} searchPlaceholder={t["search.placeholder"]} currentPath={Astro.url.pathname} />
     </div>
 
@@ -101,8 +101,8 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
           />
         </div>
       )}
-      <span id="header-langpicker-wrap"><LanguagePicker availableLangs={availableLangs} /></span>
-      <span id="header-theme-toggle-wrap" class="block md:block"><ThemeToggle /></span>
+      <LanguagePicker availableLangs={availableLangs} />
+      <span class="block md:block"><ThemeToggle /></span>
 <a 
         href={primaryHref}
         class="hidden md:block px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-all"
@@ -134,26 +134,13 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
     const header = document.getElementById('main-header');
     if (!header) return;
 
-    const SCROLLED_CLASSES = ['bg-zinc-900/95', 'dark:bg-zinc-950/95', 'backdrop-blur-md', 'border-gray-200/10', 'dark:border-white/10', 'py-2', 'shadow-lg'];
+    const SCROLLED_CLASSES = ['bg-zinc-900/70', 'dark:bg-zinc-950/70', 'backdrop-blur-md', 'border-gray-200/10', 'dark:border-white/10', 'py-2', 'shadow-sm'];
     const TOP_CLASSES = ['bg-transparent', 'border-transparent', 'py-4'];
     const logoImg = document.getElementById('header-logo-img');
     const subText = document.getElementById('header-subtext');
-    const brandLink = document.getElementById('header-brand-link');
-    const themeToggleWrap = document.getElementById('header-theme-toggle-wrap');
-    const navWrap = document.getElementById('header-nav-wrap');
-    const langPickerWrap = document.getElementById('header-langpicker-wrap');
-
-    const isDarkMode = () => document.documentElement.classList.contains('dark');
-    const isHomePage = header.dataset.isHome === 'true';
 
     const handleScroll = () => {
-      const scrolled = window.scrollY > 20;
-      const dark = isDarkMode();
-      // トップページは常に暗い背景画像なので、最上部でも白文字でよい。
-      // それ以外のページは最上部が明るい背景なので、黒文字にする。
-      const useWhiteText = scrolled || dark || isHomePage;
-
-      if (scrolled) {
+      if (window.scrollY > 20) {
         header.classList.remove(...TOP_CLASSES);
         header.classList.add(...SCROLLED_CLASSES);
         if (subText) { subText.classList.remove('text-zinc-400'); subText.classList.add('text-zinc-300'); }
@@ -162,30 +149,9 @@ const primaryHref = getLocalizedHref(ACTION_LINKS.primary.href);
         header.classList.add(...TOP_CLASSES);
         if (subText) { subText.classList.remove('text-zinc-300'); subText.classList.add('text-zinc-400'); }
       }
-
-      if (brandLink) {
-        brandLink.classList.toggle('text-white', useWhiteText);
-        brandLink.classList.toggle('text-black', !useWhiteText);
-      }
-      if (themeToggleWrap) {
-        themeToggleWrap.classList.toggle('text-white', useWhiteText);
-        themeToggleWrap.classList.toggle('text-black', !useWhiteText);
-      }
-      if (navWrap) {
-        navWrap.classList.toggle('text-white', useWhiteText);
-        navWrap.classList.toggle('text-black', !useWhiteText);
-      }
-      if (langPickerWrap) {
-        langPickerWrap.classList.toggle('text-white', useWhiteText);
-        langPickerWrap.classList.toggle('text-black', !useWhiteText);
-      }
-      if (logoImg) {
-        logoImg.style.filter = useWhiteText ? 'invert(1)' : 'none';
-      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    document.getElementById('theme-toggle')?.addEventListener('click', () => setTimeout(handleScroll, 0));
     handleScroll(); // Initial check
   }
 

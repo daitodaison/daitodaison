@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:where(.dark, .dark *));
 @custom-variant navy (&:where(.navy, .navy *));
@@ -335,4 +335,7 @@ img {
 aside.sticky {
   top: 7rem !important;
 }
+
+
+
 
