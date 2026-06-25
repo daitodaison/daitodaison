@@ -778,13 +778,11 @@ const otherPosts = (allPosts as any[])
         }
       </main>
 
-      <!-- 右サイドバー：目次＋固定バナー -->
-
-
-        <div
-          class="hidden lg:block rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 w-52 shrink-0"
-          style="align-self: start;"
-        >
+      <!-- 右サイドバー：プロフィールカード（non-sticky） -->
+      <div
+        class="hidden lg:block rounded-2xl overflow-hidden border border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 w-52 shrink-0"
+        style="align-self: start;"
+      >
           <div
             class="bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 px-4 pt-5 pb-8 relative overflow-hidden"
           >
@@ -854,15 +852,10 @@ const otherPosts = (allPosts as any[])
           </div>
         </div>
 
-        <!-- TOC + banners: sticky -->
-        <aside class="hidden lg:block w-52 shrink-0" style="position: sticky; top: 9rem; align-self: start;">
+      <!-- TOC + banners: sticky -->
+      <aside class="hidden lg:flex lg:flex-col w-52 shrink-0 gap-4" style="position: sticky; top: 9rem; align-self: start; max-height: calc(100vh - 10rem); overflow-y: auto; overflow-x: hidden;">
           <div
             class="flex flex-col gap-4"
-            style="max-height: calc(100vh - 9rem); overflow: hidden;"
-          >
-          <div
-            class="flex flex-col gap-4"
-            style="max-height: calc(100vh - 7rem); overflow: hidden;"
           >
             <!-- 目次：独立スクロール -->
             {
@@ -958,8 +951,6 @@ const otherPosts = (allPosts as any[])
                 </div>
               </div>
             </div>
-          </div>
-        </div>
           </div>
         </aside>
       </div>
