@@ -12,7 +12,7 @@
     "build": "astro build",
     "build:vercel": "cross-env ADAPTER=vercel astro build",
     "build:netlify": "cross-env ADAPTER=netlify astro build",
-    "build:cloudflare": "cross-env ADAPTER=cloudflare astro build",
+    "build:cloudflare": "cross-env ADAPTER=cloudflare astro build && node fix-wrangler-assets.mjs",
     "preview": "astro preview",
     "deploy": "pnpm build:cloudflare && wrangler deploy",
     "preview:worker": "wrangler dev",
