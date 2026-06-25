@@ -43,7 +43,7 @@ function getAdapter() {
   const adapter = process.env.ADAPTER || 'node';
   switch (adapter) {
     case 'vercel': return vercel({ webAnalytics: { enabled: true } });
-    case 'netlify': return netlify(); case 'cloudflare': return cloudflare({ platformProxy: { enabled: true }, imageService: 'passthrough' });
+    case 'netlify': return netlify(); case 'cloudflare': return cloudflare({});
 
     case 'node': default: return node({ mode: 'standalone' });
   }
