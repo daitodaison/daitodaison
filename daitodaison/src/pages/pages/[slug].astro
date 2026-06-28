@@ -3,16 +3,24 @@ import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
   const res = await fetch(
-    'https://daitodaison.microcms.io/api/v1/pages?limit=100&fields=id,title,slug,content',
+    'https://daitodaison.microcms.io/api/v1/pages?limit=100&fields=id,title,slug',
     { headers: { 'X-MICROCMS-API-KEY': 'xPnAHYwXkxMz8dA0obaE79otSJzlWElii3wQ' } }
   );
   const data = await res.json();
   return data.contents
     .filter((p) => p.slug && p.slug.trim() !== '')
-    .map((p) => ({ params: { slug: p.slug }, props: { page: p } }));
+    .map((p) => ({ params: { slug: p.slug }, props: { id: p.id, title: p.title } }));
 }
 
-const { page } = Astro.props;
+const { id, title } = Astro.props;
+const { slug } = Astro.params;
+
+// 個別にcontentだけ取得
+const res = await fetch(
+  `https://daitodaison.microcms.io/api/v1/pages/${id}?fields=title,content`,
+  { headers: { 'X-MICROCMS-API-KEY': 'xPnAHYwXkxMz8dA0obaE79otSJzlWElii3wQ' } }
+);
+const page = await res.json();
 ---
 
 <Layout title={page.title}>
@@ -33,21 +41,13 @@ const { page } = Astro.props;
 .page-content h1 {
   font-size: 1.8rem;
   margin-bottom: 2rem;
-  color: var(--color-heading);
+  color: var(--color-heading, #4a9eff);
 }
 .content-body {
   line-height: 1.8;
-  color: var(--color-text);
+  color: var(--color-text, #e0e0e0);
 }
-.content-body h2 {
-  font-size: 1.4rem;
-  margin: 2rem 0 1rem;
-  color: var(--color-heading);
-}
-.content-body p {
-  margin-bottom: 1rem;
-}
-.content-body a {
-  color: var(--color-link);
-}
+.content-body h2 { font-size: 1.4rem; margin: 2rem 0 1rem; color: var(--color-heading, #4a9eff); }
+.content-body p { margin-bottom: 1rem; }
+.content-body a { color: var(--color-link, #4a9eff); }
 </style>
