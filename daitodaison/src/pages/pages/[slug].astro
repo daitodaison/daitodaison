@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const res = await fetch(
+    'https://daitodaison.microcms.io/api/v1/pages?limit=100&fields=id,title,slug,content',
+    { headers: { 'X-MICROCMS-API-KEY': 'xPnAHYwXkxMz8dA0obaE79otSJzlWElii3wQ' } }
+  );
+  const data = await res.json();
+  return data.contents
+    .filter((p) => p.slug && p.slug.trim() !== '')
+    .map((p) => ({ params: { slug: p.slug }, props: { page: p } }));
+}
+
+const { page } = Astro.props;
+---
+
+<Layout title={page.title}>
+  <main class="page-container">
+    <article class="page-content">
+      <h1>{page.title}</h1>
+      <div class="content-body" set:html={page.content} />
+    </article>
+  </main>
+</Layout>
+
+<style>
+.page-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+.page-content h1 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: var(--color-heading);
+}
+.content-body {
+  line-height: 1.8;
+  color: var(--color-text);
+}
+.content-body h2 {
+  font-size: 1.4rem;
+  margin: 2rem 0 1rem;
+  color: var(--color-heading);
+}
+.content-body p {
+  margin-bottom: 1rem;
+}
+.content-body a {
+  color: var(--color-link);
+}
+</style>
