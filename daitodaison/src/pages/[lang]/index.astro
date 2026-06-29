@@ -14,7 +14,7 @@ const { lang = defaultLang } = Astro.params;
 let latestPosts: any[] = [];
 try {
   const res = await client.get({ endpoint: "blogs", queries: { limit: 6, fields: "id,title,eyecatch,category,content" } });
-  latestPosts = res.contents.filter((p: any) => p.category?.name !== "?????" && p.category?.id !== "fixed").slice(0, 3);
+  latestPosts = res.contents.filter((p: any) => p.category?.id !== "4ztfo35vle7").slice(0, 3);
 } catch(e) {}
 ---
 
