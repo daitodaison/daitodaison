@@ -11,9 +11,11 @@ import DOMPurify from "isomorphic-dompurify";
 translate.engine = "google";
 
 export async function getStaticPaths() {
+  console.log('[build] getStaticPaths start');
   let posts: any[] = [];
   let offset = 0;
   while (true) {
+    console.log('[fetch1] offset=', offset);
     const response = await client.get({
       endpoint: "blogs",
       queries: {
@@ -26,10 +28,12 @@ export async function getStaticPaths() {
     if (posts.length >= response.totalCount) break;
     offset += 100;
   }
+  console.log('[fetch1] done, total=', posts.length);
   // allPostsはサイドバー用に軽量版を別取得
   let lightPosts: any[] = [];
   let offset2 = 0;
   while (true) {
+    console.log('[fetch2] offset2=', offset2);
     const res2 = await client.get({
       endpoint: "blogs",
       queries: {
@@ -42,6 +46,8 @@ export async function getStaticPaths() {
     if (lightPosts.length >= res2.totalCount) break;
     offset2 += 100;
   }
+  console.log('[fetch2] done, total=', lightPosts.length);
+  console.log('[build] getStaticPaths returning paths');
   return posts.flatMap((post: any) =>
     Object.keys(languages).map((lang) => ({
       params: { lang, id: post.id },
