@@ -16,7 +16,7 @@ export async function getStaticPaths() {
       endpoint: "blogs",
       queries: { limit: 100, offset, orders: "-updatedAt", fields: "id,title,eyecatch,category,tags,updatedAt" },
     });
-    allPosts = allPosts.concat(response.contents.filter((p: any) => p.category?.id !== "4ztfo35vle7"));
+    allPosts = allPosts.concat(response.contents);
     if (!response.contents?.length || allPosts.length >= (response.totalCount ?? 0)) break;
     offset += 100;
   }
