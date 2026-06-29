@@ -1,7 +1,10 @@
-﻿{
+{
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "daitodaison",
   "compatibility_date": "2026-03-17",
   "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "./dist"
+  "pages_build_output_dir": "./dist",
+  "vars": {
+    "MICROCMS_SERVICE_DOMAIN": "daitodaison"
+  }
 }
