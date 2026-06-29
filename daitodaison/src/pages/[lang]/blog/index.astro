@@ -73,8 +73,8 @@ if (cur < totalPages) {
   paginationItems.push({ type: 'page', page: cur + 1, label: '＞', active: false });
 }
 ---
-<Layout title="Blog" description={t["blog.microcms.desc"]}>
-  <PageHeader title="Blog" description={t["blog.microcms.desc"]} />
+<Layout title="攻略ブログ | daito" description={t["blog.microcms.desc"]}>
+  <PageHeader title="攻略ブログ" description="プロップファーム攻略・FX戦略を毎週更新" />
   <Container as="section" class="pb-24">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
       {posts.map((post: any) => (
@@ -132,8 +132,6 @@ if (cur < totalPages) {
       </nav>
     )}
 
-    <p class="text-center text-sm text-muted-foreground mt-4">
-      {totalPosts}件中 1〜{Math.min(perPage, totalPosts)}件を表示
-    </p>
+    <p class="text-center text-sm text-muted-foreground mt-4">{totalPosts}件中 {(currentPage - 1) * perPage + 1}～{Math.min(currentPage * perPage, totalPosts)}件を表示</p>
   </Container>
 </Layout>
