@@ -5,6 +5,7 @@
   "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "./dist",
   "vars": {
-    "MICROCMS_SERVICE_DOMAIN": "daitodaison"
+    "MICROCMS_SERVICE_DOMAIN": "daitodaison",
+    "MICROCMS_API_KEY": "xPnAHYwXkxMz8dA0obaE79otSJzlWElii3wQ"
   }
 }
