@@ -8,7 +8,7 @@ import { client } from "~/library/microcms";
 import { useTranslations } from "~/i18n/utils";
 
 export async function getStaticPaths() {
-  const PER_PAGE = 9;
+  const PER_PAGE = 12;
   let allPosts: any[] = [];
   let offset = 0;
   while (true) {
@@ -17,16 +17,18 @@ export async function getStaticPaths() {
       queries: { limit: 100, offset, orders: "-updatedAt", fields: "id,title,eyecatch,category,tags,updatedAt" },
     });
     allPosts = allPosts.concat(response.contents);
-    if (allPosts.length >= response.totalCount) break;
+    if (!response.contents?.length || allPosts.length >= (response.totalCount ?? 0)) break;
     offset += 100;
   }
   const totalPages = Math.max(1, Math.ceil(allPosts.length / PER_PAGE));
-  const start = 0;
-  const posts = allPosts.slice(0, PER_PAGE);
-  return [
-    { params: { lang: "ja" }, props: { posts, currentPage: 1, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE } },
-    { params: { lang: "en" }, props: { posts, currentPage: 1, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE } },
-  ];
+  const paths: any[] = [];
+  for (const lang of ["ja", "en"]) {
+    for (let page = 1; page <= totalPages; page++) {
+      const posts = allPosts.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+      paths.push({ params: { lang }, props: { posts, currentPage: page, totalPages, totalPosts: allPosts.length, perPage: PER_PAGE } });
+    }
+  }
+  return paths;
 }
 
 const { posts, currentPage, totalPages, totalPosts, perPage } = Astro.props;
