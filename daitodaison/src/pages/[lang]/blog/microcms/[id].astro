@@ -21,7 +21,7 @@ export async function getStaticPaths() {
       queries: {
         limit: 100,
         offset,
-        fields: "id,title,eyecatch,category,tags,publishedAt,updatedAt",
+        fields: "id,title,eyecatch,category,tags,publishedAt,updatedAt,content",
       },
     });
     posts = posts.concat(response.contents);
