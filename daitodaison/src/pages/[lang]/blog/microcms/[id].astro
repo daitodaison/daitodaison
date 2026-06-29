@@ -25,7 +25,7 @@ export async function getStaticPaths() {
       },
     });
     posts = posts.concat(response.contents);
-    if (posts.length >= response.totalCount) break;
+    if (!response.contents?.length || posts.length >= (response.totalCount ?? 0)) break;
     offset += 100;
   }
   console.log('[fetch1] done, total=', posts.length);
@@ -43,7 +43,7 @@ export async function getStaticPaths() {
       },
     });
     lightPosts = lightPosts.concat(res2.contents);
-    if (lightPosts.length >= res2.totalCount) break;
+    if (!res2.contents?.length || lightPosts.length >= (res2.totalCount ?? 0)) break;
     offset2 += 100;
   }
   console.log('[fetch2] done, total=', lightPosts.length);
