@@ -3,7 +3,9 @@ import Layout from '~/layouts/Layout.astro';
 import { ui, defaultLang, languages } from '~/i18n/ui';
 
 const t = ui[defaultLang] as any;
+console.log('DEBUG 404 t:', JSON.stringify(t), 'defaultLang:', defaultLang, 'ui keys:', JSON.stringify(Object.keys(ui)));
 ---
+
 
 <Layout title={t['404.title']} description={t['404.description']}>
   <script is:inline define:vars={{ languages, defaultLang }}>

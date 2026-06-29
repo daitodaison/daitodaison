@@ -22,10 +22,11 @@ export const availableLangs = SUPPORTED_LANGS;
 for (const path in locales) {
   const code = path.match(/\/([a-z]{2})\.properties$/)?.[1];
   if (code && SUPPORTED_LANGS.includes(code)) {
+console.log('DEBUG locale path:', path, 'value type:', typeof locales[path], locales[path]);
     const content = (locales[path] as { default: string }).default;
     const props = parseProperties(content);
     ui[code] = props;
     languages[code] = props['system.language_name'] || code.toUpperCase();
   }
 }
-export const defaultLang = import.meta.env.DEFAULT_LOCALE || 'en';
+export const defaultLang = import.meta.env.DEFAULT_LOCALE || 'ja';
