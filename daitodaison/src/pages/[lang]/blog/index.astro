@@ -8,7 +8,7 @@ import { client } from "~/library/microcms";
 import { useTranslations } from "~/i18n/utils";
 
 export async function getStaticPaths() {
-  const PER_PAGE = 12;
+  const PER_PAGE = 100;
   let allPosts: any[] = [];
   let offset = 0;
   while (true) {
@@ -97,6 +97,9 @@ if (cur < totalPages) {
             <h2 class="text-xl font-display font-bold mb-2 group-hover:text-primary transition-colors">
               {post.title}
             </h2>
+            {post.updatedAt && (
+              <p class="text-xs text-muted-foreground mt-1">更新: {new Date(post.updatedAt).toLocaleDateString("ja-JP")}</p>
+            )}
             {post.tags && (
               <div class="flex flex-wrap gap-1 mt-2">
                 {post.tags.split(',').map((tag: string) => (
