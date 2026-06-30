@@ -94,6 +94,9 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
               <h2 class="text-sm font-bold text-zinc-900 dark:text-white line-clamp-3 group-hover:text-blue-600 transition-colors leading-snug">
                 {post.title}
               </h2>
+              <p class="mt-2 text-[10px] text-zinc-400 dark:text-zinc-500">
+                🕐 {new Date(post.updatedAt).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })}
+              </p>
             </div>
           </a>
         );
