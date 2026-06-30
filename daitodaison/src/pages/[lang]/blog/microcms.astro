@@ -12,27 +12,27 @@ const t = useTranslations(lang);
 let posts: any[] = [];
 let off = 0;
 while (true) {
-  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,category,tags', orders: '-updatedAt'} });
+  const res = await client.get({ endpoint: 'blogs', queries: { limit: 100, offset: off, fields: 'id,title,eyecatch,updatedAt,wpUpdatedAt,category,tags', orders: '-wpUpdatedAt,-updatedAt'} });
   posts = posts.concat(res.contents);
   if (posts.length >= res.totalCount) break;
   off += 100;
 }
-// カテゴリー・タグ一覧を抽出
+// 郢ｧ・ｫ郢昴・縺也ｹ晢ｽｪ郢晢ｽｼ郢晢ｽｻ郢ｧ・ｿ郢ｧ・ｰ闕ｳﾂ髫包ｽｧ郢ｧ蜻域ｭ楢怎・ｺ
 const categories = [...new Set(posts.map((p:any) => p.category?.name).filter(Boolean))];
 const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map((t:string) => t.trim()).filter(Boolean)))];
 ---
-<Layout title="ブログ記事一覧" description="プロップファーム攻略記事の一覧">
+<Layout title="郢晄じﾎ溽ｹｧ・ｰ髫ｪ蛟・ｽｺ蛟ｶ・ｸﾂ髫包ｽｧ" description="郢晏干ﾎ溽ｹ昴・繝ｻ郢晁ｼ斐＜郢晢ｽｼ郢晢｣ｰ隰ｾ・ｻ騾｡・･髫ｪ蛟・ｽｺ荵昴・闕ｳﾂ髫包ｽｧ">
   <div class="max-w-5xl mx-auto px-4 pt-32 pb-20">
-    <h1 class="text-2xl font-bold mb-6">{t["blog.title"] || "ブログ"}</h1>
+    <h1 class="text-2xl font-bold mb-6">{t["blog.title"] || "郢晄じﾎ溽ｹｧ・ｰ"}</h1>
 
-    <!-- フィルターUI -->
+    <!-- 郢晁ｼ斐≦郢晢ｽｫ郢ｧ・ｿ郢晢ｽｼUI -->
     <div class="mb-8 space-y-3">
       <div class="flex flex-wrap gap-2 items-center">
-        <span class="text-xs font-bold text-zinc-500 dark:text-zinc-400 w-12">📂</span>
+        <span class="text-xs font-bold text-zinc-500 dark:text-zinc-400 w-12">﨟槫柏</span>
         <button onclick="filterPosts(null, null)"
           id="filter-all"
           class="filter-btn text-xs px-3 py-1 rounded-full border border-blue-400 bg-blue-500 text-white font-medium transition-all">
-          すべて
+          邵ｺ蜷ｶ竏狗ｸｺ・ｦ
         </button>
         {categories.map((cat) => (
           <button onclick={`filterPosts('${cat}', null)`}
@@ -56,8 +56,8 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
       )}
     </div>
 
-    <!-- 件数表示 -->
-    <p id="post-count" class="text-xs text-zinc-400 mb-4">{posts.length}件</p>
+    <!-- 闔会ｽｶ隰ｨ・ｰ髯ｦ・ｨ驕会ｽｺ -->
+    <p id="post-count" class="text-xs text-zinc-400 mb-4">{posts.length}闔会ｽｶ</p>
 
     <div id="post-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.map((post: any) => {
@@ -95,7 +95,7 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
                 {post.title}
               </h2>
               <p class="mt-2 text-[10px] text-zinc-400 dark:text-zinc-500">
-                🕐 {new Date(post.updatedAt).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })}
+                﨟樊ｭｦ {new Date(post.wpUpdatedAt || post.updatedAt).toLocaleDateString('ja-JP', { year: 'numeric', month: 'short', day: 'numeric' })}
               </p>
             </div>
           </a>
@@ -103,7 +103,7 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
       })}
     </div>
 
-    <p id="no-results" class="hidden text-center text-zinc-400 py-20">該当する記事がありません</p>
+    <p id="no-results" class="hidden text-center text-zinc-400 py-20">髫ｧ・ｲ陟冶侭笘・ｹｧ邇厄ｽｨ蛟・ｽｺ荵昶ｲ邵ｺ繧・ｽ顔ｸｺ・ｾ邵ｺ蟶呻ｽ・/p>
   </div>
 
   <script is:inline>
@@ -113,7 +113,7 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
     var btns = document.querySelectorAll('.filter-btn');
     var count = 0;
 
-    // ボタンのスタイルリセット
+    // 郢晄㈱縺｡郢晢ｽｳ邵ｺ・ｮ郢ｧ・ｹ郢ｧ・ｿ郢ｧ・､郢晢ｽｫ郢晢ｽｪ郢ｧ・ｻ郢昴・繝ｨ
     btns.forEach(function(b) {
       b.classList.remove('border-blue-400', 'bg-blue-500', 'text-white', 'border-purple-400', 'bg-purple-500');
       b.classList.add('border-zinc-300', 'dark:border-zinc-600', 'text-zinc-600', 'dark:text-zinc-300');
@@ -141,7 +141,7 @@ const tags = [...new Set(posts.flatMap((p:any) => (p.tags || '').split(',').map(
       if (show) count++;
     });
 
-    document.getElementById('post-count').textContent = count + '件';
+    document.getElementById('post-count').textContent = count + '闔会ｽｶ';
     document.getElementById('no-results').classList.toggle('hidden', count > 0);
   }
   </script>
