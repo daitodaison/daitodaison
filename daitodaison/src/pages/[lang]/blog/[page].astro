@@ -23,6 +23,12 @@ export async function getStaticPaths() {
   const totalPages = Math.max(1, Math.ceil(allPosts.length / PER_PAGE));
   const paths = [];
   for (const lang of ["ja", "en"]) {
+    // /blog/1/ への直アクセス・外部/旧リンク対策として、
+    // page=1 は一覧(index.astro)へのリダイレクトとして生成する（404防止）
+    paths.push({
+      params: { lang, page: "1" },
+      props: { redirectToIndex: true },
+    });
     for (let page = 2; page <= totalPages; page++) {
       const start = (page - 1) * PER_PAGE;
       const posts = allPosts.slice(start, start + PER_PAGE);
@@ -33,6 +39,10 @@ export async function getStaticPaths() {
     }
   }
   return paths;
+}
+
+if (Astro.props.redirectToIndex) {
+  return Astro.redirect(`/${Astro.params.lang}/blog/`, 301);
 }
 
 const { posts, currentPage, totalPages, totalPosts, perPage } = Astro.props;
@@ -85,7 +95,7 @@ if (cur < totalPages) {
         <Card href={`/${lang}/blog/microcms/${post.id}`} class="p-0 overflow-hidden hover:shadow-primary/10 hover:-translate-y-1 block h-full group">
           <div class="relative aspect-video w-full overflow-hidden bg-muted">
             {post.eyecatch ? (
-              <img src={post.eyecatch.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://www.dysonblog.org/wp-content").replace("http://","https://")} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={post.eyecatch.split("|")[0].replace("https://daitodaison.pages.dev/wp-content","https://dysonblog.org/wp-content").replace("http://","https://")} alt={post.title} loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
             ) : (
               <div class="h-full w-full flex items-center justify-center bg-black/5 dark:bg-white/5">
                 <span class="text-4xl">📝</span>
